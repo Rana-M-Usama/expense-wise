@@ -6,6 +6,7 @@ const compression = require("compression");
 const cors = require("cors");
 const httpStatus = require("http-status");
 const timeout = require("connect-timeout");
+const hpp = require("hpp");
 const config = require("./config/config");
 const morgan = require("./config/morgan");
 const { authLimiter } = require("./middlewares/rateLimiter");
@@ -34,6 +35,9 @@ app.use(mongoSanitize());
 
 // gzip compression
 app.use(compression());
+
+// Prevent http param pollution
+app.use(hpp());
 
 // enable cors
 app.use(cors());

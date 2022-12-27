@@ -7,9 +7,10 @@ const ApiError = require("../utils/ApiError");
 const errorConverter = (err, req, res, next) => {
   let error = err;
   if (!(error instanceof ApiError)) {
-    const statusCode = error.statusCode || error instanceof mongoose.Error
-      ? httpStatus.BAD_REQUEST
-      : httpStatus.INTERNAL_SERVER_ERROR;
+    const statusCode =
+      error.statusCode || error instanceof mongoose.Error
+        ? httpStatus.BAD_REQUEST
+        : httpStatus.INTERNAL_SERVER_ERROR;
     const message = error.message || httpStatus[statusCode];
     error = new ApiError(statusCode, message, false, err.stack);
   }
@@ -27,6 +28,7 @@ const errorHandler = (err, req, res, next) => {
   res.locals.errorMessage = err.message;
 
   const response = {
+    success: false,
     code: statusCode,
     message,
     // eslint-disable-next-line node/no-unsupported-features/es-syntax
@@ -37,7 +39,7 @@ const errorHandler = (err, req, res, next) => {
     logger.error(err);
   }
 
-  res.status(statusCode).send(response);
+  res.status(statusCode).json({ response });
 };
 
 module.exports = {
