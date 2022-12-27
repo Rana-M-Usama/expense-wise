@@ -43,4 +43,10 @@ module.exports = {
       },
     },
   },
+  SMTP_HOST: envVars.SMTP_HOST,
+  SMTP_PORT: envVars.SMTP_PORT,
+  SMTP_EMAIL: envVars.SMTP_EMAIL,
+  SMTP_PASSWORD: envVars.SMTP_PASSWORD,
+  FROM_EMAIL: envVars.FROM_EMAIL,
+  FROM_NAME: envVars.FROM_NAME,
 };
