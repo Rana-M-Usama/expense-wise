@@ -1,7 +1,8 @@
 const express = require("express");
 
-const advancedResults = require("../../middlewares/advancedResults");
 const Sheet = require("../../models/Sheet");
+const ExpenseRouter = require("./expenses");
+const advancedResults = require("../../middlewares/advancedResults");
 const { protect } = require("../../middlewares/auth");
 const {
   addSheet,
@@ -18,6 +19,8 @@ const {
 } = require("../../middlewares/authorize/sheetPolicy");
 
 const router = express.Router({ mergeParams: true });
+
+router.use("/:sheetId/expenses", ExpenseRouter);
 router.use(protect);
 
 router
