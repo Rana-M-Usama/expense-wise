@@ -1,9 +1,8 @@
-const httpStatus = require("http-status");
+import httpStatus from "http-status";
+import ErrorResponse from "../../utils/errorResponse";
+import Expense from "../../models/Expense";
 
-const ErrorResponse = require("../../utils/errorResponse");
-const Expense = require("../../models/Expense");
-
-exports.expensePolicy = async (req, res, next) => {
+const expensePolicy = async (req, res, next) => {
   req.expense = await Expense.findOne({
     _id: req.params.id,
     sheet: req.params.sheetId,
@@ -40,17 +39,24 @@ exports.expensePolicy = async (req, res, next) => {
   next();
 };
 
-exports.getExpensePolicy = async (req, res, next) => {
+const getExpensePolicy = async (req, res, next) => {
   // Access rights logic will lay down here....
   next();
 };
 
-exports.updateExpensePolicy = async (req, res, next) => {
+const updateExpensePolicy = async (req, res, next) => {
   // Access rights logic will lay down here....
   next();
 };
 
-exports.deleteExpensePolicy = async (req, res, next) => {
+const deleteExpensePolicy = async (req, res, next) => {
   // Access rights logic will lay down here....
   next();
+};
+
+export {
+  expensePolicy,
+  getExpensePolicy,
+  updateExpensePolicy,
+  deleteExpensePolicy,
 };

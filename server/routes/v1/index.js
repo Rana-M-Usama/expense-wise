@@ -1,11 +1,11 @@
-const express = require("express");
+import express from "express";
 
-const auth = require("./auth");
-const sheets = require("./sheets");
+import auth from "./auth";
+import sheets from "./sheets";
 
 const router = express.Router();
 
 router.use("/auth", auth);
 router.use("/sheets", sheets);
 
-module.exports = router;
+export default router;

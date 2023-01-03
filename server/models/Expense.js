@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const { ObjectId } = mongoose.Schema.Types;
+const { ObjectId } = mongoose.Types;
 
 const ExpenseSchema = new mongoose.Schema({
   title: {
@@ -41,4 +41,4 @@ const ExpenseSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Expense", ExpenseSchema);
+export default mongoose.model("Expense", ExpenseSchema);

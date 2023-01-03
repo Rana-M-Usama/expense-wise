@@ -1,6 +1,5 @@
-const winston = require("winston");
-
-const config = require("./config");
+import winston from "winston";
+import config from "./config";
 
 const DEVELOPMENT = "development";
 const DEBUG = "debug";
@@ -30,4 +29,4 @@ const logger = winston.createLogger({
   ],
 });
 
-module.exports = logger;
+export default logger;

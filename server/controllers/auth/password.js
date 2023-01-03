@@ -1,16 +1,15 @@
-const httpStatus = require("http-status");
-const crypto = require("crypto");
-
-const ErrorResponse = require("../../utils/errorResponse");
-const asyncHandler = require("../../middlewares/async");
-const sendEmail = require("../../utils/sendEmail");
-const User = require("../../models/User");
-const sendTokenResponse = require("../helpers/sendTokenResponse");
+import crypto from "crypto";
+import httpStatus from "http-status";
+import ErrorResponse from "../../utils/errorResponse";
+import asyncHandler from "../../middlewares/async";
+import sendEmail from "../../utils/sendEmail";
+import User from "../../models/User";
+import sendTokenResponse from "../helpers/sendTokenResponse";
 
 // @desc      Update password
 // @route     PUT /api/v1/auth/update-password
 // @access    Private
-exports.updatePassword = asyncHandler(async (req, res, next) => {
+const updatePassword = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id).select("+password");
 
   if (!(await user.matchPassword(req.body.currentPassword))) {
@@ -28,7 +27,7 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
 // @desc      Forgot password
 // @route     POST /api/v1/auth/forgot-password
 // @access    Public
-exports.forgotPassword = asyncHandler(async (req, res, next) => {
+const forgotPassword = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
@@ -78,7 +77,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 // @desc      Reset password
 // @route     PUT /api/v1/auth/reset-password/:resettoken
 // @access    Public
-exports.resetPassword = asyncHandler(async (req, res, next) => {
+const resetPassword = asyncHandler(async (req, res, next) => {
   const resetPasswordToken = crypto
     .createHash("sha256")
     .update(req.params.resetToken)
@@ -113,3 +112,5 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 
   sendTokenResponse(user, httpStatus.OK, res);
 });
+
+export { updatePassword, forgotPassword, resetPassword };

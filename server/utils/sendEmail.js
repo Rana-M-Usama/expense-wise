@@ -1,4 +1,6 @@
-const nodemailer = require("nodemailer");
+import nodemailer from "nodemailer";
+import config from "../config/config";
+import logger from "../config/logger";
 
 const {
   SMTP_EMAIL,
@@ -8,8 +10,7 @@ const {
   FROM_NAME,
   SMTP_PORT,
   env,
-} = require("../config/config");
-const logger = require("../config/logger");
+} = config;
 
 const DEVELOPMENT = "development";
 
@@ -37,4 +38,4 @@ const sendEmail = async (options) => {
   }
 };
 
-module.exports = sendEmail;
+export default sendEmail;

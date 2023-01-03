@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const SheetSchema = new mongoose.Schema(
   {
@@ -29,4 +29,4 @@ SheetSchema.pre("remove", async function (next) {
   next();
 });
 
-module.exports = mongoose.model("Sheet", SheetSchema);
+export default mongoose.model("Sheet", SheetSchema);

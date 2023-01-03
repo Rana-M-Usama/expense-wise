@@ -1,12 +1,13 @@
-const morgan = require("morgan");
-
-const config = require("./config");
-const logger = require("./logger");
+// const morgan = require("morgan");
+// const config = require("./config");
+// const logger = require("./logger");
+import morgan from "morgan";
+import config from "./config";
+import logger from "./logger";
 
 morgan.token("message", (req, res) => res.locals.errorMessage || "");
 
 const PRODUCTION = "production";
-
 const getIpFormat = config.env === PRODUCTION ? ":remote-addr - " : "";
 const successResponseFormat = `${getIpFormat}:method :url`.concat(
   " :status - :response-time ms",
@@ -25,7 +26,4 @@ const errorHandler = morgan(errorResponseFormat, {
   stream: { write: (message) => logger.error(message.trim()) },
 });
 
-module.exports = {
-  successHandler,
-  errorHandler,
-};
+export { successHandler, errorHandler };

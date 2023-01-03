@@ -84,4 +84,4 @@ const advancedResults =
     next();
   };
 
-module.exports = advancedResults;
+export default advancedResults;

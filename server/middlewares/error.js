@@ -1,10 +1,9 @@
-/* eslint no-unused-vars: ["off", { "varsIgnorePattern": "next" }] */
-const mongoose = require("mongoose");
-const httpStatus = require("http-status");
+import mongoose from "mongoose";
+import httpStatus from "http-status";
 
-const config = require("../config/config");
-const logger = require("../config/logger");
-const ErrorResponse = require("../utils/errorResponse");
+import config from "../config/config";
+import logger from "../config/logger";
+import ErrorResponse from "../utils/errorResponse";
 
 const DEVELOPMENT = "development";
 const PRODUCTION = "production";
@@ -53,7 +52,4 @@ const errorConverter = (err, req, res, next) => {
   );
 };
 
-module.exports = {
-  errorConverter,
-  errorHandler,
-};
+export { errorConverter, errorHandler };

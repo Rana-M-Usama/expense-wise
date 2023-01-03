@@ -1,27 +1,29 @@
-const httpStatus = require("http-status");
-
-const asyncHandler = require("../middlewares/async");
-const Sheet = require("../models/Sheet");
+import httpStatus from "http-status";
+import asyncHandler from "../middlewares/async";
+import Sheet from "../models/Sheet";
 
 // @desc      Get sheets
 // @route     GET /api/v1/sheets
+// @route     GET /api/v1/bootcamps/:bootcampId/sheets
 // @access    Private
-exports.getSheets = asyncHandler(async (req, res) =>
-  res.status(httpStatus.OK).json(res.advancedResults));
+const getSheets = asyncHandler(async (req, res) =>
+  res.status(httpStatus.OK).json(res.advancedResults),
+);
 
 // @desc      Get single sheet
 // @route     GET /api/v1/sheets/:id
 // @access    Private
-exports.getSheet = asyncHandler(async (req, res) =>
+const getSheet = asyncHandler(async (req, res) =>
   res.status(httpStatus.OK).json({
     success: true,
     data: req.sheet,
-  }));
+  }),
+);
 
 // @desc      Add sheet
 // @route     POST /api/v1/sheets/
 // @access    Private
-exports.addSheet = asyncHandler(async (req, res) => {
+const addSheet = asyncHandler(async (req, res) => {
   req.body.owner = req.user.id;
   const sheet = await Sheet.create(req.body);
 
@@ -34,7 +36,7 @@ exports.addSheet = asyncHandler(async (req, res) => {
 // @desc      Update sheet
 // @route     PUT /api/v1/sheets/:id
 // @access    Private
-exports.updateSheet = asyncHandler(async (req, res) => {
+const updateSheet = asyncHandler(async (req, res) => {
   const sheet = await Sheet.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -49,7 +51,7 @@ exports.updateSheet = asyncHandler(async (req, res) => {
 // @desc      Delete sheet
 // @route     DELETE /api/v1/sheets/:id
 // @access    Private
-exports.deleteSheet = asyncHandler(async (req, res) => {
+const deleteSheet = asyncHandler(async (req, res) => {
   await req.sheet.remove();
 
   res.status(httpStatus.OK).json({
@@ -57,3 +59,5 @@ exports.deleteSheet = asyncHandler(async (req, res) => {
     data: {},
   });
 });
+
+export { getSheets, getSheet, addSheet, updateSheet, deleteSheet };
