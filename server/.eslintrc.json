@@ -4,15 +4,24 @@
     "commonjs": true,
     "es2021": true
   },
-  "extends": ["prettier", "airbnb-base", "plugin:node/recommended"],
-  "plugins": ["prettier"],
+  "extends": [
+    "prettier",
+    "airbnb-base",
+    "plugin:node/recommended"
+  ],
+  "plugins": [
+    "prettier"
+  ],
   "overrides": [],
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
   "rules": {
-    "quotes": ["warn", "double"],
+    "quotes": [
+      "warn",
+      "double"
+    ],
     "no-unused-vars": "warn",
     "func-names": "off", // to avoid unnamed annoymus function warning
     "implicit-arrow-linebreak": "off", // to allow one line function
