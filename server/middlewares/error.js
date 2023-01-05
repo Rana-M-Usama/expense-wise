@@ -45,11 +45,7 @@ const errorConverter = (err, req, res, next) => {
     error = new ErrorResponse(message, statusCode);
   }
 
-  errorHandler(
-    new ErrorResponse(error.message || httpStatus[statusCode], statusCode),
-    req,
-    res,
-  );
+  errorHandler(new ErrorResponse(message, statusCode), req, res);
 };
 
 export { errorConverter, errorHandler };
