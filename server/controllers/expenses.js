@@ -1,5 +1,3 @@
-/* eslint-disable arrow-body-style */
-/* eslint-disable consistent-return */
 const httpStatus = require("http-status");
 const asyncHandler = require("../middlewares/async");
 const Expense = require("../models/Expense");
@@ -8,19 +6,17 @@ const Expense = require("../models/Expense");
 // @route     GET /api/v1/expenses
 // @route     GET /api/v1/sheets/:sheetId/expenses
 // @access    Public
-exports.getExpenses = asyncHandler(async (req, res) => {
-  return res.status(httpStatus.OK).json(res.advancedResults);
-});
+exports.getExpenses = asyncHandler(async (req, res) =>
+  res.status(httpStatus.OK).json(res.advancedResults));
 
 // @desc      Get single expense
 // @route     GET /api/v1/expenses/:id
 // @access    Public
-exports.getExpense = asyncHandler(async (req, res) => {
-  return res.status(httpStatus.OK).json({
+exports.getExpense = asyncHandler(async (req, res) =>
+  res.status(httpStatus.OK).json({
     success: true,
     data: req.expense,
-  });
-});
+  }));
 
 // @desc      Add expense
 // @route     POST /api/v1/sheets/:sheetId/expenses

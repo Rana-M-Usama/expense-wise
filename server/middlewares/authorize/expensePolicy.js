@@ -3,7 +3,6 @@ const httpStatus = require("http-status");
 const ErrorResponse = require("../../utils/errorResponse");
 const Expense = require("../../models/Expense");
 
-// eslint-disable-next-line consistent-return
 exports.expensePolicy = async (req, res, next) => {
   const expense = await Expense.findOne({
     _id: req.params.id,
@@ -22,7 +21,6 @@ exports.expensePolicy = async (req, res, next) => {
 
   req.expense = expense;
 
-  // Make sure expense belongs to user
   if (expense && expense.owner._id.toString() !== req.user.id) {
     return next(
       new ErrorResponse(
