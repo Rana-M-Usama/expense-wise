@@ -62,7 +62,7 @@ app.use((req, res) => {
   res.status(httpStatus.NOT_FOUND).json({ error: "Not Found!" });
 });
 
-// convert error to ApiError, if needed
+// convert error to ErrorResponse, if needed
 app.use(errorConverter);
 
 // handle error

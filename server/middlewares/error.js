@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const httpStatus = require("http-status");
 const config = require("../config/config");
 const logger = require("../config/logger");
-const ApiError = require("../utils/ApiError");
 const ErrorResponse = require("../utils/errorResponse");
 
 const errorHandler = (err, req, res) => {
@@ -29,16 +28,16 @@ const errorHandler = (err, req, res) => {
   res.status(statusCode).json({ response });
 };
 
-const errorConverter = (err, req, res, next) => {
+const errorConverter = (err, req, res) => {
   let error = err;
   const statusCode =
     error.statusCode || error instanceof mongoose.Error
       ? httpStatus.BAD_REQUEST
       : httpStatus.INTERNAL_SERVER_ERROR;
 
-  if (!(error instanceof ApiError)) {
+  if (!(error instanceof ErrorResponse)) {
     const message = error.message || httpStatus[statusCode];
-    error = new ApiError(statusCode, message, false, err.stack);
+    error = new ErrorResponse(statusCode, message, false, err.stack);
   }
 
   errorHandler(
