@@ -1,5 +1,3 @@
-/* eslint-disable arrow-body-style */
-/* eslint-disable consistent-return */
 const httpStatus = require("http-status");
 const asyncHandler = require("../middlewares/async");
 const Sheet = require("../models/Sheet");
@@ -8,19 +6,17 @@ const Sheet = require("../models/Sheet");
 // @route     GET /api/v1/sheets
 // @route     GET /api/v1/bootcamps/:bootcampId/sheets
 // @access    Public
-exports.getSheets = asyncHandler(async (req, res) => {
-  return res.status(httpStatus.OK).json(res.advancedResults);
-});
+exports.getSheets = asyncHandler(async (req, res) =>
+  res.status(httpStatus.OK).json(res.advancedResults));
 
 // @desc      Get single sheet
 // @route     GET /api/v1/sheets/:id
 // @access    Public
-exports.getSheet = asyncHandler(async (req, res) => {
-  return res.status(httpStatus.OK).json({
+exports.getSheet = asyncHandler(async (req, res) =>
+  res.status(httpStatus.OK).json({
     success: true,
     data: req.sheet,
-  });
-});
+  }));
 
 // @desc      Add sheet
 // @route     POST /api/v1/bootcamps/:bootcampId/sheets
