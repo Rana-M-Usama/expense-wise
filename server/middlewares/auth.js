@@ -8,8 +8,8 @@ exports.protect = asyncHandler(async (req, res, next) => {
   let token;
 
   if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
+    req.headers.authorization
+    && req.headers.authorization.startsWith("Bearer")
   ) {
     [, token] = req.headers.authorization.split(" ");
   }
@@ -17,7 +17,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
   if (!token) {
     return next(
       new ErrorResponse(
-        "Not authorized to access this route",
+        "Please provide authentication token.",
         httpStatus.UNAUTHORIZED,
       ),
     );
@@ -32,8 +32,8 @@ exports.protect = asyncHandler(async (req, res, next) => {
   } catch (err) {
     return next(
       new ErrorResponse(
-        "Not authorized to access this route",
-        httpStatus.UNAUTHORIZED,
+        "Something went wrong.",
+        httpStatus.INTERNAL_SERVER_ERROR,
       ),
     );
   }

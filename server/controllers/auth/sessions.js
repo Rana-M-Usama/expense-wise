@@ -11,14 +11,16 @@ exports.login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return next(new ErrorResponse("Please provide an email and password", 400));
+    return next(
+      new ErrorResponse("Please provide an email and password.", 400),
+    );
   }
 
   const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
     return next(
-      new ErrorResponse("Invalid credentials", httpStatus.UNAUTHORIZED),
+      new ErrorResponse("Invalid credentials.", httpStatus.UNAUTHORIZED),
     );
   }
 
@@ -26,7 +28,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 
   if (!isMatch) {
     return next(
-      new ErrorResponse("Invalid credentials", httpStatus.UNAUTHORIZED),
+      new ErrorResponse("Invalid credentials.", httpStatus.UNAUTHORIZED),
     );
   }
 
@@ -38,7 +40,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 // @access    Private
 exports.logout = asyncHandler(async (req, res) => {
   res.cookie("token", "none", {
-    expires: new Date(Date.now() + 10 * 1000),
+    expires: new Date(Date.now()),
     httpOnly: true,
   });
 

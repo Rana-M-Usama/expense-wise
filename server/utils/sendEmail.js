@@ -6,8 +6,11 @@ const {
   SMTP_PASSWORD,
   FROM_NAME,
   SMTP_PORT,
+  env,
 } = require("../config/config");
 const logger = require("../config/logger");
+
+const DEVELOPMENT = "development";
 
 const sendEmail = async (options) => {
   const transporter = nodemailer.createTransport({
@@ -28,7 +31,9 @@ const sendEmail = async (options) => {
 
   const info = await transporter.sendMail(message);
 
-  logger.info("Message sent: %s", info.messageId);
+  if (env === DEVELOPMENT) {
+    logger.info("Message sent: %s", info.messageId);
+  }
 };
 
 module.exports = sendEmail;

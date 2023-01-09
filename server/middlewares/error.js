@@ -1,12 +1,16 @@
+/* eslint no-unused-vars: ["off", { "varsIgnorePattern": "next" }] */
 const mongoose = require("mongoose");
 const httpStatus = require("http-status");
 const config = require("../config/config");
 const logger = require("../config/logger");
 const ErrorResponse = require("../utils/errorResponse");
 
-const errorHandler = (err, req, res) => {
+const DEVELOPMENT = "development";
+const PRODUCTION = "production";
+
+const errorHandler = (err, req, res, next) => {
   let { statusCode, message } = err;
-  if (config.env === "production" && !err.isOperational) {
+  if (config.env === PRODUCTION && !err.isOperational) {
     statusCode = httpStatus.INTERNAL_SERVER_ERROR;
     message = httpStatus[httpStatus.INTERNAL_SERVER_ERROR];
   }
@@ -15,29 +19,29 @@ const errorHandler = (err, req, res) => {
 
   const response = {
     success: false,
-    code: statusCode,
-    message,
+    statusCode,
+    errors: [message],
 
-    ...(config.env === "development" && { stack: err.stack }),
+    ...(config.env === DEVELOPMENT && { stack: err.stack }),
   };
 
-  if (config.env === "development") {
+  if (config.env === DEVELOPMENT) {
     logger.error(err);
   }
 
   res.status(statusCode).json({ response });
 };
 
-const errorConverter = (err, req, res) => {
+const errorConverter = (err, req, res, next) => {
   let error = err;
-  const statusCode =
-    error.statusCode || error instanceof mongoose.Error
-      ? httpStatus.BAD_REQUEST
-      : httpStatus.INTERNAL_SERVER_ERROR;
+  const statusCode = error.statusCode || error instanceof mongoose.Error
+    ? httpStatus.BAD_REQUEST
+    : httpStatus.INTERNAL_SERVER_ERROR;
+
+  const message = error.message || httpStatus[statusCode];
 
   if (!(error instanceof ErrorResponse)) {
-    const message = error.message || httpStatus[statusCode];
-    error = new ErrorResponse(statusCode, message, false, err.stack);
+    error = new ErrorResponse(message, statusCode);
   }
 
   errorHandler(
