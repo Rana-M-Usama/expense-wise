@@ -1,30 +1,25 @@
 {
-    "env": {
-        "browser": true,
-        "commonjs": true,
-        "es2021": true
-    },
-    "extends": [
-        "prettier",
-        "airbnb-base",
-        "plugin:node/recommended"
-    ],
-    "plugins": [
-        "prettier"
-    ],
-    "overrides": [],
-    "parserOptions": {
-        "ecmaVersion": "latest"
-    },
-    "rules": {
-        "quotes": [
-            "warn",
-            "double"
-        ],
-        "no-unused-vars": "warn",
-        "func-names": "off",
-        "no-process-exit": "off",
-        "implicit-arrow-linebreak": "off",
-        "operator-linebreak": "off"
-    }
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2021": true
+  },
+  "extends": ["prettier", "airbnb-base", "plugin:node/recommended"],
+  "plugins": ["prettier"],
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "rules": {
+    "quotes": ["warn", "double"],
+    "no-unused-vars": "warn",
+    "func-names": "off", // to avoid unnamed annoymus function warning
+    "implicit-arrow-linebreak": "off", // to allow one line function
+    "operator-linebreak": "off", // to avoid conflict between prettier and lint
+    "no-underscore-dangle": "off", // for mongoose to allow _id
+    "object-curly-newline": "off", // to avoid conflict between prettier and lint
+    "consistent-return": "off", // to avoid expected to return a value at the end of async arrow function error
+    "node/no-unsupported-features/es-syntax": "off", // to allow ES6 syntax
+    "max-len": ["warn", 80] // set line length to 80
+  }
 }

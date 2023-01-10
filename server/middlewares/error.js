@@ -1,25 +1,17 @@
+/* eslint no-unused-vars: ["off", { "varsIgnorePattern": "next" }] */
 const mongoose = require("mongoose");
 const httpStatus = require("http-status");
+
 const config = require("../config/config");
 const logger = require("../config/logger");
-const ApiError = require("../utils/ApiError");
+const ErrorResponse = require("../utils/errorResponse");
 
-const errorConverter = (err, req, res, next) => {
-  let error = err;
-  if (!(error instanceof ApiError)) {
-    const statusCode = error.statusCode || error instanceof mongoose.Error
-      ? httpStatus.BAD_REQUEST
-      : httpStatus.INTERNAL_SERVER_ERROR;
-    const message = error.message || httpStatus[statusCode];
-    error = new ApiError(statusCode, message, false, err.stack);
-  }
-  next(error);
-};
+const DEVELOPMENT = "development";
+const PRODUCTION = "production";
 
-// eslint-disable-next-line no-unused-vars
 const errorHandler = (err, req, res, next) => {
   let { statusCode, message } = err;
-  if (config.env === "production" && !err.isOperational) {
+  if (config.env === PRODUCTION && !err.isOperational) {
     statusCode = httpStatus.INTERNAL_SERVER_ERROR;
     message = httpStatus[httpStatus.INTERNAL_SERVER_ERROR];
   }
@@ -27,17 +19,38 @@ const errorHandler = (err, req, res, next) => {
   res.locals.errorMessage = err.message;
 
   const response = {
-    code: statusCode,
-    message,
-    // eslint-disable-next-line node/no-unsupported-features/es-syntax
-    ...(config.env === "development" && { stack: err.stack }),
+    success: false,
+    statusCode,
+    errors: [message],
+
+    ...(config.env === DEVELOPMENT && { stack: err.stack }),
   };
 
-  if (config.env === "development") {
+  if (config.env === DEVELOPMENT) {
     logger.error(err);
   }
 
-  res.status(statusCode).send(response);
+  res.status(statusCode).json({ response });
+};
+
+const errorConverter = (err, req, res, next) => {
+  let error = err;
+  const statusCode =
+    error.statusCode || error instanceof mongoose.Error
+      ? httpStatus.BAD_REQUEST
+      : httpStatus.INTERNAL_SERVER_ERROR;
+
+  const message = error.message || httpStatus[statusCode];
+
+  if (!(error instanceof ErrorResponse)) {
+    error = new ErrorResponse(message, statusCode);
+  }
+
+  errorHandler(
+    new ErrorResponse(error.message || httpStatus[statusCode], statusCode),
+    req,
+    res,
+  );
 };
 
 module.exports = {

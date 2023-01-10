@@ -1,0 +1,74 @@
+### Register User
+
+POST http://localhost:3000/api/v1/auth/register
+content-type: application/json
+
+{
+  "firstName": "test",
+  "lastName": "1",
+  "email": "demo@email.com",
+  "password": "Admin123*"
+}
+
+### Login User
+
+POST http://localhost:3000/api/v1/auth/login
+content-type: application/json
+
+{
+  "email": "demo@email.com",
+  "password": "Admin123*"
+}
+
+### Logout User
+
+GET http://localhost:3000/api/v1/auth/logout
+content-type: application/json
+
+### Profile
+
+GET http://localhost:3000/api/v1/auth/me
+content-type: application/json
+Authorization: Bearer paste_token_here
+
+### Update Profile
+
+PUT http://localhost:3000/api/v1/auth/updateDetails
+content-type: application/json
+Authorization: Bearer paste_token_here
+
+{
+  "firstName": "test",
+  "lastName": "1",
+  "imageUrl": "test.png"
+
+}
+
+### Update User Password
+
+PUT http://localhost:3000/api/v1/auth/updatePassword
+content-type: application/json
+Authorization: Bearer paste_token_here
+{
+  "currentPassword": "123456",
+  "newPassword": "1234567"
+
+}
+
+### Forgot Password
+
+POST http://localhost:3000/api/v1/auth/forgotPassword
+content-type: application/json
+
+{
+  "email": "demo@email.com"
+}
+
+### Reset Password
+
+PUT http://localhost:3000/api/v1/auth/resetPassword/:resetToken
+content-type: application/json
+
+{
+  "password": "newpassword"
+}

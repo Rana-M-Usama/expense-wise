@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 const app = require("./app");
 const config = require("./config/config");
 const logger = require("./config/logger");
@@ -15,10 +16,7 @@ const exitHandler = () => {
   if (server) {
     server.close(() => {
       logger.info("Server closed");
-      process.exit(1);
     });
-  } else {
-    process.exit(1);
   }
 };
 

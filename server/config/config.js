@@ -1,14 +1,16 @@
 const dotenv = require("dotenv");
-const path = require("path");
 const Joi = require("joi");
+const path = require("path");
 
 dotenv.config({ path: path.join(__dirname, "../.env") });
 
+const DEVELOPMENT = "development";
+const PRODUCTION = "production";
+const TEST = "test";
+
 const envVarsSchema = Joi.object()
   .keys({
-    NODE_ENV: Joi.string()
-      .valid("production", "development", "test")
-      .required(),
+    NODE_ENV: Joi.string().valid(PRODUCTION, DEVELOPMENT, TEST).required(),
     PORT: Joi.number().default(3000),
     MONGODB_URL: Joi.string().required().description("Mongo DB url"),
     JWT_SECRET: Joi.string().required().description("JWT secret key"),
@@ -30,7 +32,7 @@ module.exports = {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
   mongoose: {
-    url: envVars.MONGODB_URL + (envVars.NODE_ENV === "test" ? "-test" : ""),
+    url: envVars.MONGODB_URL + (envVars.NODE_ENV === TEST ? "-test" : ""),
   },
   jwt: {
     secret: envVars.JWT_SECRET,
@@ -43,4 +45,10 @@ module.exports = {
       },
     },
   },
+  SMTP_HOST: envVars.SMTP_HOST,
+  SMTP_PORT: envVars.SMTP_PORT,
+  SMTP_EMAIL: envVars.SMTP_EMAIL,
+  SMTP_PASSWORD: envVars.SMTP_PASSWORD,
+  FROM_EMAIL: envVars.FROM_EMAIL,
+  FROM_NAME: envVars.FROM_NAME,
 };

@@ -6,6 +6,8 @@ const compression = require("compression");
 const cors = require("cors");
 const httpStatus = require("http-status");
 const timeout = require("connect-timeout");
+const hpp = require("hpp");
+
 const config = require("./config/config");
 const morgan = require("./config/morgan");
 const { authLimiter } = require("./middlewares/rateLimiter");
@@ -35,6 +37,9 @@ app.use(mongoSanitize());
 // gzip compression
 app.use(compression());
 
+// Prevent http param pollution
+app.use(hpp());
+
 // enable cors
 app.use(cors());
 app.options("*", cors());
@@ -55,10 +60,10 @@ app.use("/api/v1", routes);
 
 // send back a 404 error for any unknown api request
 app.use((req, res) => {
-  res.status(httpStatus.NOT_FOUND).json({ error: "Not Found!" });
+  res.status(httpStatus.NOT_FOUND).json({ errors: ["Not Found!"] });
 });
 
-// convert error to ApiError, if needed
+// convert error to ErrorResponse, if needed
 app.use(errorConverter);
 
 // handle error
