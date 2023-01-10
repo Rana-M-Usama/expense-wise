@@ -4,14 +4,13 @@ const Sheet = require("../models/Sheet");
 
 // @desc      Get sheets
 // @route     GET /api/v1/sheets
-// @route     GET /api/v1/bootcamps/:bootcampId/sheets
-// @access    Public
+// @access    Private
 exports.getSheets = asyncHandler(async (req, res) =>
   res.status(httpStatus.OK).json(res.advancedResults));
 
 // @desc      Get single sheet
 // @route     GET /api/v1/sheets/:id
-// @access    Public
+// @access    Private
 exports.getSheet = asyncHandler(async (req, res) =>
   res.status(httpStatus.OK).json({
     success: true,
@@ -19,10 +18,10 @@ exports.getSheet = asyncHandler(async (req, res) =>
   }));
 
 // @desc      Add sheet
-// @route     POST /api/v1/bootcamps/:bootcampId/sheets
+// @route     POST /api/v1/sheets/
 // @access    Private
 exports.addSheet = asyncHandler(async (req, res) => {
-  req.body.user = req.user.id;
+  req.body.owner = req.user.id;
 
   const sheet = await Sheet.create(req.body);
 

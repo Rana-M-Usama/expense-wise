@@ -5,7 +5,7 @@ const SheetSchema = new mongoose.Schema(
     title: {
       type: String,
       trim: true,
-      required: [true, "Please add a title for the sheet"],
+      required: [true, "Title is required."],
       maxlength: 100,
     },
     description: {
@@ -21,11 +21,5 @@ const SheetSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
-
-// Cascade delete expenses when a sheet is deleted
-SheetSchema.pre("remove", async function (next) {
-  await this.model("Expense").deleteMany({ sheet: this._id });
-  next();
-});
 
 module.exports = mongoose.model("Sheet", SheetSchema);

@@ -11,7 +11,7 @@ exports.sheetPolicy = async (req, res, next) => {
   if (sheet && sheet.owner.toString() !== req.user.id) {
     return next(
       new ErrorResponse(
-        "Not authorized to access the sheet",
+        "Your are not authorized to access this sheet.",
         httpStatus.UNAUTHORIZED,
       ),
     );
@@ -19,7 +19,7 @@ exports.sheetPolicy = async (req, res, next) => {
   if (!req.sheet) {
     return next(
       new ErrorResponse(
-        `No sheet found with the id of ${req.params.id || req.params.sheetId}`,
+        `No sheet found with the id of ${id}`,
         httpStatus.NOT_FOUND,
       ),
     );
