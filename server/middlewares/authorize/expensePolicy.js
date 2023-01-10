@@ -24,7 +24,7 @@ exports.expensePolicy = async (req, res, next) => {
   if (expense && expense.owner._id.toString() !== req.user.id) {
     return next(
       new ErrorResponse(
-        "Not authorized to access the expense",
+        "Your are authorized to access the expense.",
         httpStatus.UNAUTHORIZED,
       ),
     );

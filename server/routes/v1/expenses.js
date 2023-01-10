@@ -1,4 +1,5 @@
 const express = require("express");
+
 const {
   getExpenses,
   getExpense,
@@ -6,11 +7,7 @@ const {
   updateExpense,
   deleteExpense,
 } = require("../../controllers/expenses");
-
 const Expense = require("../../models/Expense");
-
-const router = express.Router({ mergeParams: true });
-
 const advancedResults = require("../../middlewares/advancedResults");
 const { protect } = require("../../middlewares/auth");
 const {
@@ -20,6 +17,8 @@ const {
   deleteExpensePolicy,
 } = require("../../middlewares/authorize/expensePolicy");
 const { sheetPolicy } = require("../../middlewares/authorize/sheetPolicy");
+
+const router = express.Router({ mergeParams: true });
 
 router.use([protect, sheetPolicy]);
 
