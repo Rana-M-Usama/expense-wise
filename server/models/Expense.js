@@ -21,7 +21,6 @@ const ExpenseSchema = new mongoose.Schema({
     type: Number,
     required: [true, "Amount is required."],
     min: [0, "Must be at least 0, got {VALUE}"],
-    max: 100000000000,
   },
   amountType: {
     type: String,

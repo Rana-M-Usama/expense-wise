@@ -4,7 +4,7 @@ const ErrorResponse = require("../../utils/errorResponse");
 const Expense = require("../../models/Expense");
 
 exports.expensePolicy = async (req, res, next) => {
-  const expense = await Expense.findOne({
+  req.expense = await Expense.findOne({
     _id: req.params.id,
     sheet: req.params.sheetId,
   })
@@ -19,24 +19,24 @@ exports.expensePolicy = async (req, res, next) => {
       },
     });
 
-  req.expense = expense;
-
-  if (expense && expense.owner._id.toString() !== req.user.id) {
-    return next(
-      new ErrorResponse(
-        "Your are authorized to access the expense.",
-        httpStatus.UNAUTHORIZED,
-      ),
-    );
-  }
   if (!req.expense) {
     return next(
       new ErrorResponse(
-        `No expense found with the id of ${req.params.id}`,
+        `No expense found with the id of ${req.params.id}.`,
         httpStatus.NOT_FOUND,
       ),
     );
   }
+
+  if (req.expense.owner._id.toString() !== req.user.id) {
+    return next(
+      new ErrorResponse(
+        "Your are not authorized to access the expense.",
+        httpStatus.UNAUTHORIZED,
+      ),
+    );
+  }
+
   next();
 };
 
