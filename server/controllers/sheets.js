@@ -1,4 +1,5 @@
 const httpStatus = require("http-status");
+
 const asyncHandler = require("../middlewares/async");
 const Sheet = require("../models/Sheet");
 
@@ -22,7 +23,6 @@ exports.getSheet = asyncHandler(async (req, res) =>
 // @access    Private
 exports.addSheet = asyncHandler(async (req, res) => {
   req.body.owner = req.user.id;
-
   const sheet = await Sheet.create(req.body);
 
   res.status(httpStatus.ACCEPTED).json({

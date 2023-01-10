@@ -5,17 +5,8 @@ const Sheet = require("../../models/Sheet");
 
 exports.sheetPolicy = async (req, res, next) => {
   const id = req.params.sheetId || req.params.id;
-  const sheet = await Sheet.findById(id);
-  req.sheet = sheet;
+  req.sheet = await Sheet.findById(id);
 
-  if (sheet && sheet.owner.toString() !== req.user.id) {
-    return next(
-      new ErrorResponse(
-        "Your are not authorized to access this sheet.",
-        httpStatus.UNAUTHORIZED,
-      ),
-    );
-  }
   if (!req.sheet) {
     return next(
       new ErrorResponse(
@@ -24,6 +15,16 @@ exports.sheetPolicy = async (req, res, next) => {
       ),
     );
   }
+
+  if (req.sheet?.owner?.toString() !== req.user.id) {
+    return next(
+      new ErrorResponse(
+        "Your are not authorized to access this sheet.",
+        httpStatus.UNAUTHORIZED,
+      ),
+    );
+  }
+
   next();
 };
 

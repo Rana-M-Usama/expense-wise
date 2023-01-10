@@ -1,15 +1,15 @@
 const express = require("express");
 
-const {
-  getSheets,
-  getSheet,
-  addSheet,
-  updateSheet,
-  deleteSheet,
-} = require("../../controllers/sheets");
-const Sheet = require("../../models/Sheet");
 const advancedResults = require("../../middlewares/advancedResults");
+const Sheet = require("../../models/Sheet");
 const { protect } = require("../../middlewares/auth");
+const {
+  addSheet,
+  deleteSheet,
+  getSheet,
+  getSheets,
+  updateSheet,
+} = require("../../controllers/sheets");
 const {
   sheetPolicy,
   getSheetPolicy,
@@ -18,7 +18,6 @@ const {
 } = require("../../middlewares/authorize/sheetPolicy");
 
 const router = express.Router({ mergeParams: true });
-
 router.use(protect);
 
 router
