@@ -1,4 +1,5 @@
 const httpStatus = require("http-status");
+
 const ErrorResponse = require("../../utils/errorResponse");
 const asyncHandler = require("../../middlewares/async");
 const User = require("../../models/User");

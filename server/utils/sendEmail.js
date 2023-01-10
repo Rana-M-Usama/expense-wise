@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+
 const {
   SMTP_EMAIL,
   FROM_EMAIL,

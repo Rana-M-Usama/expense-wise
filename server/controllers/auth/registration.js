@@ -1,4 +1,5 @@
 const httpStatus = require("http-status");
+
 const asyncHandler = require("../../middlewares/async");
 const User = require("../../models/User");
 const sendTokenResponse = require("../helpers/sendTokenResponse");

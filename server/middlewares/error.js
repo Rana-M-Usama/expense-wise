@@ -1,6 +1,7 @@
 /* eslint no-unused-vars: ["off", { "varsIgnorePattern": "next" }] */
 const mongoose = require("mongoose");
 const httpStatus = require("http-status");
+
 const config = require("../config/config");
 const logger = require("../config/logger");
 const ErrorResponse = require("../utils/errorResponse");
@@ -34,9 +35,10 @@ const errorHandler = (err, req, res, next) => {
 
 const errorConverter = (err, req, res, next) => {
   let error = err;
-  const statusCode = error.statusCode || error instanceof mongoose.Error
-    ? httpStatus.BAD_REQUEST
-    : httpStatus.INTERNAL_SERVER_ERROR;
+  const statusCode =
+    error.statusCode || error instanceof mongoose.Error
+      ? httpStatus.BAD_REQUEST
+      : httpStatus.INTERNAL_SERVER_ERROR;
 
   const message = error.message || httpStatus[statusCode];
 
