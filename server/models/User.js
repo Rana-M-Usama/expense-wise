@@ -7,11 +7,13 @@ const UserSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
+      trim: true,
       required: [true, "First name is required."],
       maxlength: [50, "First name can not be longer than 50 characters."],
     },
     lastName: {
       type: String,
+      trim: true,
       required: [true, "Last name is required."],
       maxlength: [50, "Last name can not be longer than 50 characters."],
     },
@@ -34,7 +36,7 @@ const UserSchema = new mongoose.Schema(
       select: false,
       match: [
         /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z\d@$!%*#?&]{6,}$/,
-        "Please provide a valid password, Minimum six characters," +
+        "Please provide a valid password, minimum six characters," +
           "at least one capital letter and a number.",
       ],
     },
