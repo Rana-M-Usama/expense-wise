@@ -23,7 +23,6 @@ const router = express.Router({ mergeParams: true });
 
 router.use("/:sheetId/expenses", ExpenseRouter);
 router.use("/:sheetId/access-rights", AccessRightRouter);
-
 router.use(protect);
 
 router

@@ -38,7 +38,7 @@ const grantAccess = asyncHandler(async (req, res) => {
 });
 
 // @desc      Get a single access right
-// @route     GET /api/v1/access-right/:id
+// @route     GET /api/v1/access-rights/:id
 // @access    Private
 const getAccessRight = asyncHandler(async (req, res) =>
   res.status(httpStatus.OK).json({
@@ -47,7 +47,7 @@ const getAccessRight = asyncHandler(async (req, res) =>
   }));
 
 // @desc      Delete access right
-// @route     DELETE /api/v1/access-right/:id
+// @route     DELETE /api/v1/access-rights/:id
 // @access    Private
 const deleteAccessRight = asyncHandler(async (req, res) => {
   await req.accessRight.remove();

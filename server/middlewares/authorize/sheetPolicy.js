@@ -1,11 +1,16 @@
 import httpStatus from "http-status";
 
+import AccessRight from "../../models/AccessRight";
 import ErrorResponse from "../../utils/errorResponse";
 import Sheet from "../../models/Sheet";
 
 const sheetPolicy = async (req, res, next) => {
   const id = req.params.sheetId || req.params.id;
   req.sheet = await Sheet.findById(id);
+  req.accessRight = await AccessRight.findOne({
+    sheet: req.sheet,
+    user: req?.user?.id,
+  });
 
   if (!req.sheet) {
     return next(
@@ -16,10 +21,17 @@ const sheetPolicy = async (req, res, next) => {
     );
   }
 
-  if (req.sheet.owner.toString() !== req.user.id) {
+  next();
+};
+
+const getSheetPolicy = async (req, res, next) => {
+  if (
+    req.user.id !== req.sheet.owner._id.toString() &&
+    req.accessRight?.read !== true
+  ) {
     return next(
       new ErrorResponse(
-        "Your are not authorized to access this sheet.",
+        "You are not authorized to access this sheet.",
         httpStatus.UNAUTHORIZED,
       ),
     );
@@ -28,18 +40,35 @@ const sheetPolicy = async (req, res, next) => {
   next();
 };
 
-const getSheetPolicy = async (req, res, next) => {
-  // Access rights logic will lay down here....
-  next();
-};
-
 const updateSheetPolicy = async (req, res, next) => {
-  // Access rights logic will lay down here....
+  if (
+    req.user.id !== req.sheet.owner._id.toString() &&
+    req.accessRight?.update !== true
+  ) {
+    return next(
+      new ErrorResponse(
+        "You are not authorized to edit this sheet.",
+        httpStatus.UNAUTHORIZED,
+      ),
+    );
+  }
+
   next();
 };
 
 const deleteSheetPolicy = async (req, res, next) => {
-  // Access rights logic will lay down here....
+  if (
+    req.user.id !== req.sheet.owner._id.toString() &&
+    req.accessRight?.delete !== true
+  ) {
+    return next(
+      new ErrorResponse(
+        "You are not authorized to delete this sheet.",
+        httpStatus.UNAUTHORIZED,
+      ),
+    );
+  }
+
   next();
 };
 

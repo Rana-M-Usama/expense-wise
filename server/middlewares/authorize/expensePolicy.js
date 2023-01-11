@@ -1,5 +1,6 @@
 import httpStatus from "http-status";
 
+import { getSheetPolicy, updateSheetPolicy } from "./sheetPolicy";
 import ErrorResponse from "../../utils/errorResponse";
 import Expense from "../../models/Expense";
 
@@ -27,35 +28,27 @@ const expensePolicy = async (req, res, next) => {
       ),
     );
   }
-
-  if (req.expense.owner._id.toString() !== req.user.id) {
-    return next(
-      new ErrorResponse(
-        "Your are not authorized to access the expense.",
-        httpStatus.UNAUTHORIZED,
-      ),
-    );
-  }
-
   next();
 };
 
 const getExpensePolicy = async (req, res, next) => {
-  // Access rights logic will lay down here....
-  next();
+  getSheetPolicy(req, res, next);
+};
+
+const addExpensePolicy = async (req, res, next) => {
+  updateSheetPolicy(req, res, next);
 };
 
 const updateExpensePolicy = async (req, res, next) => {
-  // Access rights logic will lay down here....
-  next();
+  updateSheetPolicy(req, res, next);
 };
 
 const deleteExpensePolicy = async (req, res, next) => {
-  // Access rights logic will lay down here....
-  next();
+  updateSheetPolicy(req, res, next);
 };
 
 export {
+  addExpensePolicy,
   expensePolicy,
   getExpensePolicy,
   updateExpensePolicy,

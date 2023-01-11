@@ -8,15 +8,19 @@ import {
   updateExpense,
 } from "../../controllers/expenses";
 import {
+  addExpensePolicy,
   deleteExpensePolicy,
   expensePolicy,
   getExpensePolicy,
   updateExpensePolicy,
 } from "../../middlewares/authorize/expensePolicy";
+import {
+  getSheetPolicy,
+  sheetPolicy,
+} from "../../middlewares/authorize/sheetPolicy";
 import advancedResults from "../../middlewares/advancedResults";
 import Expense from "../../models/Expense";
 import protect from "../../middlewares/auth";
-import { sheetPolicy } from "../../middlewares/authorize/sheetPolicy";
 
 const router = express.Router({ mergeParams: true });
 router.use([protect, sheetPolicy]);
@@ -28,14 +32,15 @@ router
       path: "sheet",
       select: "title owner",
     }),
+    getSheetPolicy,
     getExpenses,
   )
-  .post(addExpense);
+  .post(addExpensePolicy, addExpense);
 
 router
   .route("/:id")
-  .get([expensePolicy, getExpensePolicy], getExpense)
-  .put([expensePolicy, updateExpensePolicy], updateExpense)
-  .delete([expensePolicy, deleteExpensePolicy], deleteExpense);
+  .get([getExpensePolicy, expensePolicy], getExpense)
+  .put([updateExpensePolicy, expensePolicy], updateExpense)
+  .delete([deleteExpensePolicy, expensePolicy], deleteExpense);
 
 export default router;
