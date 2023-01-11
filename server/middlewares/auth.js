@@ -32,8 +32,8 @@ const protect = asyncHandler(async (req, res, next) => {
   } catch (err) {
     return next(
       new ErrorResponse(
-        "Something went wrong.",
-        httpStatus.INTERNAL_SERVER_ERROR,
+        "Please provide a valid token",
+        httpStatus.UNAUTHORIZED,
       ),
     );
   }

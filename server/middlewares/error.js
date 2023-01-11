@@ -30,23 +30,23 @@ const errorHandler = (err, req, res, next) => {
     logger.error(err);
   }
 
-  res.status(statusCode).json({ response });
+  res.status(statusCode).json({ ...response });
 };
 
 const errorConverter = (err, req, res, next) => {
   let error = err;
   const statusCode =
-    error.statusCode || error instanceof mongoose.Error
+    error.statusCode ||
+    (error instanceof mongoose.Error
       ? httpStatus.BAD_REQUEST
-      : httpStatus.INTERNAL_SERVER_ERROR;
+      : httpStatus.INTERNAL_SERVER_ERROR);
 
   const message = error.message || httpStatus[statusCode];
 
   if (!(error instanceof ErrorResponse)) {
     error = new ErrorResponse(message, statusCode);
   }
-
-  errorHandler(new ErrorResponse(message, statusCode), req, res);
+  errorHandler(new ErrorResponse(message, statusCode), req, res, next);
 };
 
 export { errorConverter, errorHandler };

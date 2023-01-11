@@ -3,6 +3,7 @@ import nodemailer from "nodemailer";
 import config from "../config/config";
 import logger from "../config/logger";
 
+const DEVELOPMENT = "development";
 const {
   SMTP_EMAIL,
   FROM_EMAIL,
@@ -13,18 +14,16 @@ const {
   env,
 } = config;
 
-const DEVELOPMENT = "development";
+const transporter = nodemailer.createTransport({
+  host: SMTP_HOST,
+  port: SMTP_PORT,
+  auth: {
+    user: SMTP_EMAIL,
+    pass: SMTP_PASSWORD,
+  },
+});
 
 const sendEmail = async (options) => {
-  const transporter = nodemailer.createTransport({
-    host: SMTP_HOST,
-    port: SMTP_PORT,
-    auth: {
-      user: SMTP_EMAIL,
-      pass: SMTP_PASSWORD,
-    },
-  });
-
   const message = {
     from: `${FROM_NAME} <${FROM_EMAIL}>`,
     to: options.email,
@@ -39,4 +38,4 @@ const sendEmail = async (options) => {
   }
 };
 
-export default sendEmail;
+export default { sendEmail, transporter };
