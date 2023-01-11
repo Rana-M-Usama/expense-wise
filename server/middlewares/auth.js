@@ -1,11 +1,11 @@
-const jwt = require("jsonwebtoken");
-const httpStatus = require("http-status");
+import httpStatus from "http-status";
+import jwt from "jsonwebtoken";
 
-const asyncHandler = require("./async");
-const ErrorResponse = require("../utils/errorResponse");
-const User = require("../models/User");
+import asyncHandler from "./async";
+import ErrorResponse from "../utils/errorResponse";
+import User from "../models/User";
 
-exports.protect = asyncHandler(async (req, res, next) => {
+const protect = asyncHandler(async (req, res, next) => {
   let token;
 
   if (
@@ -38,3 +38,5 @@ exports.protect = asyncHandler(async (req, res, next) => {
     );
   }
 });
+
+export default protect;

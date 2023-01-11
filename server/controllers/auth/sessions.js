@@ -1,14 +1,14 @@
-const httpStatus = require("http-status");
+import httpStatus from "http-status";
 
-const ErrorResponse = require("../../utils/errorResponse");
-const asyncHandler = require("../../middlewares/async");
-const User = require("../../models/User");
-const sendTokenResponse = require("../helpers/sendTokenResponse");
+import asyncHandler from "../../middlewares/async";
+import ErrorResponse from "../../utils/errorResponse";
+import sendTokenResponse from "../helpers/sendTokenResponse";
+import User from "../../models/User";
 
 // @desc      Login user
 // @route     POST /api/v1/auth/login
 // @access    Public
-exports.login = asyncHandler(async (req, res, next) => {
+const login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -39,7 +39,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 // @desc      Log user out / clear cookie
 // @route     GET /api/v1/auth/logout
 // @access    Private
-exports.logout = asyncHandler(async (req, res) => {
+const logout = asyncHandler(async (req, res) => {
   res.cookie("token", "none", {
     expires: new Date(Date.now()),
     httpOnly: true,
@@ -54,7 +54,7 @@ exports.logout = asyncHandler(async (req, res) => {
 // @desc      Get current logged in user
 // @route     POST /api/v1/auth/me
 // @access    Private
-exports.getMe = asyncHandler(async (req, res) => {
+const getMe = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user.id);
 
   res.status(httpStatus.OK).json({
@@ -62,3 +62,5 @@ exports.getMe = asyncHandler(async (req, res) => {
     data: user,
   });
 });
+
+export { login, logout, getMe };

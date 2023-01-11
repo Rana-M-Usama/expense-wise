@@ -1,18 +1,18 @@
-const express = require("express");
-const helmet = require("helmet");
-const xss = require("xss-clean");
-const mongoSanitize = require("express-mongo-sanitize");
-const compression = require("compression");
-const cors = require("cors");
-const httpStatus = require("http-status");
-const timeout = require("connect-timeout");
-const hpp = require("hpp");
+import compression from "compression";
+import cors from "cors";
+import express from "express";
+import helmet from "helmet";
+import hpp from "hpp";
+import httpStatus from "http-status";
+import mongoSanitize from "express-mongo-sanitize";
+import timeout from "connect-timeout";
+import xss from "xss-clean";
 
-const config = require("./config/config");
-const morgan = require("./config/morgan");
-const { authLimiter } = require("./middlewares/rateLimiter");
-const routes = require("./routes/v1");
-const { errorConverter, errorHandler } = require("./middlewares/error");
+import * as morgan from "./config/morgan";
+import { errorConverter, errorHandler } from "./middlewares/error";
+import authLimiter from "./middlewares/rateLimiter";
+import config from "./config/config";
+import routes from "./routes/v1";
 
 const app = express();
 
@@ -69,4 +69,4 @@ app.use(errorConverter);
 // handle error
 app.use(errorHandler);
 
-module.exports = app;
+export default app;

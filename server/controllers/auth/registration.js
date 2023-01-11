@@ -1,13 +1,13 @@
-const httpStatus = require("http-status");
+import httpStatus from "http-status";
 
-const asyncHandler = require("../../middlewares/async");
-const User = require("../../models/User");
-const sendTokenResponse = require("../helpers/sendTokenResponse");
+import asyncHandler from "../../middlewares/async";
+import sendTokenResponse from "../helpers/sendTokenResponse";
+import User from "../../models/User";
 
 // @desc      Register user
 // @route     POST /api/v1/auth/register
 // @access    Public
-exports.register = asyncHandler(async (req, res) => {
+const register = asyncHandler(async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
 
   if (email && (await User.findOne({ email }))) {
@@ -29,7 +29,7 @@ exports.register = asyncHandler(async (req, res) => {
 // @desc      Update user details
 // @route     PUT /api/v1/auth/update-details
 // @access    Private
-exports.updateDetails = asyncHandler(async (req, res) => {
+const updateDetails = asyncHandler(async (req, res) => {
   const { firstName, lastName, imageUrl } = req.body;
 
   const user = await User.findByIdAndUpdate(
@@ -46,3 +46,5 @@ exports.updateDetails = asyncHandler(async (req, res) => {
     data: user,
   });
 });
+
+export { register, updateDetails };

@@ -1,9 +1,9 @@
-const httpStatus = require("http-status");
+import httpStatus from "http-status";
 
-const ErrorResponse = require("../../utils/errorResponse");
-const Sheet = require("../../models/Sheet");
+import ErrorResponse from "../../utils/errorResponse";
+import Sheet from "../../models/Sheet";
 
-exports.sheetPolicy = async (req, res, next) => {
+const sheetPolicy = async (req, res, next) => {
   const id = req.params.sheetId || req.params.id;
   req.sheet = await Sheet.findById(id);
 
@@ -28,17 +28,19 @@ exports.sheetPolicy = async (req, res, next) => {
   next();
 };
 
-exports.getSheetPolicy = async (req, res, next) => {
+const getSheetPolicy = async (req, res, next) => {
   // Access rights logic will lay down here....
   next();
 };
 
-exports.updateSheetPolicy = async (req, res, next) => {
+const updateSheetPolicy = async (req, res, next) => {
   // Access rights logic will lay down here....
   next();
 };
 
-exports.deleteSheetPolicy = async (req, res, next) => {
+const deleteSheetPolicy = async (req, res, next) => {
   // Access rights logic will lay down here....
   next();
 };
+
+export { sheetPolicy, getSheetPolicy, updateSheetPolicy, deleteSheetPolicy };

@@ -1,14 +1,13 @@
-const express = require("express");
+import express from "express";
 
-const { password, registration, sessions } = require("../../controllers/auth");
+import { password, registration, sessions } from "../../controllers/auth";
+import protect from "../../middlewares/auth";
 
 const { forgotPassword, resetPassword, updatePassword } = password;
 const { register, updateDetails } = registration;
 const { getMe, login, logout } = sessions;
 
 const router = express.Router();
-
-const { protect } = require("../../middlewares/auth");
 
 router.post("/register", register);
 router.post("/login", login);
@@ -19,4 +18,4 @@ router.put("/update-password", protect, updatePassword);
 router.post("/forgot-password", forgotPassword);
 router.put("/reset-password/:resetToken", resetPassword);
 
-module.exports = router;
+export default router;

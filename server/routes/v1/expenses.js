@@ -1,22 +1,22 @@
-const express = require("express");
+import express from "express";
 
-const { sheetPolicy } = require("../../middlewares/authorize/sheetPolicy");
-const Expense = require("../../models/Expense");
-const advancedResults = require("../../middlewares/advancedResults");
-const { protect } = require("../../middlewares/auth");
-const {
-  getExpenses,
-  getExpense,
+import {
   addExpense,
-  updateExpense,
   deleteExpense,
-} = require("../../controllers/expenses");
-const {
+  getExpense,
+  getExpenses,
+  updateExpense,
+} from "../../controllers/expenses";
+import {
+  deleteExpensePolicy,
   expensePolicy,
   getExpensePolicy,
   updateExpensePolicy,
-  deleteExpensePolicy,
-} = require("../../middlewares/authorize/expensePolicy");
+} from "../../middlewares/authorize/expensePolicy";
+import advancedResults from "../../middlewares/advancedResults";
+import Expense from "../../models/Expense";
+import protect from "../../middlewares/auth";
+import { sheetPolicy } from "../../middlewares/authorize/sheetPolicy";
 
 const router = express.Router({ mergeParams: true });
 router.use([protect, sheetPolicy]);
@@ -38,4 +38,4 @@ router
   .put([expensePolicy, updateExpensePolicy], updateExpense)
   .delete([expensePolicy, deleteExpensePolicy], deleteExpense);
 
-module.exports = router;
+export default router;
