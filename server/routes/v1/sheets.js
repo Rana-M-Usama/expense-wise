@@ -13,6 +13,7 @@ import {
   sheetPolicy,
   updateSheetPolicy,
 } from "../../middlewares/authorize/sheetPolicy";
+import AccessRightRouter from "./accessRights";
 import advancedResults from "../../middlewares/advancedResults";
 import ExpenseRouter from "./expenses";
 import protect from "../../middlewares/auth";
@@ -21,6 +22,8 @@ import Sheet from "../../models/Sheet";
 const router = express.Router({ mergeParams: true });
 
 router.use("/:sheetId/expenses", ExpenseRouter);
+router.use("/:sheetId/access-rights", AccessRightRouter);
+
 router.use(protect);
 
 router
