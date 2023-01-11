@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint no-unused-vars: ["off", { "varsIgnorePattern": "next" }] */
 import httpStatus from "http-status";
 import mongoose from "mongoose";
 
