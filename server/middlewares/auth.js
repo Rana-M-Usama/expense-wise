@@ -1,5 +1,6 @@
-import jwt from "jsonwebtoken";
 import httpStatus from "http-status";
+import jwt from "jsonwebtoken";
+
 import asyncHandler from "./async";
 import ErrorResponse from "../utils/errorResponse";
 import User from "../models/User";

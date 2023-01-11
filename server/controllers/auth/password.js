@@ -1,10 +1,11 @@
 import crypto from "crypto";
 import httpStatus from "http-status";
-import ErrorResponse from "../../utils/errorResponse";
+
 import asyncHandler from "../../middlewares/async";
+import ErrorResponse from "../../utils/errorResponse";
 import sendEmail from "../../utils/sendEmail";
-import User from "../../models/User";
 import sendTokenResponse from "../helpers/sendTokenResponse";
+import User from "../../models/User";
 
 // @desc      Update password
 // @route     PUT /api/v1/auth/update-password

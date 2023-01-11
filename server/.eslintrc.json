@@ -4,24 +4,15 @@
     "commonjs": true,
     "es2021": true
   },
-  "extends": [
-    "prettier",
-    "airbnb-base",
-    "plugin:node/recommended"
-  ],
-  "plugins": [
-    "prettier"
-  ],
+  "extends": ["prettier", "airbnb-base", "plugin:node/recommended"],
+  "plugins": ["prettier"],
   "overrides": [],
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
   "rules": {
-    "quotes": [
-      "warn",
-      "double"
-    ],
+    "quotes": ["warn", "double"],
     "no-unused-vars": "warn",
     "func-names": "off", // to avoid unnamed annoymus function warning
     "implicit-arrow-linebreak": "off", // to allow one line function
@@ -30,6 +21,14 @@
     "object-curly-newline": "off", // to avoid line break during destructuring the object
     "consistent-return": "off", // to avoid expected to return a value at the end of async arrow function error
     "node/no-unsupported-features/es-syntax": "off", // to allow ES6 syntax
-    "max-len": ["warn", 80] // set line length to 80
+    "max-len": ["warn", 80], // set line length to 80,
+    "import/order": "off", // to allow sort order of imports
+    "sort-imports": [
+      "error",
+      {
+        "ignoreCase": true,
+        "allowSeparatedGroups": true
+      }
+    ] // for set order of imports
   }
 }

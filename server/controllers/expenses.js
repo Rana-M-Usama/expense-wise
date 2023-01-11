@@ -7,8 +7,7 @@ import Expense from "../models/Expense";
 // @route     GET /api/v1/sheets/:sheetId/expenses
 // @access    Private
 const getExpenses = asyncHandler(async (req, res) =>
-  res.status(httpStatus.OK).json(res.advancedResults),
-);
+  res.status(httpStatus.OK).json(res.advancedResults));
 
 // @desc      Get single expense
 // @route     GET /api/v1/expenses/:id
@@ -17,8 +16,7 @@ const getExpense = asyncHandler(async (req, res) =>
   res.status(httpStatus.OK).json({
     success: true,
     data: req.expense,
-  }),
-);
+  }));
 
 // @desc      Add expense
 // @route     POST /api/v1/sheets/:sheetId/expenses

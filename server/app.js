@@ -1,17 +1,18 @@
-import express from "express";
-import helmet from "helmet";
-import xss from "xss-clean";
-import mongoSanitize from "express-mongo-sanitize";
 import compression from "compression";
 import cors from "cors";
-import httpStatus from "http-status";
-import timeout from "connect-timeout";
+import express from "express";
+import helmet from "helmet";
 import hpp from "hpp";
-import config from "./config/config";
+import httpStatus from "http-status";
+import mongoSanitize from "express-mongo-sanitize";
+import timeout from "connect-timeout";
+import xss from "xss-clean";
+
 import * as morgan from "./config/morgan";
-import authLimiter from "./middlewares/rateLimiter";
-import routes from "./routes/v1";
 import { errorConverter, errorHandler } from "./middlewares/error";
+import authLimiter from "./middlewares/rateLimiter";
+import config from "./config/config";
+import routes from "./routes/v1";
 
 const app = express();
 

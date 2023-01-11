@@ -1,9 +1,10 @@
-import mongoose from "mongoose";
+/* eslint-disable no-unused-vars */
 import httpStatus from "http-status";
+import mongoose from "mongoose";
 
 import config from "../config/config";
-import logger from "../config/logger";
 import ErrorResponse from "../utils/errorResponse";
+import logger from "../config/logger";
 
 const DEVELOPMENT = "development";
 const PRODUCTION = "production";

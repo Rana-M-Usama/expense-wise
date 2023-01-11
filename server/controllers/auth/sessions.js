@@ -1,9 +1,9 @@
 import httpStatus from "http-status";
 
-import ErrorResponse from "../../utils/errorResponse";
 import asyncHandler from "../../middlewares/async";
-import User from "../../models/User";
+import ErrorResponse from "../../utils/errorResponse";
 import sendTokenResponse from "../helpers/sendTokenResponse";
+import User from "../../models/User";
 
 // @desc      Login user
 // @route     POST /api/v1/auth/login

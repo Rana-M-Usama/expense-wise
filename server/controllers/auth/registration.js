@@ -1,7 +1,8 @@
 import httpStatus from "http-status";
+
 import asyncHandler from "../../middlewares/async";
-import User from "../../models/User";
 import sendTokenResponse from "../helpers/sendTokenResponse";
+import User from "../../models/User";
 
 // @desc      Register user
 // @route     POST /api/v1/auth/register
