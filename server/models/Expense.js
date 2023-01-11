@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const { ObjectId } = mongoose.Types;
+const { ObjectId } = mongoose.Schema.Types;
 
 const ExpenseSchema = new mongoose.Schema({
   title: {
