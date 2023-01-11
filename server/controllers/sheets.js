@@ -5,10 +5,10 @@ import Sheet from "../models/Sheet";
 
 // @desc      Get sheets
 // @route     GET /api/v1/sheets
-// @route     GET /api/v1/bootcamps/:bootcampId/sheets
 // @access    Private
 const getSheets = asyncHandler(async (req, res) =>
-  res.status(httpStatus.OK).json(res.advancedResults));
+  res.status(httpStatus.OK).json(res.advancedResults),
+);
 
 // @desc      Get single sheet
 // @route     GET /api/v1/sheets/:id
@@ -17,7 +17,8 @@ const getSheet = asyncHandler(async (req, res) =>
   res.status(httpStatus.OK).json({
     success: true,
     data: req.sheet,
-  }));
+  }),
+);
 
 // @desc      Add sheet
 // @route     POST /api/v1/sheets/

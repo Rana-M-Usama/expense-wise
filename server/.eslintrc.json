@@ -22,12 +22,12 @@
     "consistent-return": "off", // to avoid expected to return a value at the end of async arrow function error
     "node/no-unsupported-features/es-syntax": "off", // to allow ES6 syntax
     "max-len": ["warn", 80], // set line length to 80
-    "function-paren-newline": "off", // to allow break line ');' at the end of function
+    "function-paren-newline": "off", // to allow line break before ');' at the end of function
     "import/order": "off", // to allow sort order of imports
     "sort-imports": [
       "error",
       {
-        "ignoreCase": true, // to allow ignore the check of case i.e Lowercase, Uppercase
+        "ignoreCase": true, // to ignore the check of case i.e Lowercase, Uppercase
         "allowSeparatedGroups": true // to allow multiple import groups
       }
     ] // to set order of imports
