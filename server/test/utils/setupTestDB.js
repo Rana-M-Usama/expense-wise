@@ -6,6 +6,7 @@ import logger from "../../config/logger";
 
 const setupTestDB = () => {
   beforeAll(async () => {
+    mongoose.set("strictQuery", false);
     mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
       logger.info("Connected to test database");
     });

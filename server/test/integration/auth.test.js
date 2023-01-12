@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, jest, test } from "@jest/globals";
+import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { faker } from "@faker-js/faker";
 import httpStatus from "http-status";
 import request from "supertest";
@@ -12,6 +12,7 @@ setupTestDB();
 
 describe("Auth routes", () => {
   let user;
+
   beforeEach(() => {
     user = {
       firstName: faker.name.fullName(),
@@ -20,8 +21,9 @@ describe("Auth routes", () => {
       password: "Admin123*",
     };
   });
+
   describe("POST /api/v1/auth/register", () => {
-    test("should return 201 and successfully register user for valid user", async () => {
+    it("should return 201 and successfully register user for valid user", async () => {
       const res = await request(app)
         .post("/api/v1/auth/register")
         .send(user)
@@ -30,7 +32,7 @@ describe("Auth routes", () => {
       expect(res.body.data).toHaveProperty("token");
     });
 
-    test("should return 400 error if email is invalid", async () => {
+    it("should return 400 error if email is invalid", async () => {
       user.email = "invalidEmail";
 
       const res = await request(app)
@@ -43,7 +45,7 @@ describe("Auth routes", () => {
       );
     });
 
-    test("should return 400 error if email is already used", async () => {
+    it("should return 400 error if email is already used", async () => {
       const user0 = await User.create(user);
       user.email = user0.email;
 
@@ -53,7 +55,7 @@ describe("Auth routes", () => {
         .expect(httpStatus.CONFLICT);
     });
 
-    test("should return 400 error if password length is less than 6 characters", async () => {
+    it("should return 400 error if password length is less than 6 characters", async () => {
       user.password = "Admin";
 
       const res = await request(app)
@@ -62,11 +64,11 @@ describe("Auth routes", () => {
         .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.errors[0]).toBe(
-        "User validation failed: password: Please provide a valid password, minimum six characters,at least one capital letter and a number.",
+        "User validation failed: password: Please provide a valid password, minimum six characters, at least one capital letter and a number.",
       );
     });
 
-    test("should return 400 error if password does not contain both letters and numbers", async () => {
+    it("should return 400 error if password does not contain both letters and numbers", async () => {
       user.password = "password";
 
       await request(app)
@@ -84,7 +86,7 @@ describe("Auth routes", () => {
   });
 
   describe("POST /api/v1/auth/login", () => {
-    test("should return 200 and auth token if email and password match", async () => {
+    it("should return 200 and auth token if email and password match", async () => {
       const loginCredentials = {
         email: user.email,
         password: user.password,
@@ -106,7 +108,7 @@ describe("Auth routes", () => {
       expect(res.body.data.token).toBeDefined();
     });
 
-    test("should return 401 error if there are no users with that email", async () => {
+    it("should return 401 error if there are no users with that email", async () => {
       const loginCredentials = {
         email: user.email,
         password: user.password,
@@ -124,7 +126,7 @@ describe("Auth routes", () => {
       });
     });
 
-    test("should return 401 error if password is wrong", async () => {
+    it("should return 401 error if password is wrong", async () => {
       const loginCredentials = {
         email: user.email,
         password: "invalidPassword123*",
@@ -147,7 +149,7 @@ describe("Auth routes", () => {
       });
     });
 
-    test("should return 400 error without email and password", async () => {
+    it("should return 400 error without email and password", async () => {
       const res = await request(app)
         .post("/api/v1/auth/login")
         .expect(httpStatus.BAD_REQUEST);
@@ -161,7 +163,7 @@ describe("Auth routes", () => {
   });
 
   describe("GET /api/v1/auth/me", () => {
-    test("should return 200 and login user with auth token", async () => {
+    it("should return 200 and login user with auth token", async () => {
       const loginCredentials = {
         email: user.email,
         password: user.password,
@@ -197,7 +199,7 @@ describe("Auth routes", () => {
       });
     });
 
-    test("should return 400 and unauthorized message without auth token", async () => {
+    it("should return 400 and unauthorized message without auth token", async () => {
       const res = await request(app)
         .get("/api/v1/auth/me")
         .expect(httpStatus.UNAUTHORIZED);
@@ -211,7 +213,7 @@ describe("Auth routes", () => {
   });
 
   describe("PUT /api/v1/auth/update-details", () => {
-    test("should return 200 and updated user", async () => {
+    it("should return 200 and updated user", async () => {
       let res = await request(app)
         .post("/api/v1/auth/register")
         .send(user)
@@ -231,7 +233,7 @@ describe("Auth routes", () => {
       expect(res.body.data.lastName).toBe(user.lastName);
       expect(res.body.data.imageUrl).toBe(user.imageUrl);
     });
-    test("should return 400 and unauthorized message with invalid auth token", async () => {
+    it("should return 400 and unauthorized message with invalid auth token", async () => {
       let res = await request(app)
         .post("/api/v1/auth/register")
         .send(user)
@@ -247,12 +249,12 @@ describe("Auth routes", () => {
         .send(user)
         .expect(httpStatus.UNAUTHORIZED);
 
-      expect(res.body.errors[0]).toBe("Please provide a valid token");
+      expect(res.body.errors[0]).toBe("Please provide a valid token.");
     });
   });
 
   describe("PUT /api/v1/auth/update-password", () => {
-    test("should return 200 and auth token", async () => {
+    it("should return 200 and auth token", async () => {
       let res = await request(app)
         .post("/api/v1/auth/register")
         .send(user)
@@ -271,7 +273,7 @@ describe("Auth routes", () => {
       expect(res.body.success).toBe(true);
     });
 
-    test("should return 400 and ", () => {});
+    it("should return 400 and ", () => {});
   });
 
   describe("POST /api/v1/auth/forgot-password", () => {
@@ -279,7 +281,7 @@ describe("Auth routes", () => {
       jest.spyOn(emailService.transporter, "sendMail").mockResolvedValue(true);
     });
 
-    test("should return 204 and send reset password email to the user", async () => {
+    it("should return 204 and send reset password email to the user", async () => {
       const sendResetPasswordEmailSpy = jest.spyOn(emailService, "sendEmail");
 
       await request(app)
@@ -302,14 +304,14 @@ describe("Auth routes", () => {
       expect(dbResetPasswordTokenDoc.resetPasswordToken).toBeDefined();
     });
 
-    test("should return 400 if email is missing", async () => {
+    it("should return 400 if email is missing", async () => {
       await request(app)
         .post("/api/v1/auth/forgot-password")
         .send()
         .expect(httpStatus.BAD_REQUEST);
     });
 
-    test("should return 404 if email does not belong to any user", async () => {
+    it("should return 404 if email does not belong to any user", async () => {
       await request(app)
         .post("/api/v1/auth/forgot-password")
         .send({ email: user.email })
@@ -318,7 +320,7 @@ describe("Auth routes", () => {
   });
 
   describe("POST /api/v1/auth/reset-password", () => {
-    test("should return 204 and reset the password", async () => {
+    it("should return 204 and reset the password", async () => {
       let res = await request(app)
         .post("/api/v1/auth/register")
         .send(user)
@@ -341,7 +343,7 @@ describe("Auth routes", () => {
         .expect(httpStatus.OK);
     });
 
-    test("should return 404 if password is invalid", async () => {
+    it("should return 404 if password is invalid", async () => {
       let res = await request(app)
         .post("/api/v1/auth/register")
         .send(user)
@@ -364,7 +366,7 @@ describe("Auth routes", () => {
         .expect(httpStatus.BAD_REQUEST);
     });
 
-    test("should return 404 if reset password token is missing", async () => {
+    it("should return 404 if reset password token is missing", async () => {
       await request(app)
         .post("/api/v1/auth/reset-password")
         .send({ password: "Admin123*" })
