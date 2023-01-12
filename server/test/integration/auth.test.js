@@ -184,7 +184,6 @@ describe("Auth routes", () => {
 
       expect(res.body).toHaveProperty("success");
       expect(res.body).toHaveProperty("data");
-
       expect(res.body.success).toBe(true);
       expect(res.body.data).toEqual({
         __v: expect.anything(),
@@ -206,7 +205,7 @@ describe("Auth routes", () => {
       expect(res.body).toEqual({
         statusCode: httpStatus.UNAUTHORIZED,
         success: false,
-        errors: ["Please provide authentication token."],
+        errors: ["Please provide an authentication token."],
       });
     });
   });
@@ -333,6 +332,7 @@ describe("Auth routes", () => {
       user = await User.findById(res.body.data._id);
 
       const resetPasswordToken = await user.getResetPasswordToken();
+
       await user.save({ validateBeforeSave: false });
 
       await request(app)
@@ -340,6 +340,7 @@ describe("Auth routes", () => {
         .send({ password: "Admin123*" })
         .expect(httpStatus.OK);
     });
+
     test("should return 404 if password is invalid", async () => {
       let res = await request(app)
         .post("/api/v1/auth/register")
@@ -354,6 +355,7 @@ describe("Auth routes", () => {
       user = await User.findById(res.body.data._id);
 
       const resetPasswordToken = await user.getResetPasswordToken();
+
       await user.save({ validateBeforeSave: false });
 
       await request(app)
