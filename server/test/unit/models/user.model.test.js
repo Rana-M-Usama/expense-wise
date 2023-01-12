@@ -24,12 +24,12 @@ describe("User model", () => {
       await expect(new User(newUser).validate()).rejects.toThrow();
     });
 
-    test("should throw a validation error if firstName length exceeds 51", async () => {
+    test("should throw a validation error if the length of the firstName exceeds 50", async () => {
       newUser.firstName = "rmulsvefxtcjfmrrvttidhlfvetvulfkecsylnrookveuqvgsnw";
       await expect(new User(newUser).validate()).rejects.toThrow();
     });
 
-    test("should throw a validation error if LastName length exceeds 51", async () => {
+    test("should throw a validation error if the length of lastName exceeds 50", async () => {
       newUser.lastName = "rmulsvefxtcjfmrrvttidhlfvetvulfkecsylnrookveuqvgsnw";
       await expect(new User(newUser).validate()).rejects.toThrow();
     });
@@ -44,22 +44,22 @@ describe("User model", () => {
       await expect(new User(newUser).validate()).rejects.toThrow();
     });
 
-    test("should be fine if length of firstName is exact 50", async () => {
+    test("should be fine if the length of firstName is exact 50", async () => {
       newUser.firstName = "rmulsvefxtcjfmrrvttidhlfvetvulfkecsylnrookveuqvgsn";
       await expect(new User(newUser).validate()).resolves.toBeUndefined();
     });
 
-    test("should be fine if length of lastName is exact 50", async () => {
+    test("should be fine if the length of lastName is exact 50", async () => {
       newUser.lastName = "rmulsvefxtcjfmrrvttidhlfvetvulfkecsylnrookveuqvgsn";
       await expect(new User(newUser).validate()).resolves.toBeUndefined();
     });
 
-    test("should be fine if length of firstName is less than or equal 50", async () => {
+    test("should be fine if the length of firstName is less than or equal 50", async () => {
       newUser.firstName = faker.lorem.word(25);
       await expect(new User(newUser).validate()).resolves.toBeUndefined();
     });
 
-    test("should be fine if length of lastName is less than or equal 50", async () => {
+    test("should be fine if the length of lastName is less than or equal 50", async () => {
       newUser.lastName = faker.lorem.word(25);
       await expect(new User(newUser).validate()).resolves.toBeUndefined();
     });
