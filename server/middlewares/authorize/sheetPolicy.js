@@ -9,7 +9,7 @@ const sheetPolicy = async (req, res, next) => {
   req.sheet = await Sheet.findById(id);
   req.accessRight = await AccessRight.findOne({
     sheet: req.sheet,
-    user: req?.user?.id,
+    user: req.user.id,
   });
 
   if (!req.sheet) {

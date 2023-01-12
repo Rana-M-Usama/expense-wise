@@ -45,6 +45,7 @@ AccessRightSchema.pre("validate", async function (next) {
       ),
     );
   }
+
   next();
 });
 

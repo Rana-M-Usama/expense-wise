@@ -1,20 +1,17 @@
 import express from "express";
 
-import protect from "../../middlewares/auth";
-
+import {
+  accessRightPolicy,
+  ownerAccessRightPolicy,
+} from "../../middlewares/authorize/accessRightPolicy";
 import {
   deleteAccessRight,
   getAccessRight,
   getAccessRights,
   grantAccess,
 } from "../../controllers/accessRights";
-
+import protect from "../../middlewares/auth";
 import { sheetPolicy } from "../../middlewares/authorize/sheetPolicy";
-
-import {
-  accessRightPolicy,
-  ownerAccessRightPolicy,
-} from "../../middlewares/authorize/accessRightPolicy";
 
 const router = express.Router({ mergeParams: true });
 router.use([protect, sheetPolicy]);

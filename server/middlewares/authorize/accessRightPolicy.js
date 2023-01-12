@@ -22,7 +22,7 @@ const accessRightPolicy = async (req, res, next) => {
 };
 
 const ownerAccessRightPolicy = async (req, res, next) => {
-  if (req.sheet.owner._id.toString() !== req?.user?.id) {
+  if (req.sheet.owner._id.toString() !== req.user.id) {
     return next(
       new ErrorResponse(
         "You are not authorized for this action.",
