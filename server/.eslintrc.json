@@ -10,7 +10,7 @@
     {
       "files": ["**/*.test.js", "**/*.fixture.js"],
       "rules": {
-        "max-len": "off" // disable mac line length for tests
+        "max-len": "off" // disable max line length for tests
       }
     }
   ],
