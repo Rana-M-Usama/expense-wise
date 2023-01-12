@@ -20,12 +20,12 @@ const AccessRightSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: [true, "User is required."],
     },
     sheet: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Sheet",
-      required: true,
+      required: [true, "Sheet is required."],
     },
   },
   { timestamps: true },
