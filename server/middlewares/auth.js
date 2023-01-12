@@ -28,13 +28,32 @@ const protect = asyncHandler(async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = await User.findById(decoded.id);
 
+    if (req.user === null) {
+      return next(
+        new ErrorResponse(
+          "You need to be logged in first.",
+          httpStatus.UNAUTHORIZED,
+        ),
+      );
+    }
+
     next();
   } catch (err) {
+    if (err.name === "TokenExpiredError") {
+      return next(new ErrorResponse("Token expired.", httpStatus.UNAUTHORIZED));
+    }
+
+    if (err.name === "JsonWebTokenError") {
+      return next(
+        new ErrorResponse(
+          "Please provide a valid token.",
+          httpStatus.UNAUTHORIZED,
+        ),
+      );
+    }
+
     return next(
-      new ErrorResponse(
-        "Please provide a valid token",
-        httpStatus.UNAUTHORIZED,
-      ),
+      new ErrorResponse("An error occurred.", httpStatus.INTERNAL_SERVER_ERROR),
     );
   }
 });

@@ -3,7 +3,6 @@ import nodemailer from "nodemailer";
 import config from "../config/config";
 import logger from "../config/logger";
 
-const DEVELOPMENT = "development";
 const {
   SMTP_EMAIL,
   FROM_EMAIL,
@@ -33,7 +32,7 @@ const sendEmail = async (options) => {
 
   const info = await transporter.sendMail(message);
 
-  if (env === DEVELOPMENT) {
+  if (env === "development") {
     logger.info("Message sent: %s", info.messageId);
   }
 };

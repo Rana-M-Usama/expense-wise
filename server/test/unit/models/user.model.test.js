@@ -1,72 +1,112 @@
-import { beforeEach, describe, expect, test } from "@jest/globals";
+import { beforeEach, describe, expect, it } from "@jest/globals";
 import { faker } from "@faker-js/faker";
+
+import generateUser from "../../fixtures/user.fixture";
 import User from "../../../models/User";
-import { user } from "../../fixtures/user.fixture";
+
+const FAKER_STRING = faker.lorem.paragraphs(1);
 
 describe("User model", () => {
-  describe("User validation", () => {
-    let newUser;
+  describe("validation", () => {
+    let user;
+
     beforeEach(() => {
-      newUser = { ...user };
+      user = { ...generateUser() };
     });
 
-    test("should correctly validate a valid user", async () => {
-      await expect(new User(newUser).validate()).resolves.toBeUndefined();
+    it("should correctly validate a valid user", () => {
+      const response = new User(user).validateSync();
+      expect(response).toEqual(undefined);
     });
 
-    test("should throw a validation error if email is invalid", async () => {
-      newUser.email = "invalidEmail";
-      await expect(new User(newUser).validate()).rejects.toThrow();
+    it("should throw a validation error if email is null", () => {
+      user.email = null;
+      const response = new User(user).validateSync();
+      expect(response.errors.email.message).toEqual("Email is required.");
     });
 
-    test("should throw a validation error if password is invalid", async () => {
-      newUser.password = "pass";
-      await expect(new User(newUser).validate()).rejects.toThrow();
+    it("should throw a validation error if email is invalid", () => {
+      user.email = "invalidEmail";
+      const response = new User(user).validateSync();
+      expect(response.errors.email.message).toEqual(
+        "Please provide a valid email.",
+      );
     });
 
-    test("should throw a validation error if the length of the firstName exceeds 50", async () => {
-      newUser.firstName = "rmulsvefxtcjfmrrvttidhlfvetvulfkecsylnrookveuqvgsnw";
-      await expect(new User(newUser).validate()).rejects.toThrow();
+    it("should throw a validation error if password is blank", () => {
+      user.password = null;
+      const response = new User(user).validateSync();
+      expect(response.errors.password.message).toEqual("Password is required.");
     });
 
-    test("should throw a validation error if the length of lastName exceeds 50", async () => {
-      newUser.lastName = "rmulsvefxtcjfmrrvttidhlfvetvulfkecsylnrookveuqvgsnw";
-      await expect(new User(newUser).validate()).rejects.toThrow();
+    it("should throw a validation error if password is invalid", () => {
+      user.password = "invalid";
+      const response = new User(user).validateSync();
+      expect(response.errors.password.message).toEqual(
+        "Please provide a valid password, minimum six characters, at least one capital letter and a number.",
+      );
     });
 
-    test("should throw a validation error if firstName is blank", async () => {
-      newUser.firstName = "";
-      await expect(new User(newUser).validate()).rejects.toThrow();
+    it("should throw a validation error if the length of the firstName exceeds 50", () => {
+      user.firstName = FAKER_STRING.substring(0, 60);
+      const response = new User(user).validateSync();
+      expect(response.errors.firstName.message).toEqual(
+        "First name can not be longer than 50 characters.",
+      );
     });
 
-    test("should throw a validation error if lastName is blank", async () => {
-      newUser.lastName = "";
-      await expect(new User(newUser).validate()).rejects.toThrow();
+    it("should throw a validation error if the length of lastName exceeds 50", () => {
+      user.lastName = FAKER_STRING.substring(0, 60);
+      const response = new User(user).validateSync();
+      expect(response.errors.lastName.message).toEqual(
+        "Last name can not be longer than 50 characters.",
+      );
     });
 
-    test("should be fine if the length of firstName is exact 50", async () => {
-      newUser.firstName = "rmulsvefxtcjfmrrvttidhlfvetvulfkecsylnrookveuqvgsn";
-      await expect(new User(newUser).validate()).resolves.toBeUndefined();
+    it("should throw a validation error if firstName is blank", () => {
+      user.firstName = null;
+      const response = new User(user).validateSync();
+      expect(response.errors.firstName.message).toEqual(
+        "First name is required.",
+      );
     });
 
-    test("should be fine if the length of lastName is exact 50", async () => {
-      newUser.lastName = "rmulsvefxtcjfmrrvttidhlfvetvulfkecsylnrookveuqvgsn";
-      await expect(new User(newUser).validate()).resolves.toBeUndefined();
+    it("should throw a validation error if lastName is blank", () => {
+      user.lastName = null;
+      const response = new User(user).validateSync();
+      expect(response.errors.lastName.message).toEqual(
+        "Last name is required.",
+      );
     });
 
-    test("should be fine if the length of firstName is less than or equal 50", async () => {
-      newUser.firstName = faker.lorem.word(25);
-      await expect(new User(newUser).validate()).resolves.toBeUndefined();
+    it("should be fine if the length of firstName is exact 50", () => {
+      user.firstName = FAKER_STRING.substring(0, 50);
+      const error = new User(user).validateSync();
+      expect(error).toEqual(undefined);
     });
 
-    test("should be fine if the length of lastName is less than or equal 50", async () => {
-      newUser.lastName = faker.lorem.word(25);
-      await expect(new User(newUser).validate()).resolves.toBeUndefined();
+    it("should be fine if the length of lastName is exact 50", () => {
+      user.lastName = FAKER_STRING.substring(0, 50);
+      const error = new User(user).validateSync();
+      expect(error).toEqual(undefined);
     });
 
-    test("should be fine if imageUrl is blank", async () => {
-      newUser.imageUrl = null;
-      await expect(new User(newUser).validate()).resolves.toBeUndefined();
+    it("should be fine if the length of firstName is less than or equal 50", () => {
+      user.firstName = FAKER_STRING.substring(0, 20);
+      const error = new User(user).validateSync();
+      expect(error).toEqual(undefined);
+    });
+
+    it("should be fine if the length of lastName is less than or equal 50", () => {
+      user.lastName = FAKER_STRING.substring(0, 20);
+      const error = new User(user).validateSync();
+      expect(error).toEqual(undefined);
+    });
+
+    it("should be fine if imageUrl is blank", () => {
+      user.imageUrl = null;
+      const error = new User(user).validateSync();
+      expect(error).toEqual(undefined);
     });
   });
 });
