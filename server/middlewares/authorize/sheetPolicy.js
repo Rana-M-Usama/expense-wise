@@ -1,13 +1,13 @@
 import httpStatus from "http-status";
 
-import AccessRight from "../../models/AccessRight";
 import ErrorResponse from "../../utils/errorResponse";
+import Permission from "../../models/Permission";
 import Sheet from "../../models/Sheet";
 
 const sheetPolicy = async (req, res, next) => {
   const id = req.params.sheetId || req.params.id;
   req.sheet = await Sheet.findById(id);
-  req.accessRight = await AccessRight.findOne({
+  req.permission = await Permission.findOne({
     sheet: req.sheet,
     user: req.user.id,
   });
@@ -26,8 +26,10 @@ const sheetPolicy = async (req, res, next) => {
 
 const getSheetPolicy = async (req, res, next) => {
   if (
-    req.user.id !== req.sheet.owner._id.toString() &&
-    req.accessRight?.read !== true
+    !(
+      req.user.id === req.sheet.owner._id.toString() ||
+      ["admin", "view", "edit"].includes(req.permission?.type)
+    )
   ) {
     return next(
       new ErrorResponse(
@@ -42,8 +44,10 @@ const getSheetPolicy = async (req, res, next) => {
 
 const updateSheetPolicy = async (req, res, next) => {
   if (
-    req.user.id !== req.sheet.owner._id.toString() &&
-    req.accessRight?.update !== true
+    !(
+      req.user.id === req.sheet.owner._id.toString() ||
+      ["admin", "edit"].includes(req.permission?.type)
+    )
   ) {
     return next(
       new ErrorResponse(
@@ -58,8 +62,10 @@ const updateSheetPolicy = async (req, res, next) => {
 
 const deleteSheetPolicy = async (req, res, next) => {
   if (
-    req.user.id !== req.sheet.owner._id.toString() &&
-    req.accessRight?.delete !== true
+    !(
+      req.user.id === req.sheet.owner._id.toString() ||
+      req.permission?.type === "admin"
+    )
   ) {
     return next(
       new ErrorResponse(

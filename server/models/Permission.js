@@ -3,19 +3,12 @@ import mongoose from "mongoose";
 import ErrorResponse from "../utils/errorResponse";
 import httpStatus from "http-status";
 
-const AccessRightSchema = new mongoose.Schema(
+const PermissionSchema = new mongoose.Schema(
   {
-    read: {
-      type: Boolean,
-      default: false,
-    },
-    update: {
-      type: Boolean,
-      default: false,
-    },
-    delete: {
-      type: Boolean,
-      default: false,
+    type: {
+      type: String,
+      default: "",
+      enum: ["view", "edit", "admin"],
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -31,16 +24,16 @@ const AccessRightSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-// validates if access right of a user with a sheet already exists
-AccessRightSchema.pre("validate", async function (next) {
+// validates if permission of a user with a sheet already exists
+PermissionSchema.pre("validate", async function (next) {
   if (
     await mongoose
-      .model("AccessRight", AccessRightSchema)
+      .model("Permission", PermissionSchema)
       .findOne({ sheet: this.sheet, user: this.user })
   ) {
     return next(
       new ErrorResponse(
-        "Access Right of this user with this sheet already exists",
+        "Permission of this user with this sheet already exists",
         httpStatus.NOT_FOUND,
       ),
     );
@@ -49,4 +42,4 @@ AccessRightSchema.pre("validate", async function (next) {
   next();
 });
 
-export default mongoose.model("AccessRight", AccessRightSchema);
+export default mongoose.model("Permission", PermissionSchema);
