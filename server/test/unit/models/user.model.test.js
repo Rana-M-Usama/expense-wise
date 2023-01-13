@@ -45,13 +45,6 @@ describe("User model", () => {
       );
     });
 
-    it("should throw a validation error if the length of the firstName exceeds 50", () => {
-      user.firstName = FAKER_STRING.substring(0, 51);
-      expect(user.validateSync().errors.firstName.message).toEqual(
-        "First name can not be longer than 50 characters.",
-      );
-    });
-
     it("should throw a validation error if firstName is blank", () => {
       user.firstName = null;
       expect(user.validateSync().errors.firstName.message).toEqual(
@@ -69,10 +62,10 @@ describe("User model", () => {
       expect(user.validateSync()).toEqual(undefined);
     });
 
-    it("should throw a validation error if the length of lastName exceeds 50", () => {
-      user.lastName = FAKER_STRING.substring(0, 51);
-      expect(user.validateSync().errors.lastName.message).toEqual(
-        "Last name can not be longer than 50 characters.",
+    it("should throw a validation error if the length of the firstName exceeds 50", () => {
+      user.firstName = FAKER_STRING.substring(0, 51);
+      expect(user.validateSync().errors.firstName.message).toEqual(
+        "First name can not be longer than 50 characters.",
       );
     });
 
@@ -91,6 +84,13 @@ describe("User model", () => {
     it("should be fine if the length of lastName is less than or equal 50", () => {
       user.lastName = FAKER_STRING.substring(0, 20);
       expect(user.validateSync()).toEqual(undefined);
+    });
+
+    it("should throw a validation error if the length of lastName exceeds 50", () => {
+      user.lastName = FAKER_STRING.substring(0, 51);
+      expect(user.validateSync().errors.lastName.message).toEqual(
+        "Last name can not be longer than 50 characters.",
+      );
     });
 
     it("should be fine if imageUrl is blank", () => {

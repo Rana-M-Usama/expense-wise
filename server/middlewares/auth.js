@@ -8,6 +8,7 @@ import User from "../models/User";
 const { JsonWebTokenError, TokenExpiredError } = jwt;
 const protect = asyncHandler(async (req, res, next) => {
   let token;
+  let decoded;
 
   if (
     req.headers.authorization &&
@@ -26,10 +27,7 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await User.findById(decoded.id);
-
-    next();
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
   } catch (e) {
     let message;
     let code;
@@ -47,6 +45,19 @@ const protect = asyncHandler(async (req, res, next) => {
 
     return next(new ErrorResponse(message, code));
   }
+
+  req.user = await User.findById(decoded.id);
+
+  if (req.user === null) {
+    return next(
+      new ErrorResponse(
+        "You need to be logged in first.",
+        httpStatus.UNAUTHORIZED,
+      ),
+    );
+  }
+
+  next();
 });
 
 export default protect;
