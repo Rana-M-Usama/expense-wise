@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   Box,
   Button,
@@ -14,14 +13,22 @@ import { Mail, CloseOutlined } from '@mui/icons-material'
 
 import useStyles from './forgetpassword.styles'
 
-const ForgotPasswordPage = () => {
+interface Props {
+  isOpen: boolean
+  onClose: () => void
+}
+
+const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
   const classes = useStyles()
-  const [isOpen, setIsOpen] = useState(false)
-  const [onClose, setOnClose] = useState(false)
+
+  if (!isOpen) {
+    return null
+  }
 
   return (
     <Modal
       open={isOpen}
+      onClose={onClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -46,7 +53,7 @@ const ForgotPasswordPage = () => {
             alignItems: 'end',
           }}
         >
-          <IconButton>
+          <IconButton onClick={onClose}>
             <CloseOutlined />
           </IconButton>
         </Box>

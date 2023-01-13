@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Button,
   CssBaseline,
@@ -11,11 +11,13 @@ import {
   Container,
 } from '@mui/material'
 
+import ForgotPasswordPage from 'pages/forgetpassword/forgetpassword.page'
 import useStyles from './login.styles'
 import logo from '../../assets/logo.png'
 
 const LoginPage = () => {
   const classes = useStyles()
+  const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {}
 
@@ -76,7 +78,11 @@ const LoginPage = () => {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link
+                onClick={() => setModalIsOpen(true)}
+                href="#"
+                variant="body2"
+              >
                 Forgot password?
               </Link>
             </Grid>
@@ -86,6 +92,10 @@ const LoginPage = () => {
               </Link>
             </Grid>
           </Grid>
+          <ForgotPasswordPage
+            isOpen={modalIsOpen}
+            onClose={() => setModalIsOpen(false)}
+          />
         </Box>
       </Box>
     </Container>
