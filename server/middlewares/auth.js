@@ -5,6 +5,7 @@ import asyncHandler from "./async";
 import ErrorResponse from "../utils/errorResponse";
 import User from "../models/User";
 
+const { JsonWebTokenError, TokenExpiredError } = jwt;
 const protect = asyncHandler(async (req, res, next) => {
   let token;
 
@@ -38,12 +39,12 @@ const protect = asyncHandler(async (req, res, next) => {
     }
 
     next();
-  } catch (err) {
-    if (err.name === "TokenExpiredError") {
+  } catch (e) {
+    if (e instanceof TokenExpiredError) {
       return next(new ErrorResponse("Token expired.", httpStatus.UNAUTHORIZED));
     }
 
-    if (err.name === "JsonWebTokenError") {
+    if (e instanceof JsonWebTokenError) {
       return next(
         new ErrorResponse(
           "Please provide a valid token.",

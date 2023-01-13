@@ -1,13 +1,12 @@
 import { faker } from "@faker-js/faker";
+import User from "../../models/User";
 
-const PASSWORD = "Admin123*";
-const FAKER_STRING = faker.lorem.paragraphs(1);
-
-const generateUser = (firstName, lastName, email, password) => ({
-  firstName: firstName || FAKER_STRING.substring(0, 20),
-  lastName: lastName || FAKER_STRING.substring(0, 20),
-  email: email || faker.internet.email(),
-  password: password || PASSWORD,
-});
+const generateUser = (firstName, lastName, email, password) =>
+  new User({
+    firstName: firstName || faker.name.firstName,
+    lastName: lastName || faker.name.lastName,
+    email: email || faker.internet.email(),
+    password: password || "Admin123*",
+  });
 
 export default generateUser;
