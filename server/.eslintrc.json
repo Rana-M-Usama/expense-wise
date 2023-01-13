@@ -8,7 +8,7 @@
   "plugins": ["prettier"],
   "overrides": [
     {
-      "files": ["**/*.test.js", "**/*.fixture.js"],
+      "files": ["**/*.test.js", "**/*.factory.js"],
       "rules": {
         "max-len": "off" // disable max line length for tests
       }
