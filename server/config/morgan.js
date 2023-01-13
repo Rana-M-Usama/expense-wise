@@ -5,8 +5,7 @@ import logger from "./logger";
 
 morgan.token("message", (req, res) => res.locals.errorMessage || "");
 
-const PRODUCTION = "production";
-const getIpFormat = config.env === PRODUCTION ? ":remote-addr - " : "";
+const getIpFormat = config.env === "production" ? ":remote-addr - " : "";
 const successResponseFormat = `${getIpFormat}:method :url`.concat(
   " :status - :response-time ms",
 );
