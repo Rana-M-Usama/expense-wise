@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "@jest/globals";
 import { faker } from "@faker-js/faker";
 
-import instantiateUser from "../../fixtures/user.fixture";
+import { instantiateUser } from "../../fixtures/user.fixture";
 
 const FAKER_STRING = faker.lorem.paragraphs(1);
 

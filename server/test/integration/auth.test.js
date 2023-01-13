@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { faker } from "@faker-js/faker";
 import httpStatus from "http-status";
 import request from "supertest";
 
 import app from "../../app";
 import emailService from "../../utils/sendEmail";
+import { fakeUser } from "../fixtures/user.fixture";
 import setupTestDB from "../utils/setupTestDB";
 import User from "../../models/User";
 
@@ -14,12 +14,7 @@ describe("Auth routes", () => {
   let user;
 
   beforeEach(() => {
-    user = {
-      firstName: faker.name.fullName(),
-      lastName: faker.name.fullName(),
-      email: faker.internet.email().toLowerCase(),
-      password: "Admin123*",
-    };
+    user = { ...fakeUser() };
   });
 
   describe("POST /api/v1/auth/register", () => {

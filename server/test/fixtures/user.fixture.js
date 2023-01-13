@@ -1,12 +1,19 @@
 import { faker } from "@faker-js/faker";
 import User from "../../models/User";
 
-const instantiateUser = (firstName, lastName, email, password) =>
-  new User({
-    firstName: firstName || faker.name.firstName,
-    lastName: lastName || faker.name.lastName,
-    email: email || faker.internet.email(),
-    password: password || "Admin123*",
-  });
+const fakeUser = ({
+  firstName = faker.name.firstName(),
+  lastName = faker.name.lastName(),
+  email = faker.internet.email(),
+  password = "Admin123*",
+} = {}) => ({
+  firstName,
+  lastName,
+  email,
+  password,
+});
 
-export default instantiateUser;
+const instantiateUser = (firstName, lastName, email, password) =>
+  new User(fakeUser(firstName, lastName, email, password));
+
+export { instantiateUser, fakeUser };
