@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "@jest/globals";
 import { faker } from "@faker-js/faker";
 
-import generateUser from "../../fixtures/user.fixture";
+import instantiateUser from "../../fixtures/user.fixture";
 
 const FAKER_STRING = faker.lorem.paragraphs(1);
 
@@ -10,7 +10,7 @@ describe("User model", () => {
     let user;
 
     beforeEach(() => {
-      user = generateUser();
+      user = instantiateUser();
     });
 
     it("should correctly validate a valid user", () => {
@@ -46,16 +46,9 @@ describe("User model", () => {
     });
 
     it("should throw a validation error if the length of the firstName exceeds 50", () => {
-      user.firstName = FAKER_STRING.substring(0, 60);
+      user.firstName = FAKER_STRING.substring(0, 51);
       expect(user.validateSync().errors.firstName.message).toEqual(
         "First name can not be longer than 50 characters.",
-      );
-    });
-
-    it("should throw a validation error if the length of lastName exceeds 50", () => {
-      user.lastName = FAKER_STRING.substring(0, 60);
-      expect(user.validateSync().errors.lastName.message).toEqual(
-        "Last name can not be longer than 50 characters.",
       );
     });
 
@@ -66,6 +59,23 @@ describe("User model", () => {
       );
     });
 
+    it("should be fine if the length of firstName is exact 50", () => {
+      user.firstName = FAKER_STRING.substring(0, 50);
+      expect(user.validateSync()).toEqual(undefined);
+    });
+
+    it("should be fine if the length of firstName is less than or equal 50", () => {
+      user.firstName = FAKER_STRING.substring(0, 20);
+      expect(user.validateSync()).toEqual(undefined);
+    });
+
+    it("should throw a validation error if the length of lastName exceeds 50", () => {
+      user.lastName = FAKER_STRING.substring(0, 51);
+      expect(user.validateSync().errors.lastName.message).toEqual(
+        "Last name can not be longer than 50 characters.",
+      );
+    });
+
     it("should throw a validation error if lastName is blank", () => {
       user.lastName = null;
       expect(user.validateSync().errors.lastName.message).toEqual(
@@ -73,18 +83,8 @@ describe("User model", () => {
       );
     });
 
-    it("should be fine if the length of firstName is exact 50", () => {
-      user.firstName = FAKER_STRING.substring(0, 50);
-      expect(user.validateSync()).toEqual(undefined);
-    });
-
     it("should be fine if the length of lastName is exact 50", () => {
       user.lastName = FAKER_STRING.substring(0, 50);
-      expect(user.validateSync()).toEqual(undefined);
-    });
-
-    it("should be fine if the length of firstName is less than or equal 50", () => {
-      user.firstName = FAKER_STRING.substring(0, 20);
       expect(user.validateSync()).toEqual(undefined);
     });
 

@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import User from "../../models/User";
 
-const generateUser = (firstName, lastName, email, password) =>
+const instantiateUser = (firstName, lastName, email, password) =>
   new User({
     firstName: firstName || faker.name.firstName,
     lastName: lastName || faker.name.lastName,
@@ -9,4 +9,4 @@ const generateUser = (firstName, lastName, email, password) =>
     password: password || "Admin123*",
   });
 
-export default generateUser;
+export default instantiateUser;
