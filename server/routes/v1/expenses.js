@@ -20,10 +20,9 @@ import {
 } from "../../middlewares/authorize/sheetPolicy";
 import advancedResults from "../../middlewares/advancedResults";
 import Expense from "../../models/Expense";
-import protect from "../../middlewares/auth";
 
 const router = express.Router({ mergeParams: true });
-router.use([protect, sheetPolicy]);
+router.use(sheetPolicy);
 
 router
   .route("/")

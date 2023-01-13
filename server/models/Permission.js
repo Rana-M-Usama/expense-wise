@@ -7,7 +7,7 @@ const PermissionSchema = new mongoose.Schema(
   {
     type: {
       type: String,
-      default: "",
+      default: "view",
       enum: ["view", "edit", "admin"],
     },
     user: {

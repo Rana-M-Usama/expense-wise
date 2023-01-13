@@ -21,9 +21,9 @@ import Sheet from "../../models/Sheet";
 
 const router = express.Router({ mergeParams: true });
 
+router.use(protect);
 router.use("/:sheetId/expenses", ExpenseRouter);
 router.use("/:sheetId/permissions", PermissionRouter);
-router.use(protect);
 
 router
   .route("/")

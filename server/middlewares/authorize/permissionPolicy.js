@@ -22,12 +22,7 @@ const permissionPolicy = async (req, res, next) => {
 };
 
 const adminPolicy = async (req, res, next) => {
-  if (
-    !(
-      req.user.id === req.sheet.owner._id.toString() ||
-      req.permission?.type === "admin"
-    )
-  ) {
+  if (!(req.permission?.type === "admin")) {
     return next(
       new ErrorResponse(
         "You are not authorized for this action.",

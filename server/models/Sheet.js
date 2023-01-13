@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+import Permission from "./Permission";
+
 const SheetSchema = new mongoose.Schema(
   {
     title: {
@@ -26,6 +28,17 @@ const SheetSchema = new mongoose.Schema(
 // Cascade delete expenses when a sheet is deleted
 SheetSchema.pre("remove", async function (next) {
   await this.model("Expense").deleteMany({ sheet: this._id });
+  next();
+});
+
+// Creates permission for the sheet owner
+SheetSchema.post("save", async function (doc, next) {
+  await Permission.create({
+    sheet: this._id,
+    user: this.owner,
+    type: "admin",
+  });
+
   next();
 });
 

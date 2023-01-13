@@ -25,12 +25,7 @@ const sheetPolicy = async (req, res, next) => {
 };
 
 const getSheetPolicy = async (req, res, next) => {
-  if (
-    !(
-      req.user.id === req.sheet.owner._id.toString() ||
-      ["admin", "view", "edit"].includes(req.permission?.type)
-    )
-  ) {
+  if (!["admin", "view", "edit"].includes(req.permission?.type)) {
     return next(
       new ErrorResponse(
         "You are not authorized to access this sheet.",
@@ -43,12 +38,7 @@ const getSheetPolicy = async (req, res, next) => {
 };
 
 const updateSheetPolicy = async (req, res, next) => {
-  if (
-    !(
-      req.user.id === req.sheet.owner._id.toString() ||
-      ["admin", "edit"].includes(req.permission?.type)
-    )
-  ) {
+  if (!["admin", "edit"].includes(req.permission?.type)) {
     return next(
       new ErrorResponse(
         "You are not authorized to edit this sheet.",
@@ -61,12 +51,7 @@ const updateSheetPolicy = async (req, res, next) => {
 };
 
 const deleteSheetPolicy = async (req, res, next) => {
-  if (
-    !(
-      req.user.id === req.sheet.owner._id.toString() ||
-      req.permission?.type === "admin"
-    )
-  ) {
+  if (!(req.permission?.type === "admin")) {
     return next(
       new ErrorResponse(
         "You are not authorized to delete this sheet.",

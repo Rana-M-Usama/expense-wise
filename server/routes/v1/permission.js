@@ -10,16 +10,15 @@ import {
   getPermissions,
   grantPermission,
 } from "../../controllers/permissions";
-import protect from "../../middlewares/auth";
 import { sheetPolicy } from "../../middlewares/authorize/sheetPolicy";
 
 const router = express.Router({ mergeParams: true });
-router.use([protect, sheetPolicy]);
+router.use(sheetPolicy);
 
 router
   .route("/")
   .get(adminPolicy, getPermissions)
-  .post([adminPolicy], grantPermission);
+  .post(adminPolicy, grantPermission);
 
 router
   .route("/:id")
