@@ -47,13 +47,15 @@ const errorConverter = (err, req, res, next) => {
   }
 
   if (err instanceof ValidationError) {
-    const errors = [];
+    const { errors } = err;
+    const errorMessages = Object.keys(errors).map((key) => errors[key].message);
 
-    Object.keys(err.errors).forEach((key) => {
-      errors.push(err.errors[key].message);
-    });
-
-    return errorHandler(new ErrorResponse(errors, statusCode), req, res, next);
+    return errorHandler(
+      new ErrorResponse(errorMessages, statusCode),
+      req,
+      res,
+      next,
+    );
   }
 
   errorHandler(new ErrorResponse(message, statusCode), req, res, next);

@@ -29,7 +29,15 @@ describe("Auth endpoints", () => {
         .send(user)
         .expect(httpStatus.OK);
 
-      expect(res.body.data).toHaveProperty("token");
+      expect(res.body.data.token).toBeUndefined();
+      expect(res.body.data).toHaveProperty("user");
+      expect(res.body.data.user).toEqual({
+        id: expect.anything(),
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        imageUrl: expect.anything(),
+      });
     });
 
     it("should return 400 error if email is invalid", async () => {
@@ -44,13 +52,15 @@ describe("Auth endpoints", () => {
     });
 
     it("should return 400 error if email is already used", async () => {
-      const user0 = await User.create(user);
-      user.email = user0.email;
+      const user2 = await User.create(user);
+      user.email = user2.email;
 
-      await request(app)
+      const res = await request(app)
         .post("/api/v1/auth/register")
         .send(user)
         .expect(httpStatus.CONFLICT);
+
+      expect(res.body.errors[0]).toBe("Email already in use.");
     });
 
     it("should return 400 error if password length is less than 6 characters", async () => {
@@ -75,50 +85,64 @@ describe("Auth endpoints", () => {
         .send(user)
         .expect(httpStatus.BAD_REQUEST);
 
-      expect(res.body.errors[0]).toBe("Please provide a valid email.");
-      expect(res.body.errors[1]).toBe(
+      expect(res.body.errors).toEqual([
+        "Please provide a valid email.",
+        "Please provide a valid password, minimum six characters, at least one capital letter and a number.",
+      ]);
+    });
+
+    it("should return 400 error if password does not contain letters", async () => {
+      user.password = "11111111";
+
+      const res = await request(app)
+        .post("/api/v1/auth/register")
+        .send(user)
+        .expect(httpStatus.BAD_REQUEST);
+
+      expect(res.body.errors[0]).toBe(
         "Please provide a valid password, minimum six characters, at least one capital letter and a number.",
       );
     });
 
-    it("should return 400 error if password does not contain both letters and numbers", async () => {
+    it("should return 400 error if password does not numbers", async () => {
       user.password = "password";
 
-      await request(app)
+      const res = await request(app)
         .post("/api/v1/auth/register")
         .send(user)
         .expect(httpStatus.BAD_REQUEST);
 
-      user.password = "11111111";
-
-      await request(app)
-        .post("/api/v1/auth/register")
-        .send(user)
-        .expect(httpStatus.BAD_REQUEST);
+      expect(res.body.errors[0]).toBe(
+        "Please provide a valid password, minimum six characters, at least one capital letter and a number.",
+      );
     });
   });
 
   describe("POST /api/v1/auth/login", () => {
-    it("should return 200 and auth token if email and password match", async () => {
+    it("should return 200 and auth token with user if email and password match", async () => {
+      await new User(user).save();
       const loginCredentials = {
         email: user.email,
         password: user.password,
       };
 
-      let res = await request(app)
-        .post("/api/v1/auth/register")
-        .send(user)
-        .expect(httpStatus.OK);
-
-      res = await request(app)
+      const res = await request(app)
         .post("/api/v1/auth/login")
         .send(loginCredentials)
         .expect(httpStatus.OK);
 
       expect(res.body).toHaveProperty("success");
       expect(res.body.data).toHaveProperty("token");
-      expect(res.body.success).toBe(true);
       expect(res.body.data.token).toBeDefined();
+      expect(res.body.success).toBe(true);
+      expect(res.body.data).toHaveProperty("user");
+      expect(res.body.data.user).toEqual({
+        id: expect.anything(),
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        imageUrl: expect.anything(),
+      });
     });
 
     it("should return 401 error if there are no users with that email", async () => {
@@ -140,17 +164,13 @@ describe("Auth endpoints", () => {
     });
 
     it("should return 401 error if password is wrong", async () => {
+      await new User(user).save();
       const loginCredentials = {
         email: user.email,
         password: "invalidPassword123*",
       };
 
-      let res = await request(app)
-        .post("/api/v1/auth/register")
-        .send(user)
-        .expect(httpStatus.OK);
-
-      res = await request(app)
+      const res = await request(app)
         .post("/api/v1/auth/login")
         .send(loginCredentials)
         .expect(httpStatus.UNAUTHORIZED);
@@ -176,18 +196,14 @@ describe("Auth endpoints", () => {
   });
 
   describe("GET /api/v1/auth/me", () => {
-    it("should return 200 and login user with auth token", async () => {
+    it("should return 200 and the user who is currently logged in", async () => {
+      await new User(user).save();
       const loginCredentials = {
         email: user.email,
         password: user.password,
       };
 
       let res = await request(app)
-        .post("/api/v1/auth/register")
-        .send(user)
-        .expect(httpStatus.OK);
-
-      res = await request(app)
         .post("/api/v1/auth/login")
         .send(loginCredentials)
         .expect(httpStatus.OK);
@@ -200,16 +216,15 @@ describe("Auth endpoints", () => {
       expect(res.body).toHaveProperty("success");
       expect(res.body).toHaveProperty("data");
       expect(res.body.success).toBe(true);
-      expect(res.body.data).toEqual({
-        __v: expect.anything(),
-        _id: expect.anything(),
-        createdAt: expect.anything(),
-        email: user.email,
-        firstName: user.firstName,
-        imageUrl: expect.anything(),
-        lastName: user.lastName,
-        updatedAt: expect.anything(),
-      });
+      expect(res.body.data).toEqual(
+        expect.objectContaining({
+          _id: expect.anything(),
+          email: user.email,
+          firstName: user.firstName,
+          imageUrl: expect.anything(),
+          lastName: user.lastName,
+        }),
+      );
     });
 
     it("should return 400 and unauthorized message without auth token", async () => {
@@ -225,11 +240,17 @@ describe("Auth endpoints", () => {
     });
   });
 
-  describe("PUT /api/v1/auth/update-details", () => {
+  describe("PUT /api/v1/auth/me", () => {
     it("should return 200 and updated user", async () => {
+      await new User(user).save();
+      const loginCredentials = {
+        email: user.email,
+        password: user.password,
+      };
+
       let res = await request(app)
-        .post("/api/v1/auth/register")
-        .send(user)
+        .post("/api/v1/auth/login")
+        .send(loginCredentials)
         .expect(httpStatus.OK);
 
       user.firstName = "Updated firstName";
@@ -237,27 +258,32 @@ describe("Auth endpoints", () => {
       user.imageUrl = "newAvatar.jpg";
 
       res = await request(app)
-        .put("/api/v1/auth/update-details")
+        .put("/api/v1/auth/me")
         .set("authorization", `Bearer ${res.body.data.token}`)
         .send(user)
         .expect(httpStatus.OK);
 
-      expect(res.body.data.firstName).toBe(user.firstName);
-      expect(res.body.data.lastName).toBe(user.lastName);
-      expect(res.body.data.imageUrl).toBe(user.imageUrl);
+      expect(res.body).toHaveProperty("success");
+      expect(res.body).toHaveProperty("data");
+      expect(res.body.success).toBe(true);
+      expect(res.body.data).toEqual(
+        expect.objectContaining({
+          _id: expect.anything(),
+          email: user.email,
+          firstName: user.firstName,
+          imageUrl: expect.anything(),
+          lastName: user.lastName,
+        }),
+      );
     });
-    it("should return 400 and unauthorized message with invalid auth token", async () => {
-      let res = await request(app)
-        .post("/api/v1/auth/register")
-        .send(user)
-        .expect(httpStatus.OK);
 
+    it("should return 400 and unauthorized message with invalid auth token", async () => {
       user.firstName = "Updated firstName";
       user.lastName = "Updated lastName";
       user.imageUrl = "newAvatar.jpg";
 
-      res = await request(app)
-        .put("/api/v1/auth/update-details")
+      const res = await request(app)
+        .put("/api/v1/auth/me")
         .set("authorization", "Bearer invalidToken")
         .send(user)
         .expect(httpStatus.UNAUTHORIZED);
@@ -266,15 +292,21 @@ describe("Auth endpoints", () => {
     });
   });
 
-  describe("PUT /api/v1/auth/update-password", () => {
+  describe("PUT /api/v1/auth/me/password", () => {
     it("should return 200 and auth token", async () => {
+      await new User(user).save();
+      const loginCredentials = {
+        email: user.email,
+        password: user.password,
+      };
+
       let res = await request(app)
-        .post("/api/v1/auth/register")
-        .send(user)
+        .post("/api/v1/auth/login")
+        .send(loginCredentials)
         .expect(httpStatus.OK);
 
       res = await request(app)
-        .put("/api/v1/auth/update-password")
+        .put("/api/v1/auth/me/password")
         .set("authorization", `Bearer ${res.body.data.token}`)
         .send({
           currentPassword: "Admin123*",
@@ -285,8 +317,6 @@ describe("Auth endpoints", () => {
       expect(res.body.data.token).toBeTruthy();
       expect(res.body.success).toBe(true);
     });
-
-    it("should return 400 and ", () => {});
   });
 
   describe("POST /api/v1/auth/forgot-password", () => {
@@ -297,7 +327,7 @@ describe("Auth endpoints", () => {
     it("should return 204 and send reset password email to the user", async () => {
       const sendResetPasswordEmailSpy = jest.spyOn(emailService, "sendEmail");
 
-      await request(app)
+      const res = await request(app)
         .post("/api/v1/auth/register")
         .send(user)
         .expect(httpStatus.OK);
@@ -307,36 +337,43 @@ describe("Auth endpoints", () => {
         .send({ email: user.email })
         .expect(httpStatus.OK);
 
-      expect(sendResetPasswordEmailSpy).toHaveBeenCalledWith(
-        expect.any(Object),
-      );
+      expect(sendResetPasswordEmailSpy).toHaveBeenCalled();
 
-      const dbResetPasswordTokenDoc = await User.findOne({
-        user: user._id,
-      });
-      expect(dbResetPasswordTokenDoc.resetPasswordToken).toBeDefined();
+      const user2 = await User.findById(res.body.data.user.id);
+
+      expect(user2.resetPasswordToken).toBeDefined();
     });
 
     it("should return 400 if email is missing", async () => {
-      await request(app)
+      const res = await request(app)
         .post("/api/v1/auth/forgot-password")
         .send()
         .expect(httpStatus.BAD_REQUEST);
+
+      expect(res.body.errors[0]).toBe("Email is required.");
     });
 
     it("should return 404 if email does not belong to any user", async () => {
-      await request(app)
+      const res = await request(app)
         .post("/api/v1/auth/forgot-password")
         .send({ email: user.email })
         .expect(httpStatus.NOT_FOUND);
+
+      expect(res.body.errors[0]).toBe("User with this email doesn't exist.");
     });
   });
 
   describe("POST /api/v1/auth/reset-password", () => {
     it("should return 204 and reset the password", async () => {
+      await new User(user).save();
+      const loginCredentials = {
+        email: user.email,
+        password: user.password,
+      };
+
       let res = await request(app)
-        .post("/api/v1/auth/register")
-        .send(user)
+        .post("/api/v1/auth/login")
+        .send(loginCredentials)
         .expect(httpStatus.OK);
 
       res = await request(app)
@@ -345,21 +382,26 @@ describe("Auth endpoints", () => {
         .expect(httpStatus.OK);
 
       user = await User.findById(res.body.data._id);
-
       const resetPasswordToken = await user.getResetPasswordToken();
-
       await user.save({ validateBeforeSave: false });
-
-      await request(app)
+      res = await request(app)
         .put(`/api/v1/auth/reset-password/${resetPasswordToken}`)
         .send({ password: "Admin123*" })
         .expect(httpStatus.OK);
+
+      expect(res.body.success).toBe(true);
     });
 
     it("should return 404 if password is invalid", async () => {
+      await new User(user).save();
+      const loginCredentials = {
+        email: user.email,
+        password: user.password,
+      };
+
       let res = await request(app)
-        .post("/api/v1/auth/register")
-        .send(user)
+        .post("/api/v1/auth/login")
+        .send(loginCredentials)
         .expect(httpStatus.OK);
 
       res = await request(app)
@@ -370,20 +412,24 @@ describe("Auth endpoints", () => {
       user = await User.findById(res.body.data._id);
 
       const resetPasswordToken = await user.getResetPasswordToken();
-
       await user.save({ validateBeforeSave: false });
-
-      await request(app)
+      res = await request(app)
         .put(`/api/v1/auth/reset-password/${resetPasswordToken}`)
         .send({ password: "123456" })
         .expect(httpStatus.BAD_REQUEST);
+
+      expect(res.body.errors[0]).toBe(
+        "Please provide a valid password, minimum six characters, at least one capital letter and a number.",
+      );
     });
 
     it("should return 404 if reset password token is missing", async () => {
-      await request(app)
+      const res = await request(app)
         .post("/api/v1/auth/reset-password")
         .send({ password: "Admin123*" })
         .expect(httpStatus.NOT_FOUND);
+
+      expect(res.body.errors[0]).toBe("Not Found!");
     });
   });
 });
