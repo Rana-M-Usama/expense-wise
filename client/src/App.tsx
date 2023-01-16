@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 import { helloWorldApi } from "./api/helloWorld";
-import logo from './assets/logo.png';
-import './App.css';
+import logo from "./assets/logo.png";
+import "./App.css";
 
 const App = () => {
-  const [data, setData] = useState('')
+  const [data, setData] = useState("");
 
   useEffect(() => {
-
-    helloWorldApi()
-      .then((response) => {
-        setData(response.expensewise)
-      })
-  }, [data])
+    helloWorldApi().then(response => {
+      setData(response.expensewise);
+    });
+  }, [data]);
 
   return (
     <div className="App">
@@ -23,6 +21,6 @@ const App = () => {
       </header>
     </div>
   );
-}
+};
 
 export default App;
