@@ -6,6 +6,8 @@ import config from "../config/config";
 import ErrorResponse from "../utils/errorResponse";
 import logger from "../config/logger";
 
+const { ValidationError } = mongoose.Document;
+
 const errorHandler = (err, req, res, next) => {
   let { statusCode, message } = err;
   if (config.env === "production" && !err.isOperational) {
@@ -18,7 +20,7 @@ const errorHandler = (err, req, res, next) => {
   const response = {
     success: false,
     statusCode,
-    errors: [message],
+    errors: Array.isArray(message) ? message : [message],
 
     ...(config.env === "development" && { stack: err.stack }),
   };
@@ -43,6 +45,17 @@ const errorConverter = (err, req, res, next) => {
   if (!(error instanceof ErrorResponse)) {
     error = new ErrorResponse(message, statusCode);
   }
+
+  if (err instanceof ValidationError) {
+    const errors = [];
+
+    Object.keys(err.errors).forEach((key) => {
+      errors.push(err.errors[key].message);
+    });
+
+    return errorHandler(new ErrorResponse(errors, statusCode), req, res, next);
+  }
+
   errorHandler(new ErrorResponse(message, statusCode), req, res, next);
 };
 

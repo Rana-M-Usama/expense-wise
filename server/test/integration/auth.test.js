@@ -40,9 +40,7 @@ describe("Auth routes", () => {
         .send(user)
         .expect(httpStatus.BAD_REQUEST);
 
-      expect(res.body.errors[0]).toBe(
-        "User validation failed: email: Please provide a valid email.",
-      );
+      expect(res.body.errors[0]).toBe("Please provide a valid email.");
     });
 
     it("should return 400 error if email is already used", async () => {
@@ -64,7 +62,22 @@ describe("Auth routes", () => {
         .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.errors[0]).toBe(
-        "User validation failed: password: Please provide a valid password, minimum six characters, at least one capital letter and a number.",
+        "Please provide a valid password, minimum six characters, at least one capital letter and a number.",
+      );
+    });
+
+    it("should return 400 error if email is invalid and password length is less than 6 characters", async () => {
+      user.email = "invalidEmail";
+      user.password = "Admin";
+
+      const res = await request(app)
+        .post("/api/v1/auth/register")
+        .send(user)
+        .expect(httpStatus.BAD_REQUEST);
+
+      expect(res.body.errors[0]).toBe("Please provide a valid email.");
+      expect(res.body.errors[1]).toBe(
+        "Please provide a valid password, minimum six characters, at least one capital letter and a number.",
       );
     });
 
