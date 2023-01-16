@@ -10,7 +10,7 @@ import User from "../../models/User";
 
 setupTestDB();
 
-describe("Auth routes", () => {
+describe("Auth endpoints", () => {
   let user;
 
   beforeEach(() => {
