@@ -22,7 +22,7 @@ router.route("/").get(getPermissions).post(grantPermission);
 
 router
   .route("/:id")
-  .get([getPermissionPolicy], getPermission)
-  .delete([getPermissionPolicy], deletePermission);
+  .get(getPermissionPolicy, getPermission)
+  .delete(getPermissionPolicy, deletePermission);
 
 export default router;
