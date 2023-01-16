@@ -16,6 +16,7 @@ import {
   Info,
   Home as Dashboard,
 } from '@mui/icons-material'
+import { Link } from "react-router-dom"
 
 import logo from 'assets/logo.png'
 import useStyles from './DrawerMenu.styles'
@@ -65,7 +66,13 @@ const DrawerMenu: React.FC<Props> = ({ open, toggle }) => {
       <List>
         {listItems.map((listItem, index) => (
           <ListItem key={listItem.listText} disablePadding>
-            <ListItemButton className={classes.listItem} key={index}>
+            <ListItemButton
+              className={classes.listItem}
+              component={Link}
+              to={listItem.to}
+              onClick={toggle}
+              key={index}
+            >
               <ListItemIcon className={classes.listItem}>
                 {listItem.listIcon}
               </ListItemIcon>
