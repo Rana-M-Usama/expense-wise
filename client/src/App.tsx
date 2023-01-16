@@ -1,28 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
+import { ThemeProvider } from '@mui/material'
 
-import { helloWorldApi } from "./api/helloWorld";
-import logo from './assets/logo.png';
-import './App.css';
+import { helloWorldApi } from './api/helloWorld'
+import { theme } from './theme'
+
+import './App.css'
+import NavBar from 'components/common/layouts/navbar/Navbar'
 
 const App = () => {
   const [data, setData] = useState('')
 
   useEffect(() => {
-
-    helloWorldApi()
-      .then((response) => {
-        setData(response.expensewise)
-      })
+    helloWorldApi().then((response) => {
+      setData(response.expensewise)
+    })
   }, [data])
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>This is from backend {data}</h1>
-      </header>
-    </div>
-  );
+    <ThemeProvider theme={theme}>
+      <NavBar />
+      <header className="App-header"></header>
+    </ThemeProvider>
+  )
 }
 
-export default App;
+export default App
