@@ -48,7 +48,7 @@ describe("Auth endpoints", () => {
         .send(user)
         .expect(httpStatus.BAD_REQUEST);
 
-      expect(res.body.errors[0]).toBe("Please provide a valid email.");
+      expect(res.body.errors).toEqual(["Please provide a valid email."]);
     });
 
     it("should return 400 error if email is already used", async () => {
@@ -60,7 +60,7 @@ describe("Auth endpoints", () => {
         .send(user)
         .expect(httpStatus.CONFLICT);
 
-      expect(res.body.errors[0]).toBe("Email already in use.");
+      expect(res.body.errors).toEqual(["Email already in use."]);
     });
 
     it("should return 400 error if password length is less than 6 characters", async () => {
@@ -71,9 +71,9 @@ describe("Auth endpoints", () => {
         .send(user)
         .expect(httpStatus.BAD_REQUEST);
 
-      expect(res.body.errors[0]).toBe(
+      expect(res.body.errors).toEqual([
         "Please provide a valid password, minimum six characters, at least one capital letter and a number.",
-      );
+      ]);
     });
 
     it("should return 400 error if email is invalid and password length is less than 6 characters", async () => {
@@ -99,9 +99,9 @@ describe("Auth endpoints", () => {
         .send(user)
         .expect(httpStatus.BAD_REQUEST);
 
-      expect(res.body.errors[0]).toBe(
+      expect(res.body.errors).toEqual([
         "Please provide a valid password, minimum six characters, at least one capital letter and a number.",
-      );
+      ]);
     });
 
     it("should return 400 error if password does not numbers", async () => {
@@ -112,9 +112,9 @@ describe("Auth endpoints", () => {
         .send(user)
         .expect(httpStatus.BAD_REQUEST);
 
-      expect(res.body.errors[0]).toBe(
+      expect(res.body.errors).toEqual([
         "Please provide a valid password, minimum six characters, at least one capital letter and a number.",
-      );
+      ]);
     });
   });
 
@@ -132,7 +132,6 @@ describe("Auth endpoints", () => {
         .expect(httpStatus.OK);
 
       expect(res.body).toHaveProperty("success");
-      expect(res.body.data).toHaveProperty("token");
       expect(res.body.data.token).toBeDefined();
       expect(res.body.success).toBe(true);
       expect(res.body.data).toHaveProperty("user");
@@ -288,7 +287,7 @@ describe("Auth endpoints", () => {
         .send(user)
         .expect(httpStatus.UNAUTHORIZED);
 
-      expect(res.body.errors[0]).toBe("Please provide a valid token.");
+      expect(res.body.errors).toEqual(["Please provide a valid token."]);
     });
   });
 
@@ -350,7 +349,7 @@ describe("Auth endpoints", () => {
         .send()
         .expect(httpStatus.BAD_REQUEST);
 
-      expect(res.body.errors[0]).toBe("Email is required.");
+      expect(res.body.errors).toEqual(["Email is required."]);
     });
 
     it("should return 404 if email does not belong to any user", async () => {
@@ -359,7 +358,7 @@ describe("Auth endpoints", () => {
         .send({ email: user.email })
         .expect(httpStatus.NOT_FOUND);
 
-      expect(res.body.errors[0]).toBe("User with this email doesn't exist.");
+      expect(res.body.errors).toEqual(["User with this email doesn't exist."]);
     });
   });
 
@@ -418,9 +417,9 @@ describe("Auth endpoints", () => {
         .send({ password: "123456" })
         .expect(httpStatus.BAD_REQUEST);
 
-      expect(res.body.errors[0]).toBe(
+      expect(res.body.errors).toEqual([
         "Please provide a valid password, minimum six characters, at least one capital letter and a number.",
-      );
+      ]);
     });
 
     it("should return 404 if reset password token is missing", async () => {
@@ -429,7 +428,7 @@ describe("Auth endpoints", () => {
         .send({ password: "Admin123*" })
         .expect(httpStatus.NOT_FOUND);
 
-      expect(res.body.errors[0]).toBe("Not Found!");
+      expect(res.body.errors).toEqual(["Not Found!"]);
     });
   });
 });
