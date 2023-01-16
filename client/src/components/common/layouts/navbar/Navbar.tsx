@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useState } from 'react'
 import {
   AppBar,
   Toolbar,
@@ -9,9 +9,12 @@ import {
 } from '@mui/material'
 import { Menu as MenuIcon, AccountCircle } from '@mui/icons-material'
 
+import DrawerMenu from '../drawer/DrawerMenu'
+
 const Navbar = () => {
-  const [auth, setAuth] = React.useState(true)
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [auth, setAuth] = useState(true)
+  const [drawerOpen, setdrawerOpen] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAuth(event.target.checked)
@@ -25,10 +28,15 @@ const Navbar = () => {
     setAnchorEl(null)
   }
 
+  const toggleSlider = () => {
+    setdrawerOpen(!drawerOpen)
+  }
+
   return (
-    <AppBar position="static">
+    <AppBar>
       <Toolbar>
         <IconButton
+          onClick={toggleSlider}
           size="large"
           edge="start"
           color="inherit"
@@ -37,6 +45,7 @@ const Navbar = () => {
         >
           <MenuIcon />
         </IconButton>
+        <DrawerMenu open={drawerOpen} toggle={toggleSlider} />
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           ExpenseWise
         </Typography>
