@@ -2,8 +2,8 @@ import crypto from "crypto";
 import httpStatus from "http-status";
 
 import asyncHandler from "../../middlewares/async";
+import emailService from "../../utils/sendEmail";
 import ErrorResponse from "../../utils/errorResponse";
-import sendEmail from "../../utils/sendEmail";
 import sendTokenResponse from "../helpers/sendTokenResponse";
 import User from "../../models/User";
 
@@ -31,6 +31,12 @@ const updatePassword = asyncHandler(async (req, res, next) => {
 const forgotPassword = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
 
+  if (!req.body.email) {
+    return next(
+      new ErrorResponse("Email is required.", httpStatus.BAD_REQUEST),
+    );
+  }
+
   if (!user) {
     return next(
       new ErrorResponse(
@@ -53,7 +59,7 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
     );
 
   try {
-    await sendEmail({
+    await emailService.sendEmail({
       email: user.email,
       subject: "Password reset token",
       message,

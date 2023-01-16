@@ -2,10 +2,6 @@ import winston from "winston";
 
 import config from "./config";
 
-const DEVELOPMENT = "development";
-const DEBUG = "debug";
-const INFO = "info";
-
 const enumerateErrorFormat = winston.format((info) => {
   if (info instanceof Error) {
     Object.assign(info, { message: info.stack });
@@ -14,10 +10,10 @@ const enumerateErrorFormat = winston.format((info) => {
 });
 
 const logger = winston.createLogger({
-  level: config.env === DEVELOPMENT ? DEBUG : INFO,
+  level: config.env === "development" ? "debug" : "info",
   format: winston.format.combine(
     enumerateErrorFormat(),
-    config.env === DEVELOPMENT
+    config.env === "development"
       ? winston.format.colorize()
       : winston.format.uncolorize(),
     winston.format.splat(),

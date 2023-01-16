@@ -1,5 +1,3 @@
-const PRODUCTION = "production";
-
 const sendTokenResponse = (user, statusCode, res) => {
   const token = user.getSignedJwtToken();
 
@@ -11,7 +9,7 @@ const sendTokenResponse = (user, statusCode, res) => {
     httpOnly: true,
   };
 
-  if (process.env.NODE_ENV === PRODUCTION) {
+  if (process.env.NODE_ENV === "production") {
     options.secure = true;
   }
 

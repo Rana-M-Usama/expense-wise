@@ -6,12 +6,9 @@ import config from "../config/config";
 import ErrorResponse from "../utils/errorResponse";
 import logger from "../config/logger";
 
-const DEVELOPMENT = "development";
-const PRODUCTION = "production";
-
 const errorHandler = (err, req, res, next) => {
   let { statusCode, message } = err;
-  if (config.env === PRODUCTION && !err.isOperational) {
+  if (config.env === "production" && !err.isOperational) {
     statusCode = httpStatus.INTERNAL_SERVER_ERROR;
     message = httpStatus[httpStatus.INTERNAL_SERVER_ERROR];
   }
@@ -23,30 +20,30 @@ const errorHandler = (err, req, res, next) => {
     statusCode,
     errors: [message],
 
-    ...(config.env === DEVELOPMENT && { stack: err.stack }),
+    ...(config.env === "development" && { stack: err.stack }),
   };
 
-  if (config.env === DEVELOPMENT) {
+  if (config.env === "development") {
     logger.error(err);
   }
 
-  res.status(statusCode).json({ response });
+  res.status(statusCode).json({ ...response });
 };
 
 const errorConverter = (err, req, res, next) => {
   let error = err;
   const statusCode =
-    error.statusCode || error instanceof mongoose.Error
+    error.statusCode ||
+    (error instanceof mongoose.Error
       ? httpStatus.BAD_REQUEST
-      : httpStatus.INTERNAL_SERVER_ERROR;
+      : httpStatus.INTERNAL_SERVER_ERROR);
 
   const message = error.message || httpStatus[statusCode];
 
   if (!(error instanceof ErrorResponse)) {
     error = new ErrorResponse(message, statusCode);
   }
-
-  errorHandler(new ErrorResponse(message, statusCode), req, res);
+  errorHandler(new ErrorResponse(message, statusCode), req, res, next);
 };
 
 export { errorConverter, errorHandler };
