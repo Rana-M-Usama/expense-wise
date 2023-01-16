@@ -40,25 +40,24 @@ const LoginPage = () => {
       >
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
+            name="email"
             margin="normal"
+            autoComplete="email"
+            id="email"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
             autoFocus
+            label="Email Address"
             className={classes.textField}
           />
           <TextField
-            color="primary"
             margin="normal"
-            required
-            fullWidth
             name="password"
             label="Password"
             type="password"
             id="password"
+            required
+            fullWidth
             autoComplete="current-password"
             className={classes.textField}
           />
@@ -67,8 +66,8 @@ const LoginPage = () => {
             label="Remember me"
           />
           <Button
-            type="submit"
             fullWidth
+            type="submit"
             variant="contained"
             className={classes.button}
           >
