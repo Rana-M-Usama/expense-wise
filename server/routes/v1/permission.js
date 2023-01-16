@@ -2,27 +2,27 @@ import express from "express";
 
 import {
   adminPolicy,
-  permissionPolicy,
-} from "../../middlewares/authorize/permissionPolicy";
+  sheetPolicy,
+} from "../../middlewares/authorize/sheetPolicy";
 import {
   deletePermission,
   getPermission,
   getPermissions,
   grantPermission,
 } from "../../controllers/permissions";
-import { sheetPolicy } from "../../middlewares/authorize/sheetPolicy";
+import {
+  getPermissionPolicy,
+  permissionPolicy,
+} from "../../middlewares/authorize/permissionPolicy";
 
 const router = express.Router({ mergeParams: true });
-router.use(sheetPolicy);
+router.use(sheetPolicy, permissionPolicy, adminPolicy);
 
-router
-  .route("/")
-  .get(adminPolicy, getPermissions)
-  .post(adminPolicy, grantPermission);
+router.route("/").get(getPermissions).post(grantPermission);
 
 router
   .route("/:id")
-  .get([permissionPolicy, adminPolicy], getPermission)
-  .delete([permissionPolicy, adminPolicy], deletePermission);
+  .get([getPermissionPolicy], getPermission)
+  .delete([getPermissionPolicy], deletePermission);
 
 export default router;

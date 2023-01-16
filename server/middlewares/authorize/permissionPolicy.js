@@ -5,6 +5,15 @@ import Permission from "../../models/Permission";
 
 const permissionPolicy = async (req, res, next) => {
   req.permission = await Permission.findOne({
+    sheet: req.sheet,
+    user: req.user.id,
+  });
+
+  next();
+};
+
+const getPermissionPolicy = async (req, res, next) => {
+  req.permission = await Permission.findOne({
     _id: req.params.id,
     sheet: req.params.sheetId,
   });
@@ -21,17 +30,4 @@ const permissionPolicy = async (req, res, next) => {
   next();
 };
 
-const adminPolicy = async (req, res, next) => {
-  if (!(req.permission?.type === "admin")) {
-    return next(
-      new ErrorResponse(
-        "You are not authorized for this action.",
-        httpStatus.UNAUTHORIZED,
-      ),
-    );
-  }
-
-  next();
-};
-
-export { permissionPolicy, adminPolicy };
+export { getPermissionPolicy, permissionPolicy };

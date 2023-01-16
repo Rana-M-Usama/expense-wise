@@ -8,13 +8,14 @@ import {
   updateSheet,
 } from "../../controllers/sheets";
 import {
-  deleteSheetPolicy,
-  getSheetPolicy,
+  adminPolicy,
+  editPolicy,
   sheetPolicy,
-  updateSheetPolicy,
+  viewPolicy,
 } from "../../middlewares/authorize/sheetPolicy";
 import advancedResults from "../../middlewares/advancedResults";
 import ExpenseRouter from "./expenses";
+import { permissionPolicy } from "../../middlewares/authorize/permissionPolicy";
 import PermissionRouter from "./permission";
 import protect from "../../middlewares/auth";
 import Sheet from "../../models/Sheet";
@@ -42,8 +43,8 @@ router
 
 router
   .route("/:id")
-  .get([sheetPolicy, getSheetPolicy], getSheet)
-  .put([sheetPolicy, updateSheetPolicy], updateSheet)
-  .delete([sheetPolicy, deleteSheetPolicy], deleteSheet);
+  .get([sheetPolicy, permissionPolicy, viewPolicy], getSheet)
+  .put([sheetPolicy, permissionPolicy, editPolicy], updateSheet)
+  .delete([sheetPolicy, permissionPolicy, adminPolicy], deleteSheet);
 
 export default router;

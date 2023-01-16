@@ -1,16 +1,11 @@
 import httpStatus from "http-status";
 
 import ErrorResponse from "../../utils/errorResponse";
-import Permission from "../../models/Permission";
 import Sheet from "../../models/Sheet";
 
 const sheetPolicy = async (req, res, next) => {
   const id = req.params.sheetId || req.params.id;
   req.sheet = await Sheet.findById(id);
-  req.permission = await Permission.findOne({
-    sheet: req.sheet,
-    user: req.user.id,
-  });
 
   if (!req.sheet) {
     return next(
@@ -24,7 +19,7 @@ const sheetPolicy = async (req, res, next) => {
   next();
 };
 
-const getSheetPolicy = async (req, res, next) => {
+const viewPolicy = async (req, res, next) => {
   if (!["admin", "view", "edit"].includes(req.permission?.type)) {
     return next(
       new ErrorResponse(
@@ -37,7 +32,7 @@ const getSheetPolicy = async (req, res, next) => {
   next();
 };
 
-const updateSheetPolicy = async (req, res, next) => {
+const editPolicy = async (req, res, next) => {
   if (!["admin", "edit"].includes(req.permission?.type)) {
     return next(
       new ErrorResponse(
@@ -50,11 +45,11 @@ const updateSheetPolicy = async (req, res, next) => {
   next();
 };
 
-const deleteSheetPolicy = async (req, res, next) => {
+const adminPolicy = async (req, res, next) => {
   if (!(req.permission?.type === "admin")) {
     return next(
       new ErrorResponse(
-        "You are not authorized to delete this sheet.",
+        "You are not authorized for this action.",
         httpStatus.UNAUTHORIZED,
       ),
     );
@@ -63,4 +58,4 @@ const deleteSheetPolicy = async (req, res, next) => {
   next();
 };
 
-export { sheetPolicy, getSheetPolicy, updateSheetPolicy, deleteSheetPolicy };
+export { sheetPolicy, adminPolicy, editPolicy, viewPolicy };

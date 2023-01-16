@@ -1,6 +1,5 @@
 import httpStatus from "http-status";
 
-import { getSheetPolicy, updateSheetPolicy } from "./sheetPolicy";
 import ErrorResponse from "../../utils/errorResponse";
 import Expense from "../../models/Expense";
 
@@ -31,26 +30,4 @@ const expensePolicy = async (req, res, next) => {
   next();
 };
 
-const getExpensePolicy = async (req, res, next) => {
-  getSheetPolicy(req, res, next);
-};
-
-const addExpensePolicy = async (req, res, next) => {
-  updateSheetPolicy(req, res, next);
-};
-
-const updateExpensePolicy = async (req, res, next) => {
-  updateSheetPolicy(req, res, next);
-};
-
-const deleteExpensePolicy = async (req, res, next) => {
-  updateSheetPolicy(req, res, next);
-};
-
-export {
-  addExpensePolicy,
-  expensePolicy,
-  getExpensePolicy,
-  updateExpensePolicy,
-  deleteExpensePolicy,
-};
+export default expensePolicy;

@@ -8,21 +8,17 @@ import {
   updateExpense,
 } from "../../controllers/expenses";
 import {
-  addExpensePolicy,
-  deleteExpensePolicy,
-  expensePolicy,
-  getExpensePolicy,
-  updateExpensePolicy,
-} from "../../middlewares/authorize/expensePolicy";
-import {
-  getSheetPolicy,
+  editPolicy,
   sheetPolicy,
+  viewPolicy,
 } from "../../middlewares/authorize/sheetPolicy";
 import advancedResults from "../../middlewares/advancedResults";
 import Expense from "../../models/Expense";
+import expensePolicy from "../../middlewares/authorize/expensePolicy";
+import { permissionPolicy } from "../../middlewares/authorize/permissionPolicy";
 
 const router = express.Router({ mergeParams: true });
-router.use(sheetPolicy);
+router.use(sheetPolicy, permissionPolicy);
 
 router
   .route("/")
@@ -31,15 +27,15 @@ router
       path: "sheet",
       select: "title owner",
     }),
-    getSheetPolicy,
+    viewPolicy,
     getExpenses,
   )
-  .post(addExpensePolicy, addExpense);
+  .post(editPolicy, addExpense);
 
 router
   .route("/:id")
-  .get([getExpensePolicy, expensePolicy], getExpense)
-  .put([updateExpensePolicy, expensePolicy], updateExpense)
-  .delete([deleteExpensePolicy, expensePolicy], deleteExpense);
+  .get([viewPolicy, expensePolicy], getExpense)
+  .put([editPolicy, expensePolicy], updateExpense)
+  .delete([editPolicy, expensePolicy], deleteExpense);
 
 export default router;
