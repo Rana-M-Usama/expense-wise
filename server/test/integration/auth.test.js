@@ -30,7 +30,6 @@ describe("Auth endpoints", () => {
         .expect(httpStatus.OK);
 
       expect(res.body.data.token).toBeUndefined();
-      expect(res.body.data).toHaveProperty("user");
       expect(res.body.data.user).toEqual({
         id: expect.anything(),
         firstName: user.firstName,
@@ -131,10 +130,8 @@ describe("Auth endpoints", () => {
         .send(loginCredentials)
         .expect(httpStatus.OK);
 
-      expect(res.body).toHaveProperty("success");
       expect(res.body.data.token).toBeDefined();
       expect(res.body.success).toBe(true);
-      expect(res.body.data).toHaveProperty("user");
       expect(res.body.data.user).toEqual({
         id: expect.anything(),
         firstName: user.firstName,
@@ -212,8 +209,6 @@ describe("Auth endpoints", () => {
         .set("authorization", `Bearer ${res.body.data.token}`)
         .expect(httpStatus.OK);
 
-      expect(res.body).toHaveProperty("success");
-      expect(res.body).toHaveProperty("data");
       expect(res.body.success).toBe(true);
       expect(res.body.data).toEqual(
         expect.objectContaining({
@@ -262,8 +257,6 @@ describe("Auth endpoints", () => {
         .send(user)
         .expect(httpStatus.OK);
 
-      expect(res.body).toHaveProperty("success");
-      expect(res.body).toHaveProperty("data");
       expect(res.body.success).toBe(true);
       expect(res.body.data).toEqual(
         expect.objectContaining({
