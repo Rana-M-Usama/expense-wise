@@ -70,12 +70,12 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
           >
             <TextField
               margin="normal"
-              required
-              fullWidth
+              name="email"
               id="email"
               label="Email Address"
-              name="email"
               autoComplete="email"
+              required
+              fullWidth
               autoFocus
               className={classes.textField}
               InputProps={{
@@ -87,8 +87,8 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
               }}
             />
             <Button
-              type="submit"
               fullWidth
+              type="submit"
               variant="contained"
               className={classes.button}
             >
