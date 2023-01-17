@@ -10,6 +10,7 @@ import {
   Box,
   Container,
 } from '@mui/material'
+
 import useStyles from './signup.styles'
 import logo from '../../assets/logo.png'
 
@@ -43,10 +44,10 @@ const SignupPage = () => {
               <TextField
                 autoComplete="given-name"
                 name="firstName"
-                required
-                fullWidth
                 id="firstName"
                 label="First Name"
+                required
+                fullWidth
                 className={classes.textField}
                 autoFocus
               />
@@ -67,9 +68,9 @@ const SignupPage = () => {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
                 name="email"
                 autoComplete="email"
+                label="Email Address"
                 className={classes.textField}
               />
             </Grid>

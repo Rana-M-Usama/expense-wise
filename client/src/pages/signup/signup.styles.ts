@@ -16,26 +16,26 @@ export default makeStyles((theme) => ({
   },
 
   avatar: {
-    margin: '10px !important',
-    backgroundColor: '#ff80ab !important',
-    width: '70px !important',
-    height: '70px !important'
+    margin: "10px !important",
+    backgroundColor: "#ff80ab !important",
+    width: "70px !important",
+    height: "70px !important"
   },
 
   icon: {
-    width: '50% !important', height: '50% !important'
+    width: "50% !important", height: "50% !important"
   },
 
   modal: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center ',
-    alignItems: 'center ',
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    backgroundColor: 'white',
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center ",
+    alignItems: "center ",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: "white",
     padding: 2,
     borderRadius: 5
   },
