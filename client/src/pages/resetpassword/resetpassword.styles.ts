@@ -16,14 +16,14 @@ export default makeStyles((theme) => ({
   },
 
   avatar: {
-    margin: '10px !important',
-    backgroundColor: '#ff80ab !important',
-    width: '70px !important',
-    height: '70px !important'
+    margin: "10px !important",
+    backgroundColor: "#ff80ab !important",
+    width: "70px !important",
+    height: "70px !important"
   },
 
   icon: {
-    width: '50% !important', height: '50% !important'
+    width: "50% !important", height: "50% !important"
   },
 
   img: {

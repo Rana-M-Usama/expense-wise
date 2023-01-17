@@ -8,6 +8,7 @@ import {
   Typography,
   Container,
 } from '@mui/material'
+
 import useStyles from './resetpassword.styles'
 import { Lock } from '@mui/icons-material'
 
@@ -35,24 +36,24 @@ const ResetPasswordPage = () => {
           <TextField
             color="primary"
             margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="New Password"
             type="password"
             id="password"
+            name="password"
+            required
+            fullWidth
+            label="New Password"
             autoComplete="current-password"
             className={classes.textField}
           />
           <TextField
             color="primary"
             margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Confirm Password"
             type="password"
             id="password"
+            name="password"
+            required
+            fullWidth
+            label="Confirm Password"
             autoComplete="current-password"
             className={classes.textField}
           />
