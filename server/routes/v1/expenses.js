@@ -9,16 +9,16 @@ import {
 } from "../../controllers/expenses";
 import {
   editPolicy,
-  sheetPolicy,
   viewPolicy,
 } from "../../middlewares/authorize/sheetPolicy";
 import advancedResults from "../../middlewares/advancedResults";
 import Expense from "../../models/Expense";
 import expensePolicy from "../../middlewares/authorize/expensePolicy";
-import { permissionPolicy } from "../../middlewares/authorize/permissionPolicy";
+import { permission } from "../../middlewares/permission";
+import sheet from "../../middlewares/sheet";
 
 const router = express.Router({ mergeParams: true });
-router.use(sheetPolicy, permissionPolicy);
+router.use(sheet, permission);
 
 router
   .route("/")

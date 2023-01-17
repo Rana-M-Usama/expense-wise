@@ -1,27 +1,15 @@
 import httpStatus from "http-status";
 
 import ErrorResponse from "../../utils/errorResponse";
-import Permission from "../../models/Permission";
 
-const permissionPolicy = async (req, res, next) => {
-  req.permission = await Permission.findOne({
-    sheet: req.sheet,
-    user: req.user.id,
-  });
-
-  next();
-};
-
-const getPermissionPolicy = async (req, res, next) => {
-  req.permission = await Permission.findOne({
-    _id: req.params.id,
-    sheet: req.params.sheetId,
-  });
-
-  if (!req.permission) {
+const grantPermissionPolicy = async (req, res, next) => {
+  if (
+    req.user.cannotGrantViewPermission(req.body.type) ||
+    req.user.cannotGrantEditPermission(req.body.type)
+  ) {
     return next(
       new ErrorResponse(
-        `No permission found with the id of ${req.params.id}.`,
+        "You do not have rights to assign this permission.",
         httpStatus.NOT_FOUND,
       ),
     );
@@ -30,4 +18,4 @@ const getPermissionPolicy = async (req, res, next) => {
   next();
 };
 
-export { getPermissionPolicy, permissionPolicy };
+export default grantPermissionPolicy;

@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+import {
+  ADMIN_PERMISSIONS,
+  EDIT_PERMISSIONS,
+  VIEW_PERMISSIONS,
+} from "../middlewares/permission";
 import Permission from "./Permission";
 
 const SheetSchema = new mongoose.Schema(
@@ -41,5 +46,17 @@ SheetSchema.post("save", async function (doc, next) {
 
   next();
 });
+
+SheetSchema.methods.hasViewPermission = function (user) {
+  return VIEW_PERMISSIONS.includes(user.permission.type);
+};
+
+SheetSchema.methods.hasEditPermission = function (user) {
+  return EDIT_PERMISSIONS.includes(user.permission.type);
+};
+
+SheetSchema.methods.hasAdminPermission = function (user) {
+  return ADMIN_PERMISSIONS.includes(user.permission.type);
+};
 
 export default mongoose.model("Sheet", SheetSchema);

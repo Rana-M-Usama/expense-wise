@@ -10,15 +10,15 @@ import {
 import {
   adminPolicy,
   editPolicy,
-  sheetPolicy,
   viewPolicy,
 } from "../../middlewares/authorize/sheetPolicy";
 import advancedResults from "../../middlewares/advancedResults";
 import ExpenseRouter from "./expenses";
-import { permissionPolicy } from "../../middlewares/authorize/permissionPolicy";
+import { permission } from "../../middlewares/permission";
 import PermissionRouter from "./permission";
 import protect from "../../middlewares/auth";
 import Sheet from "../../models/Sheet";
+import sheet from "../../middlewares/sheet";
 
 const router = express.Router({ mergeParams: true });
 
@@ -43,8 +43,8 @@ router
 
 router
   .route("/:id")
-  .get([sheetPolicy, permissionPolicy, viewPolicy], getSheet)
-  .put([sheetPolicy, permissionPolicy, editPolicy], updateSheet)
-  .delete([sheetPolicy, permissionPolicy, adminPolicy], deleteSheet);
+  .get([sheet, permission, viewPolicy], getSheet)
+  .put([sheet, permission, editPolicy], updateSheet)
+  .delete([sheet, permission, adminPolicy], deleteSheet);
 
 export default router;
