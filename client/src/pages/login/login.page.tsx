@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import {
   Button,
   CssBaseline,
@@ -9,10 +9,10 @@ import {
   Grid,
   Box,
   Container,
-} from '@mui/material'
+} from "@mui/material"
 
-import useStyles from './login.styles'
-import logo from '../../assets/logo.png'
+import useStyles from "./login.styles"
+import logo from "../../assets/logo.png"
 
 const LoginPage = () => {
   const classes = useStyles()
@@ -31,10 +31,10 @@ const LoginPage = () => {
       <Box
         sx={{
           width: {
-            xl: '40%',
-            lg: '60%',
-            md: '70%',
-            sm: '90%',
+            xl: "40%",
+            lg: "60%",
+            md: "70%",
+            sm: "90%",
           },
         }}
       >
