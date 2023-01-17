@@ -3,7 +3,7 @@ import { faker } from "@faker-js/faker";
 
 import UserFactory from "../../factories/user.factory";
 
-const FAKER_STRING = faker.lorem.paragraphs(1);
+const FAKER_STRING = faker.lorem.paragraphs(51);
 
 describe("User model", () => {
   describe("validation", () => {
