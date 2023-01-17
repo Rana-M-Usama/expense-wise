@@ -20,7 +20,7 @@ const protect = asyncHandler(async (req, res, next) => {
   if (!token) {
     return next(
       new ErrorResponse(
-        "Please provide authentication token.",
+        "Please provide an authentication token.",
         httpStatus.UNAUTHORIZED,
       ),
     );
