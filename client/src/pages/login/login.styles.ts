@@ -5,8 +5,8 @@ export default makeStyles((theme) => ({
     width: "50%",
     flexDirection: "column",
     display: "flex !important",
-    justifyContent: "center ",
-    alignItems: "center ",
+    justifyContent: "center",
+    alignItems: "center",
     [`@media (max-width: 1100px)`]: {
       width: "70%",
     },
@@ -29,8 +29,8 @@ export default makeStyles((theme) => ({
   modal: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center ",
-    alignItems: "center ",
+    justifyContent: "center",
+    alignItems: "center",
     position: "absolute",
     top: "50%",
     left: "50%",
