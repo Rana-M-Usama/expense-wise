@@ -6,6 +6,7 @@ import { theme } from './theme'
 
 import './App.css'
 import NavBar from 'components/common/layouts/navbar/Navbar'
+import Sheet from 'components/sheet/Sheet'
 
 const App = () => {
   const [data, setData] = useState('')
@@ -18,8 +19,10 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <NavBar />
-      <header className="App-header"></header>
+      <header className="App-header">
+        <NavBar />
+        <Sheet />
+      </header>
     </ThemeProvider>
   )
 }
