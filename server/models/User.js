@@ -87,12 +87,18 @@ UserSchema.methods.getResetPasswordToken = function () {
   return resetToken;
 };
 
-UserSchema.methods.cannotGrantViewPermission = function (type) {
-  return this.permission.type === VIEW && EDIT_PERMISSIONS.includes(type);
+UserSchema.methods.canGrantEditPermission = function (type) {
+  return !(this.permission.type === VIEW && EDIT_PERMISSIONS.includes(type));
 };
 
-UserSchema.methods.cannotGrantEditPermission = function (type) {
-  return this.permission.type === EDIT && ADMIN_PERMISSIONS.includes(type);
+UserSchema.methods.canGrantAdminPermission = function (type) {
+  return !(this.permission.type === EDIT && ADMIN_PERMISSIONS.includes(type));
+};
+
+UserSchema.methods.canGrantPermission = function (type) {
+  return (
+    this.canGrantEditPermission(type) && this.canGrantAdminPermission(type)
+  );
 };
 
 export default mongoose.model("User", UserSchema);

@@ -26,6 +26,9 @@ const grantPermission = asyncHandler(async (req, res) => {
     permission = await Permission.findOneAndUpdate(
       { user: req.body.user, sheet: req.body.sheet },
       req.body,
+      {
+        runValidators: true,
+      },
     );
   } else {
     permission = await Permission.create(req.body);
