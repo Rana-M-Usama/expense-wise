@@ -22,7 +22,10 @@ const findPermissionForUser = async (req, res, next) => {
 };
 
 const findPermission = async (req, res, next) => {
-  req.permission = await Permission.findById(req.params.id);
+  req.permission = await Permission.findOne({
+    _id: req.params.id,
+    sheet: req.params.sheetId,
+  });
 
   if (!req.permission) {
     return next(
