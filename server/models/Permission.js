@@ -26,11 +26,11 @@ const PermissionSchema = new mongoose.Schema(
 
 // validates if permission of a user with a sheet already exists
 PermissionSchema.pre("validate", async function (next) {
-  if (
-    await mongoose
-      .model("Permission", PermissionSchema)
-      .findOne({ sheet: this.sheet, user: this.user })
-  ) {
+  const permission = await mongoose
+    .model("Permission", PermissionSchema)
+    .findOne({ sheet: this.sheet, user: this.user });
+
+  if (permission) {
     return next(
       new ErrorResponse(
         "Permission of this user with this sheet already exists",

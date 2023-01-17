@@ -2,7 +2,7 @@ import httpStatus from "http-status";
 
 import ErrorResponse from "../../utils/errorResponse";
 
-const viewPolicy = async (req, res, next) => {
+const viewSheetPolicy = async (req, res, next) => {
   if (!req.sheet.hasViewPermission(req.user)) {
     return next(
       new ErrorResponse(
@@ -15,7 +15,7 @@ const viewPolicy = async (req, res, next) => {
   next();
 };
 
-const editPolicy = async (req, res, next) => {
+const editSheetPolicy = async (req, res, next) => {
   if (!req.sheet.hasEditPermission(req.user)) {
     return next(
       new ErrorResponse(
@@ -28,7 +28,7 @@ const editPolicy = async (req, res, next) => {
   next();
 };
 
-const adminPolicy = async (req, res, next) => {
+const adminSheetPolicy = async (req, res, next) => {
   if (!req.sheet.hasAdminPermission(req.user)) {
     return next(
       new ErrorResponse(
@@ -41,4 +41,4 @@ const adminPolicy = async (req, res, next) => {
   next();
 };
 
-export { adminPolicy, editPolicy, viewPolicy };
+export { adminSheetPolicy, editSheetPolicy, viewSheetPolicy };

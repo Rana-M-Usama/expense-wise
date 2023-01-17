@@ -8,7 +8,7 @@ import {
   EDIT,
   EDIT_PERMISSIONS,
   VIEW,
-} from "../middlewares/permission";
+} from "../constants/permission";
 
 const UserSchema = new mongoose.Schema(
   {

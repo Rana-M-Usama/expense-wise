@@ -3,14 +3,7 @@ import httpStatus from "http-status";
 import ErrorResponse from "../utils/errorResponse";
 import Permission from "../models/Permission";
 
-const VIEW_PERMISSIONS = ["view", "edit", "admin"];
-const ADMIN_PERMISSIONS = ["admin"];
-const EDIT_PERMISSIONS = ["edit", "admin"];
-const VIEW = "view";
-const EDIT = "edit";
-const ADMIN = "admin";
-
-const permission = async (req, res, next) => {
+const findPermissionForUser = async (req, res, next) => {
   req.user.permission = await Permission.findOne({
     sheet: req.sheet,
     user: req.user.id,
@@ -28,11 +21,8 @@ const permission = async (req, res, next) => {
   next();
 };
 
-const getPermissionById = async (req, res, next) => {
-  req.permission = await Permission.findOne({
-    _id: req.params.id,
-    sheet: req.params.sheetId,
-  });
+const findPermission = async (req, res, next) => {
+  req.permission = await Permission.findById(req.params.id);
 
   if (!req.permission) {
     return next(
@@ -46,13 +36,4 @@ const getPermissionById = async (req, res, next) => {
   next();
 };
 
-export {
-  permission,
-  getPermissionById,
-  ADMIN_PERMISSIONS,
-  EDIT_PERMISSIONS,
-  VIEW_PERMISSIONS,
-  VIEW,
-  ADMIN,
-  EDIT,
-};
+export { findPermissionForUser, findPermission };

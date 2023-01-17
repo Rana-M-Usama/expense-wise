@@ -4,7 +4,7 @@ import {
   ADMIN_PERMISSIONS,
   EDIT_PERMISSIONS,
   VIEW_PERMISSIONS,
-} from "../middlewares/permission";
+} from "../constants/permission";
 import Permission from "./Permission";
 
 const SheetSchema = new mongoose.Schema(

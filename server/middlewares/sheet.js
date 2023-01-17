@@ -3,7 +3,7 @@ import httpStatus from "http-status";
 import ErrorResponse from "../utils/errorResponse";
 import Sheet from "../models/Sheet";
 
-const sheet = async (req, res, next) => {
+const findSheet = async (req, res, next) => {
   const id = req.params.sheetId || req.params.id;
   req.sheet = await Sheet.findById(id);
 
@@ -19,4 +19,4 @@ const sheet = async (req, res, next) => {
   next();
 };
 
-export default sheet;
+export default findSheet;

@@ -1,9 +1,9 @@
 import httpStatus from "http-status";
 
-import ErrorResponse from "../../utils/errorResponse";
-import Expense from "../../models/Expense";
+import ErrorResponse from "../utils/errorResponse";
+import Expense from "../models/Expense";
 
-const expensePolicy = async (req, res, next) => {
+const findExpenseForSheet = async (req, res, next) => {
   req.expense = await Expense.findOne({
     _id: req.params.id,
     sheet: req.params.sheetId,
@@ -30,4 +30,4 @@ const expensePolicy = async (req, res, next) => {
   next();
 };
 
-export default expensePolicy;
+export default findExpenseForSheet;
