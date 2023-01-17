@@ -43,7 +43,7 @@ const errorConverter = (err, req, res, next) => {
   const message = error.message || httpStatus[statusCode];
 
   if (!(error instanceof ErrorResponse)) {
-    error = new ErrorResponse([message], statusCode);
+    error = new ErrorResponse(message, statusCode);
   }
 
   if (err instanceof ValidationError) {
@@ -58,7 +58,7 @@ const errorConverter = (err, req, res, next) => {
     );
   }
 
-  errorHandler(new ErrorResponse([message], statusCode), req, res, next);
+  errorHandler(new ErrorResponse(message, statusCode), req, res, next);
 };
 
 export { errorConverter, errorHandler };
