@@ -1,7 +1,7 @@
 import httpStatus from "http-status";
 
 import asyncHandler from "../../middlewares/async";
-import sendTokenResponse from "../helpers/sendTokenResponse";
+import sendSessionResponse from "../helpers/sendSessionResponse";
 import User from "../../models/User";
 
 // @desc      Register user
@@ -23,11 +23,11 @@ const register = asyncHandler(async (req, res) => {
     password,
   });
 
-  sendTokenResponse(user, httpStatus.OK, res);
+  sendSessionResponse(user, httpStatus.OK, res, false);
 });
 
 // @desc      Update user details
-// @route     PUT /api/v1/auth/update-details
+// @route     PUT /api/v1/auth/me
 // @access    Private
 const updateDetails = asyncHandler(async (req, res) => {
   const { firstName, lastName, imageUrl } = req.body;

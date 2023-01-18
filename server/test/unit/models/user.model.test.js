@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "@jest/globals";
 import { faker } from "@faker-js/faker";
 
-import instantiateUser from "../../fixtures/user.fixture";
+import UserFactory from "../../factories/user.factory";
 
 const FAKER_STRING = faker.lorem.paragraphs(1);
 
@@ -10,7 +10,7 @@ describe("User model", () => {
     let user;
 
     beforeEach(() => {
-      user = instantiateUser();
+      user = UserFactory();
     });
 
     it("should correctly validate a valid user", () => {
