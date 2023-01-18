@@ -9,10 +9,9 @@ const App = () => {
   const [data, setData] = useState("");
 
   useEffect(() => {
-    helloWorldApi()
-      .then(response => {
-        setData(response.expensewise);
-      });
+    helloWorldApi().then(response => {
+      setData(response.expensewise);
+    });
   }, [data]);
 
   return (

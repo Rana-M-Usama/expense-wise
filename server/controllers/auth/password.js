@@ -4,11 +4,11 @@ import httpStatus from "http-status";
 import asyncHandler from "../../middlewares/async";
 import emailService from "../../utils/sendEmail";
 import ErrorResponse from "../../utils/errorResponse";
-import sendTokenResponse from "../helpers/sendTokenResponse";
+import sendSessionResponse from "../helpers/sendSessionResponse";
 import User from "../../models/User";
 
 // @desc      Update password
-// @route     PUT /api/v1/auth/update-password
+// @route     PUT /api/v1/auth/me/password
 // @access    Private
 const updatePassword = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id).select("+password");
@@ -22,7 +22,7 @@ const updatePassword = asyncHandler(async (req, res, next) => {
   user.password = req.body.newPassword;
   await user.save();
 
-  sendTokenResponse(user, httpStatus.OK, res);
+  sendSessionResponse(user, httpStatus.OK, res, true);
 });
 
 // @desc      Forgot password
@@ -117,7 +117,7 @@ const resetPassword = asyncHandler(async (req, res, next) => {
   user.resetPasswordExpire = undefined;
   await user.save();
 
-  sendTokenResponse(user, httpStatus.OK, res);
+  sendSessionResponse(user, httpStatus.OK, res, false);
 });
 
 export { updatePassword, forgotPassword, resetPassword };
