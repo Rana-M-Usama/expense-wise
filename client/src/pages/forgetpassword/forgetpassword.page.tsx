@@ -8,22 +8,18 @@ import {
   Typography,
   Modal,
   IconButton,
-} from '@mui/material'
-import { Mail, CloseOutlined } from '@mui/icons-material'
+} from "@mui/material";
+import { Mail, CloseOutlined } from "@mui/icons-material";
 
-import useStyles from './forgetpassword.styles'
+import useStyles from "pages/forgetpassword/forgetpassword.styles";
 
 interface Props {
-  isOpen: boolean
-  onClose: () => void
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
-  const classes = useStyles()
-
-  if (!isOpen) {
-    return null
-  }
+  const classes = useStyles();
 
   return (
     <Modal
@@ -37,20 +33,20 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
         className={classes.modal}
         sx={{
           width: {
-            lg: '40%',
-            md: '60%',
-            sm: '80%',
-            xs: '95%',
+            lg: "40%",
+            md: "60%",
+            sm: "80%",
+            xs: "95%",
           },
         }}
       >
         <CssBaseline />
         <Box
           sx={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'end',
-            alignItems: 'end',
+            width: "100%",
+            display: "flex",
+            alignItems: "end",
+            justifyContent: "end",
           }}
         >
           <IconButton onClick={onClose}>
@@ -63,7 +59,7 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
           <Box
             component="form"
             sx={{
-              border: '1px solid #f0629270',
+              border: "1px solid #f0629270",
               p: 3,
               mb: 2,
             }}
@@ -72,8 +68,8 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
               margin="normal"
               name="email"
               id="email"
-              label="Email Address"
               autoComplete="email"
+              label="Email Address"
               required
               fullWidth
               autoFocus
@@ -98,7 +94,7 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
         </Container>
       </Box>
     </Modal>
-  )
-}
+  );
+};
 
-export default ForgotPasswordPage
+export default ForgotPasswordPage;
