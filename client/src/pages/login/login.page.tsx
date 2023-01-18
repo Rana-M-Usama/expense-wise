@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import {
   Button,
   CssBaseline,
@@ -9,17 +9,17 @@ import {
   Grid,
   Box,
   Container,
-} from '@mui/material'
+} from "@mui/material";
 
-import ForgotPasswordPage from 'pages/forgetpassword/forgetpassword.page'
-import useStyles from './login.styles'
-import logo from '../../assets/logo.png'
+import logo from "assets/logo.png";
+import useStyles from "pages/login/login.styles";
+import ForgotPasswordPage from "pages/forgetpassword/forgetpassword.page";
 
 const LoginPage = () => {
-  const classes = useStyles()
-  const [modalIsOpen, setModalIsOpen] = useState(false)
+  const classes = useStyles();
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {}
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {};
 
   return (
     <Container component="main" className={classes.container}>
@@ -33,34 +33,33 @@ const LoginPage = () => {
       <Box
         sx={{
           width: {
-            xl: '40%',
-            lg: '60%',
-            md: '70%',
-            sm: '90%',
+            xl: "40%",
+            lg: "60%",
+            md: "70%",
+            sm: "90%",
           },
         }}
       >
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
+            name="email"
             margin="normal"
+            autoComplete="email"
+            id="email"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
             autoFocus
+            label="Email Address"
             className={classes.textField}
           />
           <TextField
-            color="primary"
             margin="normal"
-            required
-            fullWidth
             name="password"
             label="Password"
             type="password"
             id="password"
+            required
+            fullWidth
             autoComplete="current-password"
             className={classes.textField}
           />
@@ -69,8 +68,8 @@ const LoginPage = () => {
             label="Remember me"
           />
           <Button
-            type="submit"
             fullWidth
+            type="submit"
             variant="contained"
             className={classes.button}
           >
@@ -99,7 +98,7 @@ const LoginPage = () => {
         </Box>
       </Box>
     </Container>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;
