@@ -3,10 +3,10 @@ import { makeStyles } from "@mui/styles";
 export default makeStyles((theme) => ({
   container: {
     width: "50%",
-    flexDirection: "column",
     display: "flex !important",
-    justifyContent: "center ",
-    alignItems: "center ",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
     [`@media (max-width: 1100px)`]: {
       width: "70%",
     },
@@ -19,11 +19,12 @@ export default makeStyles((theme) => ({
     margin: "10px !important",
     backgroundColor: "#ff80ab !important",
     width: "70px !important",
-    height: "70px !important"
+    height: "70px !important",
   },
 
   icon: {
-    width: "50% !important", height: "50% !important"
+    width: "50% !important",
+    height: "50% !important",
   },
 
   img: {

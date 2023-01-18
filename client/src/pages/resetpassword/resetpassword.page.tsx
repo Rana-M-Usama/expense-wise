@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   Button,
   CssBaseline,
@@ -7,14 +7,14 @@ import {
   Avatar,
   Typography,
   Container,
-} from '@mui/material'
+} from "@mui/material";
+import { Lock } from "@mui/icons-material";
 
-import useStyles from './resetpassword.styles'
-import { Lock } from '@mui/icons-material'
+import useStyles from "pages/resetpassword/resetpassword.styles";
 
 const ResetPasswordPage = () => {
-  const classes = useStyles()
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {}
+  const classes = useStyles();
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {};
 
   return (
     <Container component="main" className={classes.container}>
@@ -26,9 +26,9 @@ const ResetPasswordPage = () => {
       <Box
         sx={{
           width: {
-            lg: '50%',
-            md: '70%',
-            sm: '90%',
+            lg: "50%",
+            md: "70%",
+            sm: "90%",
           },
         }}
       >
@@ -68,7 +68,7 @@ const ResetPasswordPage = () => {
         </Box>
       </Box>
     </Container>
-  )
-}
+  );
+};
 
-export default ResetPasswordPage
+export default ResetPasswordPage;
