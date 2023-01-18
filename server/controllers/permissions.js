@@ -40,16 +40,6 @@ const grantPermission = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc      Get a single permission
-// @route     GET /api/v1/sheets/:sheetId/permissions/:id
-// @access    Private
-const getPermission = asyncHandler(async (req, res) =>
-  res.status(httpStatus.OK).json({
-    success: true,
-    data: req.permission,
-  }),
-);
-
 // @desc      Delete permission
 // @route     DELETE /api/v1/sheets/:sheetId/permissions/:id
 // @access    Private
@@ -62,4 +52,4 @@ const deletePermission = asyncHandler(async (req, res) => {
   });
 });
 
-export { getPermissions, getPermission, grantPermission, deletePermission };
+export { getPermissions, grantPermission, deletePermission };
