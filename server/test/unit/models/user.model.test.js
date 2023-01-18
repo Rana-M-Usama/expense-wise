@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it } from "@jest/globals";
-import { faker } from "@faker-js/faker";
 
 import UserFactory from "../../factories/user.factory";
 
-const FAKER_STRING = faker.lorem.paragraphs(51);
+const FAKER_STRING =
+  "RAI6hQ4lPq5HaS5JtK5A7LkLyLXruu9Z3No8y13oPfd9axC9gLJz4YZVnMDQkhZ9BPHp78khxUbEXqmoyE8mLdQrfGvrcOXmhct5cdA34jdAPsNcdLZIBnf4r1z8xbQphLE9xcKNXkhNa51It2eDwh";
 
 describe("User model", () => {
   describe("validation", () => {
