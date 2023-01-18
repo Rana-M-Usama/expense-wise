@@ -19,11 +19,12 @@ export default makeStyles((theme) => ({
     margin: "10px !important",
     backgroundColor: "#ff80ab !important",
     width: "70px !important",
-    height: "70px !important"
+    height: "70px !important",
   },
 
   icon: {
-    width: "50% !important", height: "50% !important"
+    width: "50% !important",
+    height: "50% !important",
   },
 
   modal: {
@@ -37,9 +38,8 @@ export default makeStyles((theme) => ({
     transform: "translate(-50%, -50%)",
     backgroundColor: "white",
     padding: 2,
-    borderRadius: 5
+    borderRadius: 5,
   },
-
 
   img: {
     height: "200px",

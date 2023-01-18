@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import {
   Button,
   CssBaseline,
@@ -9,15 +9,15 @@ import {
   Grid,
   Box,
   Container,
-} from "@mui/material"
+} from "@mui/material";
 
-import useStyles from "./login.styles"
-import logo from "../../assets/logo.png"
+import useStyles from "pages/login/login.styles";
+import logo from "assets/logo.png";
 
 const LoginPage = () => {
-  const classes = useStyles()
+  const classes = useStyles();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {}
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {};
 
   return (
     <Container component="main" className={classes.container}>
@@ -88,7 +88,7 @@ const LoginPage = () => {
         </Box>
       </Box>
     </Container>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;
