@@ -3,9 +3,9 @@ import { faker } from "@faker-js/faker";
 
 import ExpenseFactory from "../../factories/expense.factory";
 
-const FAKER_STRING = faker.lorem.paragraphs(101);
+const FAKER_STRING = faker.lorem.lines(101);
 
-describe("Sheet model", () => {
+describe("Expense model", () => {
   describe("validation", () => {
     let expense;
 
