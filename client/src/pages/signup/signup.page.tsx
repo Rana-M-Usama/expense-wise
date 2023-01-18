@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   Button,
   CssBaseline,
@@ -9,32 +9,32 @@ import {
   Grid,
   Box,
   Container,
-} from '@mui/material'
+} from "@mui/material";
 
-import useStyles from './signup.styles'
-import logo from '../../assets/logo.png'
+import logo from "assets/logo.png";
+import useStyles from "pages/signup/signup.styles";
 
 const SignupPage = () => {
-  const classes = useStyles()
+  const classes = useStyles();
 
-  const handleSubmit = () => {}
+  const handleSubmit = () => {};
 
   return (
     <Container component="main" className={classes.container}>
       <CssBaseline />
       <Box
-        component="img"
         className={classes.img}
         src={logo}
+        component="img"
         alt="expenseWise"
       />
       <Box
         sx={{
           width: {
-            xl: '50%',
-            lg: '60%',
-            md: '70%',
-            sm: '90%',
+            xl: "50%",
+            lg: "60%",
+            md: "70%",
+            sm: "90%",
           },
         }}
       >
@@ -42,40 +42,41 @@ const SignupPage = () => {
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
               <TextField
+                className={classes.textField}
                 autoComplete="given-name"
                 name="firstName"
                 id="firstName"
                 label="First Name"
                 required
                 fullWidth
-                className={classes.textField}
                 autoFocus
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                className={classes.textField}
                 required
                 fullWidth
                 id="lastName"
                 label="Last Name"
                 name="lastName"
                 autoComplete="family-name"
-                className={classes.textField}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
+                className={classes.textField}
                 required
                 fullWidth
                 id="email"
                 name="email"
                 autoComplete="email"
                 label="Email Address"
-                className={classes.textField}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
+                className={classes.textField}
                 required
                 fullWidth
                 name="password"
@@ -83,17 +84,16 @@ const SignupPage = () => {
                 type="password"
                 id="password"
                 autoComplete="new-password"
-                className={classes.textField}
               />
               <TextField
+                className={classes.textField}
                 margin="normal"
+                type="password"
                 required
                 fullWidth
                 name="Confirm password"
                 label="Confirm Password"
-                type="password"
                 id="Confirm password"
-                className={classes.textField}
               />
             </Grid>
             <Grid item xs={12}>
@@ -104,8 +104,8 @@ const SignupPage = () => {
             </Grid>
           </Grid>
           <Button
-            type="submit"
             className={classes.button}
+            type="submit"
             fullWidth
             variant="contained"
             color="primary"
@@ -122,7 +122,7 @@ const SignupPage = () => {
         </Box>
       </Box>
     </Container>
-  )
-}
+  );
+};
 
-export default SignupPage
+export default SignupPage;
