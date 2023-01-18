@@ -10,11 +10,11 @@ import {
 import {
   adminSheetPolicy,
   editSheetPolicy,
+  sheetPolicy,
   viewSheetPolicy,
 } from "../../middlewares/authorize/sheetPolicy";
 import advancedResults from "../../middlewares/advancedResults";
 import ExpenseRouter from "./expenses";
-import { findPermissionForUser } from "../../middlewares/permission";
 import findSheet from "../../middlewares/sheet";
 import PermissionRouter from "./permission";
 import protect from "../../middlewares/auth";
@@ -43,8 +43,8 @@ router
 
 router
   .route("/:id")
-  .get([findSheet, findPermissionForUser, viewSheetPolicy], getSheet)
-  .put([findSheet, findPermissionForUser, editSheetPolicy], updateSheet)
-  .delete([findSheet, findPermissionForUser, adminSheetPolicy], deleteSheet);
+  .get([findSheet, sheetPolicy, viewSheetPolicy], getSheet)
+  .put([findSheet, sheetPolicy, editSheetPolicy], updateSheet)
+  .delete([findSheet, sheetPolicy, adminSheetPolicy], deleteSheet);
 
 export default router;

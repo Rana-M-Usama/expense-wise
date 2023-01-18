@@ -2,17 +2,30 @@ import httpStatus from "http-status";
 
 import ErrorResponse from "../../utils/errorResponse";
 
-const grantPermissionPolicy = async (req, res, next) => {
-  if (!req.user.canGrantPermission(req.body.type)) {
-    return next(
-      new ErrorResponse(
-        "You do not have rights to assign this permission.",
-        httpStatus.NOT_FOUND,
-      ),
-    );
+const permissionPolicy = async (req, res, next) => {
+  if (req.permission.sheet.id === req.sheet.id) {
+    return next();
   }
 
-  next();
+  next(
+    new ErrorResponse(
+      "You can't access this permission.",
+      httpStatus.UNAUTHORIZED,
+    ),
+  );
 };
 
-export default grantPermissionPolicy;
+const grantPermissionPolicy = async (req, res, next) => {
+  if (req.sheet.canGrantPermission(req.user, req.body.type)) {
+    return next();
+  }
+
+  next(
+    new ErrorResponse(
+      "You do not have rights to assign this permission.",
+      httpStatus.UNAUTHORIZED,
+    ),
+  );
+};
+
+export { grantPermissionPolicy, permissionPolicy };

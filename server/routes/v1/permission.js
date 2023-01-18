@@ -1,22 +1,23 @@
 import express from "express";
 
 import {
+  adminSheetPolicy,
+  sheetPolicy,
+} from "../../middlewares/authorize/sheetPolicy";
+import {
   deletePermission,
-  getPermission,
   getPermissions,
   grantPermission,
 } from "../../controllers/permissions";
 import {
-  findPermission,
-  findPermissionForUser,
-} from "../../middlewares/permission";
-import { adminSheetPolicy } from "../../middlewares/authorize/sheetPolicy";
+  grantPermissionPolicy,
+  permissionPolicy,
+} from "../../middlewares/authorize/permissionPolicy";
+import findPermission from "../../middlewares/permission";
 import findSheet from "../../middlewares/sheet";
-import grantPermissionPolicy
-  from "../../middlewares/authorize/permissionPolicy";
 
 const router = express.Router({ mergeParams: true });
-router.use(findSheet, findPermissionForUser);
+router.use(findSheet, sheetPolicy);
 
 router
   .route("/")
@@ -25,7 +26,9 @@ router
 
 router
   .route("/:id")
-  .get(adminSheetPolicy, findPermission, getPermission)
-  .delete(adminSheetPolicy, findPermission, deletePermission);
+  .delete(
+    [findPermission, permissionPolicy, adminSheetPolicy],
+    deletePermission,
+  );
 
 export default router;

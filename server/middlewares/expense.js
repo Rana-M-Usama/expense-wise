@@ -3,11 +3,8 @@ import httpStatus from "http-status";
 import ErrorResponse from "../utils/errorResponse";
 import Expense from "../models/Expense";
 
-const findExpenseForSheet = async (req, res, next) => {
-  req.expense = await Expense.findOne({
-    _id: req.params.id,
-    sheet: req.params.sheetId,
-  })
+const findExpense = async (req, res, next) => {
+  req.expense = await Expense.findById(req.params.id)
     .populate("owner", ["firstName", "lastName"])
     .populate("sheet", ["title", "owner"])
     .populate({
@@ -19,15 +16,16 @@ const findExpenseForSheet = async (req, res, next) => {
       },
     });
 
-  if (!req.expense) {
-    return next(
-      new ErrorResponse(
-        `No expense found with the id of ${req.params.id}.`,
-        httpStatus.NOT_FOUND,
-      ),
-    );
+  if (req.expense) {
+    return next();
   }
-  next();
+
+  next(
+    new ErrorResponse(
+      `No expense found with the id of ${req.params.id}.`,
+      httpStatus.NOT_FOUND,
+    ),
+  );
 };
 
-export default findExpenseForSheet;
+export default findExpense;

@@ -9,16 +9,17 @@ import {
 } from "../../controllers/expenses";
 import {
   editSheetPolicy,
+  sheetPolicy,
   viewSheetPolicy,
 } from "../../middlewares/authorize/sheetPolicy";
 import advancedResults from "../../middlewares/advancedResults";
 import Expense from "../../models/Expense";
-import findExpenseForSheet from "../../middlewares/expense";
-import { findPermissionForUser } from "../../middlewares/permission";
+import expensePolicy from "../../middlewares/authorize/expensePolicy";
+import findExpense from "../../middlewares/expense";
 import findSheet from "../../middlewares/sheet";
 
 const router = express.Router({ mergeParams: true });
-router.use(findSheet, findPermissionForUser);
+router.use(findSheet, sheetPolicy);
 
 router
   .route("/")
@@ -34,8 +35,8 @@ router
 
 router
   .route("/:id")
-  .get([viewSheetPolicy, findExpenseForSheet], getExpense)
-  .put([editSheetPolicy, findExpenseForSheet], updateExpense)
-  .delete([editSheetPolicy, findExpenseForSheet], deleteExpense);
+  .get([findExpense, expensePolicy, viewSheetPolicy], getExpense)
+  .put([findExpense, expensePolicy, editSheetPolicy], updateExpense)
+  .delete([findExpense, expensePolicy, editSheetPolicy], deleteExpense);
 
 export default router;

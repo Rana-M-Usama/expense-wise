@@ -2,7 +2,9 @@ import mongoose from "mongoose";
 
 import {
   ADMIN_PERMISSIONS,
+  EDIT,
   EDIT_PERMISSIONS,
+  VIEW,
   VIEW_PERMISSIONS,
 } from "../constants/permission";
 import Permission from "./Permission";
@@ -57,6 +59,21 @@ SheetSchema.methods.hasEditPermission = function (user) {
 
 SheetSchema.methods.hasAdminPermission = function (user) {
   return ADMIN_PERMISSIONS.includes(user.permission.type);
+};
+
+SheetSchema.methods.canGrantEditPermission = function (user, type) {
+  return !(user.permission.type === VIEW && EDIT_PERMISSIONS.includes(type));
+};
+
+SheetSchema.methods.canGrantAdminPermission = function (user, type) {
+  return !(user.permission.type === EDIT && ADMIN_PERMISSIONS.includes(type));
+};
+
+SheetSchema.methods.canGrantPermission = function (user, type) {
+  return (
+    this.canGrantEditPermission(user, type) &&
+    this.canGrantAdminPermission(user, type)
+  );
 };
 
 export default mongoose.model("Sheet", SheetSchema);

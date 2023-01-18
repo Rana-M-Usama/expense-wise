@@ -3,13 +3,6 @@ import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 
-import {
-  ADMIN_PERMISSIONS,
-  EDIT,
-  EDIT_PERMISSIONS,
-  VIEW,
-} from "../constants/permission";
-
 const UserSchema = new mongoose.Schema(
   {
     firstName: {
@@ -85,20 +78,6 @@ UserSchema.methods.getResetPasswordToken = function () {
   this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
   return resetToken;
-};
-
-UserSchema.methods.canGrantEditPermission = function (type) {
-  return !(this.permission.type === VIEW && EDIT_PERMISSIONS.includes(type));
-};
-
-UserSchema.methods.canGrantAdminPermission = function (type) {
-  return !(this.permission.type === EDIT && ADMIN_PERMISSIONS.includes(type));
-};
-
-UserSchema.methods.canGrantPermission = function (type) {
-  return (
-    this.canGrantEditPermission(type) && this.canGrantAdminPermission(type)
-  );
 };
 
 export default mongoose.model("User", UserSchema);
