@@ -1,23 +1,23 @@
-import React from 'react'
-import Modal from '@mui/material/Modal'
-import { Box } from '@mui/system'
-import { Avatar, Button, TextField, Typography } from '@mui/material'
+import React from "react";
+import Modal from "@mui/material/Modal";
+import { Box } from "@mui/system";
+import { Avatar, Button, TextField, Typography } from "@mui/material";
 
-import useStyles from './SheetModal.styles'
-import logo from '../../../assets/logo.png'
+import logo from "assets/logo.png";
+import useStyles from "components/sheet/SheetModal.styles";
 
 interface Props {
-  isOpen: boolean
-  title: string
-  button: string
-  name: string
-  description: string
-  onClose: () => void
+  isOpen: boolean;
+  title: string;
+  button: string;
+  name: string;
+  description: string;
+  onClose: () => void;
 }
 
 const SheetModal = (props: Props) => {
-  const { isOpen, title, button, name, description, onClose } = props
-  const classes = useStyles()
+  const { isOpen, title, button, name, description, onClose } = props;
+  const classes = useStyles();
 
   return (
     <Modal
@@ -38,13 +38,8 @@ const SheetModal = (props: Props) => {
         }}
       >
         <Box className={classes.box}>
-          <Avatar className={classes.avatar} src={logo} alt="wolfPack" />
-          <Typography
-            sx={{ marginTop: 5 }}
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-          >
+          <Avatar className={classes.avatar} src={logo} alt="expenseWise" />
+          <Typography id="modal-modal-title" variant="h6" component="h2">
             {title}
           </Typography>
         </Box>
@@ -56,7 +51,7 @@ const SheetModal = (props: Props) => {
             required
             fullWidth
             id="name"
-            label={name ? null : 'Name'}
+            label={name ? null : "Name"}
             value={name}
             name="name"
           />
@@ -67,7 +62,7 @@ const SheetModal = (props: Props) => {
             required
             fullWidth
             name="descrption"
-            label={description ? null : 'Description'}
+            label={description ? null : "Description"}
             value={description}
             id="description"
           />
@@ -79,7 +74,7 @@ const SheetModal = (props: Props) => {
         </Box>
       </Box>
     </Modal>
-  )
-}
+  );
+};
 
-export default SheetModal
+export default SheetModal;

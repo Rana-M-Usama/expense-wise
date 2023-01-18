@@ -1,27 +1,27 @@
-import { makeStyles } from "@mui/styles"
+import { makeStyles } from "@mui/styles";
 
 export default makeStyles((theme) => ({
   modal: {
-    position: "absolute",
     top: "50%",
     left: "50%",
-    transform: "translate(-50%, -50%)",
     width: 400,
-    backgroundColor: "white",
-    paddingTop: 20,
     padding: 20,
-    paddingBottom: 20,
-    boxShadow: "20 !important"
+    borderRadius: "10px",
+    position: "absolute",
+    backgroundColor: "white",
+    boxShadow: "20 !important",
+    transform: "translate(-50%, -50%)",
   },
 
   box: {
     display: "flex",
-    justifyContent: "center"
+    alignItems: "center",
+    flexDirection: "column",
   },
 
   avatar: {
     width: "30% !important",
-    height: "30% !important"
+    height: "30% !important",
   },
 
   textfield: {
@@ -30,6 +30,5 @@ export default makeStyles((theme) => ({
         borderColor: "#f06292",
       },
     },
-
-  }
-}))
+  },
+}));

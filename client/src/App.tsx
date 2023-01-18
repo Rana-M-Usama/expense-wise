@@ -1,30 +1,32 @@
-import { useEffect, useState } from 'react'
-import { ThemeProvider } from '@mui/material'
+import { useEffect, useState } from "react";
+import { ThemeProvider } from "@mui/material";
 
-import { helloWorldApi } from './api/helloWorld'
-import { theme } from './theme'
+import { helloWorldApi } from "api/helloWorld";
+import NavBar from "components/common/layouts/navbar/Navbar";
+import SingleSheet from "components/sheet/SingleSheet";
+import { theme } from "theme";
 
-import './App.css'
-import NavBar from 'components/common/layouts/navbar/Navbar'
-import Sheet from 'components/sheet/Sheet'
+import "App.css";
 
 const App = () => {
-  const [data, setData] = useState('')
+  const [data, setData] = useState("");
 
   useEffect(() => {
     helloWorldApi().then((response) => {
-      setData(response.expensewise)
-    })
-  }, [data])
+      setData(response.expensewise);
+    });
+  }, [data]);
 
   return (
     <ThemeProvider theme={theme}>
       <header className="App-header">
         <NavBar />
-        <Sheet />
       </header>
+      <body className="App-body">
+        <SingleSheet />
+      </body>
     </ThemeProvider>
-  )
-}
+  );
+};
 
-export default App
+export default App;

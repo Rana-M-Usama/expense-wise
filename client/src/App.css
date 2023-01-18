@@ -10,12 +10,13 @@
 }
 
 .App-header {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  min-height: 10vh;
   font-size: calc(10px + 2vmin);
+}
+
+.App-body {
+  min-height: 90vh;
+  display: flex;
 }
 
 .App-link {
