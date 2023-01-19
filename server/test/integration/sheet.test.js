@@ -22,6 +22,16 @@ describe("Sheet endpoints", () => {
   });
 
   describe("GET /api/v1/sheets/", () => {
+    it("should raise an error if the auth token is invalid", async () => {
+      const res = await request(app)
+        .get("/api/v1/sheets/")
+        .set("authorization", "Bearer inValid")
+        .expect(httpStatus.UNAUTHORIZED);
+
+      expect(res.body.success).toBeFalsy();
+      expect(res.body.errors).toEqual(["Please provide a valid token."]);
+    });
+
     it("should return a list of all the sheets belonging to the owner", async () => {
       await buildSheetList(2, user);
 
@@ -57,34 +67,27 @@ describe("Sheet endpoints", () => {
         },
       ]);
     });
+  });
 
+  describe("GET /api/v1/sheets/:id", () => {
     it("should raise an error if the auth token is invalid", async () => {
       const res = await request(app)
-        .get("/api/v1/sheets/")
+        .get("/api/v1/sheets/63c8197c553b29d8b53b25be")
         .set("authorization", "Bearer inValid")
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body.errors).toEqual(["Please provide a valid token."]);
     });
-  });
 
-  describe("GET /api/v1/sheets/:id", () => {
-    it("should return the sheet that belongs to the owner, identified by the specified ID", async () => {
-      await buildSheetList(2, user);
-      const sheet = await Sheet.findOne({ owner: user.id });
+    it("should raise an error if the id is invalid", async () => {
       const res = await request(app)
-        .get(`/api/v1/sheets/${sheet._id}`)
+        .get("/api/v1/sheets/inValid")
         .set("authorization", `Bearer ${authToken}`)
-        .expect(httpStatus.OK);
+        .expect(httpStatus.BAD_REQUEST);
 
-      expect(res.body.success).toBeTruthy();
-      expect(res.body.data).toMatchObject({
-        _id: sheet._id,
-        description: sheet.description,
-        title: sheet.title,
-        owner: sheet.owner,
-      });
+      expect(res.body.success).toBeFalsy();
+      expect(res.body.errors).toEqual(["Invalid sheet id"]);
     });
 
     it("should raise an error if the sheet does not belong to the owner", async () => {
@@ -116,28 +119,42 @@ describe("Sheet endpoints", () => {
       ]);
     });
 
-    it("should raise an error if the auth token is invalid", async () => {
+    it("should return the sheet that belongs to the owner, identified by the specified ID", async () => {
+      await buildSheetList(2, user);
+      const sheet = await Sheet.findOne({ owner: user.id });
       const res = await request(app)
-        .get("/api/v1/sheets/63c8197c553b29d8b53b25be")
+        .get(`/api/v1/sheets/${sheet._id}`)
+        .set("authorization", `Bearer ${authToken}`)
+        .expect(httpStatus.OK);
+
+      expect(res.body.success).toBeTruthy();
+      expect(res.body.data).toMatchObject({
+        _id: sheet._id,
+        description: sheet.description,
+        title: sheet.title,
+        owner: sheet.owner,
+      });
+    });
+  });
+
+  describe("POST /api/v1/sheets/", () => {
+    it("should raise an error if the auth token is invalid", async () => {
+      const sheet = {
+        title: faker.lorem.word(),
+        description: faker.lorem.word(),
+        owner: user,
+      };
+
+      const res = await request(app)
+        .post("/api/v1/sheets/")
         .set("authorization", "Bearer inValid")
+        .send(sheet)
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body.errors).toEqual(["Please provide a valid token."]);
     });
 
-    it("should raise an error if the id is invalid", async () => {
-      const res = await request(app)
-        .get("/api/v1/sheets/inValid")
-        .set("authorization", `Bearer ${authToken}`)
-        .expect(httpStatus.BAD_REQUEST);
-
-      expect(res.body.success).toBeFalsy();
-      expect(res.body.errors).toEqual(["Invalid sheet id"]);
-    });
-  });
-
-  describe("POST /api/v1/sheets/", () => {
     it("should create a sheet and return it", async () => {
       const sheet = {
         title: faker.lorem.word(),
@@ -158,7 +175,9 @@ describe("Sheet endpoints", () => {
         owner: sheet.owner.id,
       });
     });
+  });
 
+  describe("PUT /api/v1/sheets/", () => {
     it("should raise an error if the auth token is invalid", async () => {
       const sheet = {
         title: faker.lorem.word(),
@@ -167,7 +186,7 @@ describe("Sheet endpoints", () => {
       };
 
       const res = await request(app)
-        .post("/api/v1/sheets/")
+        .put("/api/v1/sheets/")
         .set("authorization", "Bearer inValid")
         .send(sheet)
         .expect(httpStatus.UNAUTHORIZED);
@@ -175,9 +194,7 @@ describe("Sheet endpoints", () => {
       expect(res.body.success).toBeFalsy();
       expect(res.body.errors).toEqual(["Please provide a valid token."]);
     });
-  });
 
-  describe("PUT /api/v1/sheets/", () => {
     it("should update the sheet and return updated one", async () => {
       const sheet = await SheetFactory({ owner: user }).save();
 
@@ -211,26 +228,21 @@ describe("Sheet endpoints", () => {
         "You are not authorized for this action.",
       ]);
     });
+  });
 
+  describe("DELETE /api/v1/sheets/", () => {
     it("should raise an error if the auth token is invalid", async () => {
-      const sheet = {
-        title: faker.lorem.word(),
-        description: faker.lorem.word(),
-        owner: user,
-      };
+      const sheet = await SheetFactory({ owner: user }).save();
 
       const res = await request(app)
-        .put("/api/v1/sheets/")
+        .delete(`/api/v1/sheets/${sheet._id}`)
         .set("authorization", "Bearer inValid")
-        .send(sheet)
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body.errors).toEqual(["Please provide a valid token."]);
     });
-  });
 
-  describe("DELETE /api/v1/sheets/", () => {
     it("should delete the sheet and return an empty object", async () => {
       const sheet = await SheetFactory({ owner: user }).save();
 
@@ -255,18 +267,6 @@ describe("Sheet endpoints", () => {
       expect(res.body.errors).toEqual([
         "You are not authorized for this action.",
       ]);
-    });
-
-    it("should raise an error if the auth token is invalid", async () => {
-      const sheet = await SheetFactory({ owner: user }).save();
-
-      const res = await request(app)
-        .delete(`/api/v1/sheets/${sheet._id}`)
-        .set("authorization", "Bearer inValid")
-        .expect(httpStatus.UNAUTHORIZED);
-
-      expect(res.body.success).toBeFalsy();
-      expect(res.body.errors).toEqual(["Please provide a valid token."]);
     });
   });
 });

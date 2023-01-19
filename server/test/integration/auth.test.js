@@ -57,8 +57,8 @@ describe("Auth endpoints", () => {
     });
 
     it("should return 400 error if email is already used", async () => {
-      const user3 = await User.create(userParams);
-      user3.email = userParams.email;
+      const user2 = await User.create(userParams);
+      user2.email = userParams.email;
 
       const res = await request(app)
         .post("/api/v1/auth/register")
