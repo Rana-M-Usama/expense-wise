@@ -90,7 +90,7 @@ describe("Sheet endpoints", () => {
       ]);
     });
 
-    it("It should raise an error if the specified sheet does not exist", async () => {
+    it("should raise an error if the specified sheet does not exist", async () => {
       const res = await request(app)
         .get("/api/v1/sheets/63c8197c553b29d8b53b25be")
         .set("authorization", `Bearer ${authToken}`)
@@ -182,7 +182,7 @@ describe("Sheet endpoints", () => {
       });
     });
 
-    it("should raise an error if try to change owner", async () => {
+    it("should raise an error if attempts to change the owner", async () => {
       const user2 = await UserFactory().save();
       const sheet = await SheetFactory({ owner: user2 }).save();
 
@@ -217,7 +217,7 @@ describe("Sheet endpoints", () => {
   });
 
   describe("DELETE /api/v1/sheets/", () => {
-    it("should delete the sheet and return empty object", async () => {
+    it("should delete the sheet and return an empty object", async () => {
       const sheet = await SheetFactory({ owner: user }).save();
 
       const res = await request(app)
@@ -229,7 +229,7 @@ describe("Sheet endpoints", () => {
       expect(res.body.data).toEqual({});
     });
 
-    it("should raise an error if user try to delete the sheet which belongs to other user", async () => {
+    it("should raise an error if a user attempts to delete a sheet that belongs to another user", async () => {
       const user2 = await UserFactory().save();
       const sheet = await SheetFactory({ owner: user2 }).save();
 
