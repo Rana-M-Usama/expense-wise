@@ -15,12 +15,12 @@ const SheetSchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: [true, "Title is required."],
-      maxlength: 100,
+      maxlength: [100, "Title can not be longer than 100 characters."],
     },
     description: {
       type: String,
       trim: true,
-      maxlength: 1000,
+      maxlength: [1000, "Description can not be longer than 1000 characters."],
     },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
