@@ -1,4 +1,4 @@
-import { makeStyles } from "@mui/styles"
+import { makeStyles } from "@mui/styles";
 
 export default makeStyles((theme) => ({
   openButton: {
@@ -8,7 +8,6 @@ export default makeStyles((theme) => ({
       background: "#E31C79 !important",
     },
   },
-
   editButton: {
     color: "#455a64 !important",
     border: "1px solid #455a64 !important",
@@ -18,7 +17,6 @@ export default makeStyles((theme) => ({
       background: "#455a64 !important",
     },
   },
-
   deleteButton: {
     color: "##f44336 !important",
     border: "1px solid ##f44336 !important",
@@ -27,6 +25,5 @@ export default makeStyles((theme) => ({
       border: "1px solid #f4433680",
       background: "#f44336 !important",
     },
-
-  }
-}))
+  },
+}));
