@@ -3,9 +3,9 @@ import { ThemeProvider } from "@mui/material";
 
 import { helloWorldApi } from "api/helloWorld";
 import { theme } from "theme";
+import LoginPage from "pages/login/login.page";
 
 import "App.css";
-import SignupPage from "pages/signup/signup.page";
 
 const App = () => {
   const [data, setData] = useState("");
@@ -19,7 +19,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <header className="App-header">
-        <SignupPage />
+        <LoginPage />
       </header>
     </ThemeProvider>
   );
