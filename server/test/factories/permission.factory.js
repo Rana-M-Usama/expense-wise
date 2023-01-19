@@ -7,8 +7,8 @@ import { VIEW } from "../../constants/permission";
 const PermissionFactory = ({ type, user, sheet } = {}) =>
   new Permission({
     type: type || VIEW,
-    user: user || SheetFactory(),
-    sheet: sheet || UserFactory(),
+    user: user || UserFactory(),
+    sheet: sheet || SheetFactory(),
   });
 
 export default PermissionFactory;

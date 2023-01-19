@@ -21,19 +21,15 @@ describe("Permission model", () => {
       );
     });
 
-    it("should throw a validation error if sheet is null", () => {
-      permission.sheet = null;
-      expect(permission.validateSync().errors.sheet.message).toEqual(
-        "Sheet is required.",
+    it("should throw a validation error if permission type is invalid", () => {
+      permission.type = "inValid";
+      expect(permission.validateSync().errors.type.message).toEqual(
+        "`inValid` is not a valid enum value for path `type`.",
       );
     });
 
-    it("should throw a validation error if both sheet and user are null", () => {
-      permission.user = null;
+    it("should throw a validation error if sheet is null", () => {
       permission.sheet = null;
-      expect(permission.validateSync().errors.user.message).toEqual(
-        "User is required.",
-      );
       expect(permission.validateSync().errors.sheet.message).toEqual(
         "Sheet is required.",
       );
