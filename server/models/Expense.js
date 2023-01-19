@@ -26,7 +26,7 @@ const ExpenseSchema = new mongoose.Schema({
   },
   amountType: {
     type: String,
-    required: [true, "Type is required."],
+    required: [true, "Amount type is required."],
     enum: ["incoming", "outgoing"],
   },
   sheet: {

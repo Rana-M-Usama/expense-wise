@@ -13,7 +13,7 @@ describe("Expense model", () => {
       expense = ExpenseFactory();
     });
 
-    it("validate a expense to ensure it is valid", () => {
+    it("validate an expense to ensure it is valid", () => {
       expect(expense.validateSync()).toEqual(undefined);
     });
 
@@ -79,6 +79,11 @@ describe("Expense model", () => {
       );
     });
 
+    it("should not error if the status field is 'paid' or 'unpaid'", () => {
+      expense.status = "unpaid";
+      expect(expense.validateSync()).toEqual(undefined);
+    });
+
     it("should throw an error if the amount field is empty or null", () => {
       expense.amount = null;
       expect(expense.validateSync().errors.amount.message).toEqual(
@@ -96,7 +101,7 @@ describe("Expense model", () => {
     it("should throw an error if the amountType field is empty or null", () => {
       expense.amountType = null;
       expect(expense.validateSync().errors.amountType.message).toEqual(
-        "Type is required.",
+        "Amount type is required.",
       );
     });
 
@@ -107,14 +112,19 @@ describe("Expense model", () => {
       );
     });
 
-    it("should be fine if the sheet field is empty or null", () => {
+    it("should not throw an error if the amountType field is 'incoming' or 'outgoing'", () => {
+      expense.amountType = "outgoing";
+      expect(expense.validateSync()).toEqual(undefined);
+    });
+
+    it("should throw an error if the expense doesn't have a sheet attached", () => {
       expense.sheet = null;
       expect(expense.validateSync().errors.sheet.message).toEqual(
         "Sheet is required.",
       );
     });
 
-    it("should be fine if the owner field is empty or null", () => {
+    it("should throw an error if the expense doesn't have a owner attached", () => {
       expense.owner = null;
       expect(expense.validateSync().errors.owner.message).toEqual(
         "User is required.",
