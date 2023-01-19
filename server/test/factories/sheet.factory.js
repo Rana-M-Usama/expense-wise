@@ -10,4 +10,10 @@ const SheetFactory = ({ title, description, owner } = {}) =>
     owner: owner || UserFactory(),
   });
 
-export default SheetFactory;
+const buildSheetList = async (totalCount, owner) => {
+  for (let i = 1; i <= totalCount; i++) {
+    await SheetFactory({ owner }).save();
+  }
+};
+
+export { buildSheetList, SheetFactory };
