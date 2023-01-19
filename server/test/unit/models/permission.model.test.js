@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it } from "@jest/globals";
 
 import PermissionFactory from "../../factories/permission.factory";
 
+import { ADMIN, EDIT, VIEW } from "../../../constants/permission";
+
 describe("Permission model", () => {
   describe("validation", () => {
     let permission;
@@ -19,6 +21,21 @@ describe("Permission model", () => {
       expect(permission.validateSync().errors.user.message).toEqual(
         "User is required.",
       );
+    });
+
+    it("should not throw any validation error if permission type is view", () => {
+      permission.type = VIEW;
+      expect(permission.validateSync()).toEqual(undefined);
+    });
+
+    it("should not throw any validation error if permission type is edit", () => {
+      permission.type = EDIT;
+      expect(permission.validateSync()).toEqual(undefined);
+    });
+
+    it("should not throw any validation error if permission type is admin", () => {
+      permission.type = ADMIN;
+      expect(permission.validateSync()).toEqual(undefined);
     });
 
     it("should throw a validation error if permission type is invalid", () => {

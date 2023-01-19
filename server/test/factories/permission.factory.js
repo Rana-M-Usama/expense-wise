@@ -1,4 +1,4 @@
-import SheetFactory from "./sheet.factory";
+import { SheetFactory } from "./sheet.factory";
 import UserFactory from "./user.factory";
 
 import Permission from "../../models/Permission";
