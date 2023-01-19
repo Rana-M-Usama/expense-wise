@@ -26,6 +26,7 @@ const ProfilePage = () => {
     dob: "28-Aug-2022",
     country: "Pakistan",
   }
+
   return (
     <Container
       component="main"
