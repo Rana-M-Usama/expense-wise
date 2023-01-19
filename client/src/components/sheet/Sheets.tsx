@@ -47,16 +47,6 @@ interface Props {
   name: string;
   description: string;
 }
-interface item {
-  id: number;
-  author: string;
-  name: string;
-  // other properties
-}
-
-interface Props1 {
-  sheet1: item[];
-}
 
 const Sheets = () => {
   const classes = useStyles();
@@ -116,7 +106,7 @@ const Sheets = () => {
           bgcolor: "#eeeeee",
         }}
       >
-        {_DATA.currentData().map((value: item, index: number, array: object[]) => (
+        {_DATA.currentData().map((sheet: any) => (
           <React.Fragment>
             <ListItem
               key={sheet.id}
