@@ -10,15 +10,14 @@ import User from "../../models/User";
 import UserFactory from "../factories/user.factory";
 
 setupTestDB();
-jest.setTimeout(10000);
 
 describe("Auth endpoints", () => {
   let user;
-  let user2;
+  let userParams;
   let authToken;
 
   beforeEach(async () => {
-    user2 = {
+    userParams = {
       firstName: faker.name.fullName(),
       lastName: faker.name.fullName(),
       email: faker.internet.email().toLowerCase(),
@@ -33,48 +32,48 @@ describe("Auth endpoints", () => {
     it("should return 201 and successfully register user for valid user", async () => {
       const res = await request(app)
         .post("/api/v1/auth/register")
-        .send(user2)
+        .send(userParams)
         .expect(httpStatus.OK);
 
       expect(res.body.data.token).toBeUndefined();
       expect(res.body.data.user).toEqual({
         id: expect.anything(),
-        firstName: user2.firstName,
-        lastName: user2.lastName,
-        email: user2.email,
+        firstName: userParams.firstName,
+        lastName: userParams.lastName,
+        email: userParams.email,
         imageUrl: expect.anything(),
       });
     });
 
     it("should return 400 error if email is invalid", async () => {
-      user2.email = "invalidEmail";
+      userParams.email = "invalidEmail";
 
       const res = await request(app)
         .post("/api/v1/auth/register")
-        .send(user2)
+        .send(userParams)
         .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.errors).toEqual(["Please provide a valid email."]);
     });
 
     it("should return 400 error if email is already used", async () => {
-      const user3 = await User.create(user2);
-      user3.email = user2.email;
+      const user3 = await User.create(userParams);
+      user3.email = userParams.email;
 
       const res = await request(app)
         .post("/api/v1/auth/register")
-        .send(user2)
+        .send(userParams)
         .expect(httpStatus.CONFLICT);
 
       expect(res.body.errors).toEqual(["Email already in use."]);
     });
 
     it("should return 400 error if password length is less than 6 characters", async () => {
-      user2.password = "Admin";
+      userParams.password = "Admin";
 
       const res = await request(app)
         .post("/api/v1/auth/register")
-        .send(user2)
+        .send(userParams)
         .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.errors).toEqual([
@@ -83,12 +82,12 @@ describe("Auth endpoints", () => {
     });
 
     it("should return 400 error if email is invalid and password length is less than 6 characters", async () => {
-      user2.email = "invalidEmail";
-      user2.password = "Admin";
+      userParams.email = "invalidEmail";
+      userParams.password = "Admin";
 
       const res = await request(app)
         .post("/api/v1/auth/register")
-        .send(user2)
+        .send(userParams)
         .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.errors).toEqual([
@@ -98,11 +97,11 @@ describe("Auth endpoints", () => {
     });
 
     it("should return 400 error if password does not contain letters", async () => {
-      user2.password = "11111111";
+      userParams.password = "11111111";
 
       const res = await request(app)
         .post("/api/v1/auth/register")
-        .send(user2)
+        .send(userParams)
         .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.errors).toEqual([
@@ -111,11 +110,11 @@ describe("Auth endpoints", () => {
     });
 
     it("should return 400 error if password does not numbers", async () => {
-      user2.password = "password";
+      userParams.password = "password";
 
       const res = await request(app)
         .post("/api/v1/auth/register")
-        .send(user2)
+        .send(userParams)
         .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.errors).toEqual([
@@ -307,7 +306,7 @@ describe("Auth endpoints", () => {
     it("should return 404 if email does not belong to any user", async () => {
       const res = await request(app)
         .post("/api/v1/auth/forgot-password")
-        .send({ email: user2.email })
+        .send({ email: userParams.email })
         .expect(httpStatus.NOT_FOUND);
 
       expect(res.body.errors).toEqual(["User with this email doesn't exist."]);

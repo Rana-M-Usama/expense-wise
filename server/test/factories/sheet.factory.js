@@ -10,10 +10,10 @@ const SheetFactory = ({ title, description, owner } = {}) =>
     owner: owner || UserFactory(),
   });
 
-const buildSheetList = async (totalCount, owner) => {
-  for (let i = 1; i <= totalCount; i++) {
-    await SheetFactory({ owner }).save();
-  }
+const buildSheetList = async (quantity, owner) => {
+  await Promise.all(
+    Array.from({ length: quantity }, () => SheetFactory({ owner }).save()),
+  );
 };
 
 export { buildSheetList, SheetFactory };

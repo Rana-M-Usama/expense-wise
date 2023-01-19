@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from "@jest/globals";
+import { beforeEach, describe, expect, it } from "@jest/globals";
 import { faker } from "@faker-js/faker";
 import httpStatus from "http-status";
 import request from "supertest";
@@ -10,7 +10,6 @@ import Sheet from "../../models/Sheet";
 import UserFactory from "../factories/user.factory";
 
 setupTestDB();
-jest.setTimeout(10000);
 
 describe("Sheet endpoints", () => {
   let user;
@@ -25,6 +24,9 @@ describe("Sheet endpoints", () => {
   describe("GET /api/v1/sheets/", () => {
     it("should return a list of all the sheets belonging to the owner", async () => {
       await buildSheetList(2, user);
+
+      const sheets = await Sheet.where({ owner: user.id });
+
       const res = await request(app)
         .get("/api/v1/sheets/")
         .set("authorization", `Bearer ${authToken}`)
@@ -32,16 +34,28 @@ describe("Sheet endpoints", () => {
 
       expect(res.body.success).toBeTruthy();
       expect(res.body.count).toEqual(2);
-      expect(res.body.data[0]).toMatchObject({
-        _id: expect.anything(),
-        description: expect.anything(),
-        title: expect.anything(),
-        owner: {
-          _id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
+      expect(res.body.data).toMatchObject([
+        {
+          _id: sheets[0]._id,
+          description: sheets[0].description,
+          title: sheets[0].title,
+          owner: {
+            _id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          },
         },
-      });
+        {
+          _id: sheets[1]._id,
+          description: sheets[1].description,
+          title: sheets[1].title,
+          owner: {
+            _id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          },
+        },
+      ]);
     });
 
     it("should raise an error if the auth token is invalid", async () => {
