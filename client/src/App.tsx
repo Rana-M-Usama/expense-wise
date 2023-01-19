@@ -7,6 +7,7 @@ import SingleSheet from "components/sheet/SingleSheet";
 import { theme } from "theme";
 
 import "App.css";
+import Sheets from "components/sheet/Sheets";
 
 const App = () => {
   const [data, setData] = useState("");
@@ -22,9 +23,9 @@ const App = () => {
       <header className="App-header">
         <NavBar />
       </header>
-      <body className="App-body">
-        <SingleSheet />
-      </body>
+      <div className="App-body">
+        <Sheets />
+      </div>
     </ThemeProvider>
   );
 };

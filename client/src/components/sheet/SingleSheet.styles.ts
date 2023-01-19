@@ -46,9 +46,9 @@ const rows = [
   createData("Ice cream sandwich", 237, 9.0, 37, 4.3, "delete"),
   createData("Eclair", 262, 16.0, 24, 6.0, "delete"),
   createData("Cupcake", 305, 3.7, 67, 4.3, "delete"),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, "delete"),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, "delete"),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, "delete"),
+  createData("Gingerbread1", 356, 16.0, 49, 3.9, "delete"),
+  createData("Gingerbread2", 357, 16.0, 49, 3.9, "delete"),
+  createData("Gingerbread3", 358, 16.0, 49, 3.9, "delete"),
 ];
 
 export { StyledTableCell, StyledTableRow, rows, StyledButton };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import {
   Container,
   Button,
@@ -7,13 +7,16 @@ import {
   ListItemText,
   ListItem,
   Divider,
+  Pagination,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 
 import SheetModal from "components/sheet/SheetModal";
+import usePagination from "./Pagination";
 
 import useStyles from "components/sheet/Sheets.styles";
+import { type } from "@testing-library/user-event/dist/type";
 
 const SHEETS = [
   { id: 1, name: "Sheet1", author: "currentUser" },
@@ -26,8 +29,16 @@ const SHEETS = [
   { id: 8, name: "Sheet8", author: "ali" },
   { id: 9, name: "Sheet9", author: "currentUser" },
   { id: 10, name: "Sheet10", author: "ali" },
-  { id: 11, name: "Sheet10", author: "currentUser" },
-  { id: 12, name: "Sheet10", author: "ali" },
+  { id: 11, name: "Sheet11", author: "currentUser" },
+  { id: 12, name: "Sheet12", author: "zain" },
+  { id: 13, name: "Sheet13", author: "currentUser" },
+  { id: 14, name: "Sheet14", author: "Fahd" },
+  { id: 15, name: "Sheet15", author: "currentUser" },
+  { id: 16, name: "Sheet16", author: "ali" },
+  { id: 17, name: "Sheet17", author: "currentUser" },
+  { id: 18, name: "Sheet18", author: "ali" },
+  { id: 19, name: "Sheet19", author: "currentUser" },
+  { id: 20, name: "Sheet20", author: "zain" },
 ];
 
 interface Props {
@@ -36,10 +47,22 @@ interface Props {
   name: string;
   description: string;
 }
+interface item {
+  id: number;
+  author: string;
+  name: string;
+  // other properties
+}
+
+interface Props1 {
+  sheet1: item[];
+}
 
 const Sheets = () => {
   const classes = useStyles();
+
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
   const [modalProps, setModalProps] = useState<Props>({
     title: "",
     button: "",
@@ -47,6 +70,16 @@ const Sheets = () => {
     description: "",
   });
 
+  let [page, setPage] = useState(1);
+  const [paginate, setpaginate] = useState(10);
+
+  const count = Math.ceil(SHEETS.length / paginate);
+  const _DATA = usePagination(SHEETS, paginate);
+
+  const handleChange = (event: ChangeEvent<unknown>, page: number) => {
+    setPage(page);
+    _DATA.jump(page);
+  };
   const openModal = (props: Props) => {
     setModalProps(props);
     setModalIsOpen(true);
@@ -83,7 +116,7 @@ const Sheets = () => {
           bgcolor: "#eeeeee",
         }}
       >
-        {SHEETS.map((sheet) => (
+        {_DATA.currentData().map((value: item, index: number, array: object[]) => (
           <React.Fragment>
             <ListItem
               key={sheet.id}
@@ -91,6 +124,7 @@ const Sheets = () => {
                 <Box sx={{ "& button": { m: 1 } }}>
                   {sheet.author === "currentUser" ? (
                     <>
+                      {console.log(sheet)}
                       <Button
                         className={classes.openButton}
                         variant="outlined"
@@ -140,6 +174,17 @@ const Sheets = () => {
           </React.Fragment>
         ))}
       </List>
+      <Box sx={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
+        <Pagination
+          count={count}
+          size="large"
+          page={page}
+          variant="outlined"
+          shape="rounded"
+          onChange={handleChange}
+          color="primary"
+        />
+      </Box>
     </Container>
   );
 };
