@@ -99,7 +99,8 @@ const SignupPage = () => {
             <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
+                label="I want to receive inspiration, marketing
+                      promotions and updates via email."
               />
             </Grid>
           </Grid>

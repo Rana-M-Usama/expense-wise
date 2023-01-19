@@ -14,7 +14,7 @@ import useStyles from "pages/resetpassword/resetpassword.styles";
 
 const ResetPasswordPage = () => {
   const classes = useStyles();
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {};
+  const handleSubmit = () => {};
 
   return (
     <Container component="main" className={classes.container}>

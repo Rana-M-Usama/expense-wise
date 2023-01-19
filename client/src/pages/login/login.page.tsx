@@ -19,7 +19,7 @@ const LoginPage = () => {
   const classes = useStyles();
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {};
+  const handleSubmit = () => {};
 
   return (
     <Container component="main" className={classes.container}>

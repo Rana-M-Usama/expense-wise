@@ -1,3 +1,4 @@
+import React from "react";
 import {
   TextField,
   Grid,
@@ -6,26 +7,24 @@ import {
   Box,
   Button,
   Avatar,
-} from "@mui/material"
-import { Stack } from "@mui/system"
+} from "@mui/material";
+import { Stack } from "@mui/system";
 
-import useStyles from "./profile.styles"
-import userImage from "../../assets/user.png"
-
+import useStyles from "pages//profile/profile.styles";
+import userImage from "assets/user.png";
 
 const ProfilePage = () => {
-  const classes = useStyles()
+  const classes = useStyles();
   const user = {
     name: "User",
     lastName: "1",
     email: "123@gmail.com",
     phoneNo: "123409809-",
     password: "12345",
-    address:
-      "daf csKDjfwrijg oidj voierhg ioerjg erugh aeurihgerouihgoaerig uaeroh gaergoaerhguioer fcgvhjknvd uifhieruh gierh gieugh iuerhguier",
+    address: "daf csKDjfwrijg oidj voierhg",
     dob: "28-Aug-2022",
     country: "Pakistan",
-  }
+  };
 
   return (
     <Container
@@ -145,7 +144,7 @@ const ProfilePage = () => {
         </Grid>
       </Grid>
     </Container>
-  )
-}
+  );
+};
 
-export default ProfilePage
+export default ProfilePage;
