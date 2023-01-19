@@ -13,8 +13,8 @@ router.post("/register", register);
 router.post("/login", login);
 router.get("/logout", logout);
 router.get("/me", protect, getMe);
-router.put("/update-details", protect, updateDetails);
-router.put("/update-password", protect, updatePassword);
+router.put("/me", protect, updateDetails);
+router.put("/me/password", protect, updatePassword);
 router.post("/forgot-password", forgotPassword);
 router.put("/reset-password/:resetToken", resetPassword);
 

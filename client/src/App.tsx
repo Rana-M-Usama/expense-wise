@@ -11,7 +11,7 @@ const App = () => {
   const [data, setData] = useState("");
 
   useEffect(() => {
-    helloWorldApi().then((response) => {
+    helloWorldApi().then(response => {
       setData(response.expensewise);
     });
   }, [data]);

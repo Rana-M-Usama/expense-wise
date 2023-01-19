@@ -1,0 +1,36 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "jest": true
+  },
+  "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:prettier/recommended"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["react"],
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": false, // to avoid single quote
+        "trailingComma": "all", // to set comma that appears at the end of a list of item
+        "endOfLine": "lf", // to set line ending character should be "/n" 
+        "arrowParens": "avoid", // to avoid extra arrow parentheses in arrow function
+        "bracketSpacing": true, // to add space inside bracket e.g. { name: "test" }
+        "tsxBracketSameLine": false, // to set formatte of tags with the closing bracket on a new line
+        "no-duplicate-variable": [true, "check-parameters"], // to avoid duplicate variable having same name and different data type
+        "no-var-keyword": true, // to avoid using var
+        "printWidth": 80, // can not exceeds 80 character in one line
+        "quoteProps": "as-needed", // to controls whether or not object properties should be quoted when they are defined
+        "tabWidth": 2 // to set tab with two spaces
+      }
+    ],
+    "max-lines": ["error", { "max": 2000, "skipBlankLines": true }], // to set max number of line in one file is 2000 without blank lines
+    "max-len": ["warn", 80] // to set line length to 80
+  }
+}
