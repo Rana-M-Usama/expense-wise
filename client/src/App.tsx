@@ -3,7 +3,7 @@ import { ThemeProvider } from "@mui/material";
 
 import { helloWorldApi } from "api/helloWorld";
 import { theme } from "theme";
-import ResetPasswordPage from "pages/resetpassword/resetpassword.page";
+import LoginPage from "pages/login/login.page";
 
 import "App.css";
 
@@ -19,7 +19,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <header className="App-header">
-        <ResetPasswordPage />
+        <LoginPage />
       </header>
     </ThemeProvider>
   );
