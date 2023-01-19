@@ -3,37 +3,46 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface currentUser {
   id: Number | null;
+  firstName: String | null;
+  lastName: String | null;
   email: String | null;
-  username: String | null;
+  imageUrl: String | null;
 }
 
-export interface UserState {
+interface UserState {
   currentUser: currentUser;
 }
 
 const initialState: UserState = {
-  currentUser: { id: 1, username: "test", email: "test@gmail.com" },
+  currentUser: {
+    id: 1,
+    firstName: "test",
+    lastName: "user",
+    email: "test@gmail.com",
+    imageUrl: "",
+  },
 };
 
-export const userSlice = createSlice({
+const userSlice = createSlice({
   name: "currentUser",
   initialState,
   reducers: {
     setCurrentUser: (state, action: PayloadAction<currentUser>) => {
-      console.log("Set current user");
       state.currentUser = action.payload;
     },
-    emptyCurrentUser: state => {
-      console.log("Empty current user");
+    setCurrentUserEmpty: state => {
       state.currentUser = {
         id: null,
+        firstName: null,
+        lastName: null,
+        imageUrl: null,
         email: null,
-        username: null,
       };
     },
   },
 });
 
-export const { setCurrentUser, emptyCurrentUser } = userSlice.actions;
-
+export { userSlice };
+export type { UserState };
 export default userSlice.reducer;
+export const { setCurrentUser, setCurrentUserEmpty } = userSlice.actions;

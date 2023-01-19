@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { helloWorldApi } from "api/helloWorld";
 
-import { helloWorldApi } from "./api/helloWorld";
-import logo from "./assets/logo.png";
-import "./App.css";
+import "App.css";
+import logo from "assets/logo.png";
 
 const App = () => {
   const [data, setData] = useState("");

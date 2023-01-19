@@ -30,6 +30,14 @@
         "tabWidth": 2 // to set tab with two spaces
       }
     ],
+    "import/order": "off", // to allow sort order of imports
+    "sort-imports": [
+      "error",
+      {
+        "ignoreCase": true, // to ignore the check of case i.e Lowercase, Uppercase
+        "allowSeparatedGroups": true // to allow multiple import groups
+      }
+    ], // to set order of imports
     "max-lines": ["error", { "max": 2000, "skipBlankLines": true }], // to set max number of line in one file is 2000 without blank lines
     "max-len": ["warn", 80] // to set line length to 80
   }
