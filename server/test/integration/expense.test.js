@@ -12,7 +12,7 @@ import UserFactory from "../factories/user.factory";
 
 setupTestDB();
 
-describe("Sheet endpoints", () => {
+describe("Expense endpoints", () => {
   let user;
   let sheet;
   let authToken;
@@ -175,7 +175,7 @@ describe("Sheet endpoints", () => {
       expect(res.body.errors).toEqual(["Invalid expense id"]);
     });
 
-    it("should raise an error if the expense does'nt belongs to sheet", async () => {
+    it("should raise an error if the expense doesn't belongs to sheet", async () => {
       const sheet2 = SheetFactory();
 
       await sheet2.save();
@@ -264,7 +264,7 @@ describe("Sheet endpoints", () => {
       expect(res.body.errors).toEqual(["Please provide a valid token."]);
     });
 
-    it("should create a expense and return it", async () => {
+    it("should create an expense and return it", async () => {
       const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/expenses/`)
         .set("authorization", `Bearer ${authToken}`)
@@ -303,7 +303,7 @@ describe("Sheet endpoints", () => {
       expect(res.body.errors).toEqual(["Please provide a valid token."]);
     });
 
-    it("should raise an error if the user tries to update expenses that do not belong to them", async () => {
+    it("should raise an error if a user attempts to update an expense that does not belong to them", async () => {
       const sheet2 = SheetFactory();
 
       await sheet2.save();
@@ -361,7 +361,7 @@ describe("Sheet endpoints", () => {
       expect(res.body.errors).toEqual(["Please provide a valid token."]);
     });
 
-    it("should raise an error if the user tries to delete expenses that do not belong to them", async () => {
+    it("should raise an error if a user attempts to delete an expense that does not belong to them", async () => {
       const sheet2 = SheetFactory();
 
       await sheet2.save();
@@ -379,7 +379,7 @@ describe("Sheet endpoints", () => {
       ]);
     });
 
-    it("should delete the expense and returns empty object", async () => {
+    it("should delete the expense and returns an empty object", async () => {
       const res = await request(app)
         .delete(`/api/v1/sheets/${sheet._id}/expenses/${expense._id}`)
         .set("authorization", `Bearer ${authToken}`)
