@@ -7,7 +7,7 @@
       "esnext"
     ],
     "allowJs": true,
-    "baseUrl": "src",
+    "baseUrl": "src", // This is our base url for absolute path.
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
