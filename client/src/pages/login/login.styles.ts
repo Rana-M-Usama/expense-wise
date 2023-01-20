@@ -1,6 +1,6 @@
 import { makeStyles } from "@mui/styles";
 
-export default makeStyles((theme) => ({
+export default makeStyles(() => ({
   container: {
     width: "50%",
     flexDirection: "column",
