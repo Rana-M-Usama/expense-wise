@@ -1,7 +1,9 @@
+import { ThemeProvider } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 import { helloWorldApi } from "api/helloWorld";
-import logo from "assets/logo.png";
+import { theme } from "theme";
+import LoginPage from "pages/login/login.page";
 
 import "App.css";
 
@@ -15,12 +17,11 @@ const App = () => {
   }, [data]);
 
   return (
-    <div className="App">
+    <ThemeProvider theme={theme}>
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>This is from backend {data}</h1>
+        <LoginPage />
       </header>
-    </div>
+    </ThemeProvider>
   );
 };
 

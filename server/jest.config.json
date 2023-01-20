@@ -1,4 +1,5 @@
 {
   "bail": 1,
-  "verbose": true
+  "verbose": true,
+  "setupFilesAfterEnv": ["./jest-setup.js"]
 }
