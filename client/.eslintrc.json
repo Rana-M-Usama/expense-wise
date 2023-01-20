@@ -4,13 +4,28 @@
     "es2021": true,
     "jest": true
   },
-  "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:prettier/recommended"],
+
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
     },
     "ecmaVersion": "latest",
     "sourceType": "module"
+  },
+  "globals": {
+    "process": true
   },
   "plugins": ["react"],
   "rules": {
@@ -19,7 +34,7 @@
       {
         "singleQuote": false, // to avoid single quote
         "trailingComma": "all", // to set comma that appears at the end of a list of item
-        "endOfLine": "lf", // to set line ending character should be "/n" 
+        "endOfLine": "lf", // to set line ending character should be "/n"
         "arrowParens": "avoid", // to avoid extra arrow parentheses in arrow function
         "bracketSpacing": true, // to add space inside bracket e.g. { name: "test" }
         "tsxBracketSameLine": false, // to set formatte of tags with the closing bracket on a new line

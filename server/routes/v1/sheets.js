@@ -8,20 +8,23 @@ import {
   updateSheet,
 } from "../../controllers/sheets";
 import {
-  deleteSheetPolicy,
-  getSheetPolicy,
+  adminSheetPolicy,
+  editSheetPolicy,
   sheetPolicy,
-  updateSheetPolicy,
+  viewSheetPolicy,
 } from "../../middlewares/authorize/sheetPolicy";
 import advancedResults from "../../middlewares/advancedResults";
 import ExpenseRouter from "./expenses";
+import findSheet from "../../middlewares/sheet";
+import PermissionRouter from "./permission";
 import protect from "../../middlewares/auth";
 import Sheet from "../../models/Sheet";
 
 const router = express.Router({ mergeParams: true });
 
-router.use("/:sheetId/expenses", ExpenseRouter);
 router.use(protect);
+router.use("/:sheetId/expenses", ExpenseRouter);
+router.use("/:sheetId/permissions", PermissionRouter);
 
 router
   .route("/")
@@ -40,8 +43,8 @@ router
 
 router
   .route("/:id")
-  .get([sheetPolicy, getSheetPolicy], getSheet)
-  .put([sheetPolicy, updateSheetPolicy], updateSheet)
-  .delete([sheetPolicy, deleteSheetPolicy], deleteSheet);
+  .get([findSheet, sheetPolicy, viewSheetPolicy], getSheet)
+  .put([findSheet, sheetPolicy, editSheetPolicy], updateSheet)
+  .delete([findSheet, sheetPolicy, adminSheetPolicy], deleteSheet);
 
 export default router;

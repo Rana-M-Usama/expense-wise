@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { ThemeProvider } from "@mui/material";
+
 import { helloWorldApi } from "api/helloWorld";
+import LoginPage from "pages/login/login.page";
+import { theme } from "theme";
 
 import "App.css";
-import logo from "assets/logo.png";
 
 const App = () => {
   const [data, setData] = useState("");
@@ -14,12 +17,11 @@ const App = () => {
   }, [data]);
 
   return (
-    <div className="App">
+    <ThemeProvider theme={theme}>
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>This is from backend {data}</h1>
+        <LoginPage />
       </header>
-    </div>
+    </ThemeProvider>
   );
 };
 
