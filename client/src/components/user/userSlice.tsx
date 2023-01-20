@@ -1,17 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-interface currentUser {
-  id: Number | null;
-  firstName: String | null;
-  lastName: String | null;
-  email: String | null;
-  imageUrl: String | null;
-}
+type currentUser = {
+  id: number | null;
+  firstName: string | null;
+  lastName: string | null;
+  email: string | null;
+  imageUrl: string | null;
+};
 
-interface UserState {
+type UserState = {
   currentUser: currentUser;
-}
+};
 
 const initialState: UserState = {
   currentUser: {
