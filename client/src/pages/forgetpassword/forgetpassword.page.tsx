@@ -1,16 +1,16 @@
-import React from "react";
 import {
   Box,
   Button,
   Container,
   CssBaseline,
+  IconButton,
   InputAdornment,
+  Modal,
   TextField,
   Typography,
-  Modal,
-  IconButton,
 } from "@mui/material";
-import { Mail, CloseOutlined } from "@mui/icons-material";
+import { CloseOutlined, Mail } from "@mui/icons-material";
+import React from "react";
 
 import useStyles from "pages/forgetpassword/forgetpassword.styles";
 
