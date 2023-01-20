@@ -1,25 +1,25 @@
-import { useEffect, useState } from 'react'
-import { ThemeProvider } from '@mui/material'
-import { Routes, Route } from 'react-router-dom'
+import { useEffect, useState } from "react";
+import { ThemeProvider } from "@mui/material";
+import { Routes, Route } from "react-router-dom";
 
-import { helloWorldApi } from './api/helloWorld'
-import { theme } from './theme'
+import { helloWorldApi } from "./api/helloWorld";
+import { theme } from "./theme";
 
-import './App.css'
-import NavBar from 'components/common/layouts/navbar/Navbar'
-import Home from 'components/home/Home'
-import Sheet from 'components/sheet/Sheet'
-import Expense from 'components/expense/Expense'
-import About from 'components/about/About'
+import "./App.css";
+import NavBar from "components/common/layouts/navbar/Navbar";
+import Home from "components/home/Home";
+import Sheet from "components/sheet/Sheet";
+import Expense from "components/expense/Expense";
+import About from "components/about/About";
 
 const App = () => {
-  const [data, setData] = useState('')
+  const [data, setData] = useState("");
 
   useEffect(() => {
     helloWorldApi().then((response) => {
-      setData(response.expensewise)
-    })
-  }, [data])
+      setData(response.expensewise);
+    });
+  }, [data]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -33,7 +33,7 @@ const App = () => {
         </Routes>
       </header>
     </ThemeProvider>
-  )
-}
+  );
+};
 
-export default App
+export default App;

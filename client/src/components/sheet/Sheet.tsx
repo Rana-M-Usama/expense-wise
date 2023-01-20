@@ -1,7 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const Sheet = () => {
-  return <div>Sheet</div>
-}
+  return <div>Sheet</div>;
+};
 
-export default Sheet
+export default Sheet;
