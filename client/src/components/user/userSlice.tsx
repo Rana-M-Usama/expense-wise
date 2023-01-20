@@ -42,7 +42,7 @@ const userSlice = createSlice({
   },
 });
 
-export { userSlice };
-export type { UserState };
-export default userSlice.reducer;
-export const { setCurrentUser, setCurrentUserEmpty } = userSlice.actions;
+const userReducer = userSlice.reducer;
+const { setCurrentUser, setCurrentUserEmpty } = userSlice.actions;
+
+export { userReducer, setCurrentUser, setCurrentUserEmpty };
