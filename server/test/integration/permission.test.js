@@ -57,7 +57,6 @@ describe("Permission endpoints", () => {
         .send(permissionParams)
         .expect(httpStatus.UNAUTHORIZED);
 
-      expect(res.body.success).toBeFalsy();
       expect(res.body).toEqual({
         statusCode: httpStatus.UNAUTHORIZED,
         errors: ["You are not authorized for this action."],
@@ -78,7 +77,6 @@ describe("Permission endpoints", () => {
 
     it("should raise an error if a user having view permission attempts to assign edit permission", async () => {
       await Permission.findOneAndUpdate(permission.id, { type: VIEW });
-
       permissionParams.type = EDIT;
 
       const res = await request(app)
@@ -97,7 +95,6 @@ describe("Permission endpoints", () => {
 
     it("should raise an error if a user having view permission attempts to assign admin permission", async () => {
       await Permission.findOneAndUpdate(permission.id, { type: VIEW });
-
       permissionParams.type = ADMIN;
 
       const res = await request(app)
@@ -116,7 +113,6 @@ describe("Permission endpoints", () => {
 
     it("should raise an error if a user having edit permission attempts to assign admin permission", async () => {
       await Permission.findOneAndUpdate(permission.id, { type: EDIT });
-
       permissionParams.type = ADMIN;
 
       const res = await request(app)
@@ -151,7 +147,6 @@ describe("Permission endpoints", () => {
 
     it("should be fine if a user having edit permission attempts to assign view permission", async () => {
       await Permission.findOneAndUpdate(permission.id, { type: EDIT });
-
       permissionParams.type = VIEW;
 
       const res = await request(app)
@@ -169,9 +164,8 @@ describe("Permission endpoints", () => {
       });
     });
 
-    it("should be fine if a user having edit permission attempts to assign edit", async () => {
+    it("should be fine if a user having edit permission attempts to assign edit permission", async () => {
       await Permission.findOneAndUpdate(permission.id, { type: EDIT });
-
       permissionParams.type = EDIT;
 
       const res = await request(app)
@@ -191,7 +185,6 @@ describe("Permission endpoints", () => {
 
     it("should be fine if a user having admin permission attempts to assign view permission", async () => {
       await Permission.findOneAndUpdate(permission.id, { type: ADMIN });
-
       permissionParams.type = VIEW;
 
       const res = await request(app)
@@ -211,7 +204,6 @@ describe("Permission endpoints", () => {
 
     it("should be fine if a user having admin permission attempts to assign edit permission", async () => {
       await Permission.findOneAndUpdate(permission.id, { type: ADMIN });
-
       permissionParams.type = EDIT;
 
       const res = await request(app)
@@ -231,7 +223,6 @@ describe("Permission endpoints", () => {
 
     it("should be fine if a user having admin permission attempts to assign admin permission", async () => {
       await Permission.findOneAndUpdate(permission.id, { type: ADMIN });
-
       permissionParams.type = ADMIN;
 
       const res = await request(app)
@@ -251,7 +242,6 @@ describe("Permission endpoints", () => {
 
     it("should be fine if an admin changes the sheet owner's permissions to edit or view", async () => {
       await Permission.findOneAndUpdate(permission.id, { type: ADMIN });
-
       permissionParams.type = ADMIN;
       await new Permission(permissionParams).save();
       const authToken2 = await permissionParams.user.getSignedJwtToken();
@@ -289,9 +279,8 @@ describe("Permission endpoints", () => {
 
     it("should raise an error if a user provides an invalid id for sheet", async () => {
       const res = await request(app)
-        .post("/api/v1/sheets/invalid/permissions")
+        .get("/api/v1/sheets/invalid/permissions")
         .set("Authorization", `Bearer ${authToken}`)
-        .send(permissionParams)
         .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
@@ -299,7 +288,9 @@ describe("Permission endpoints", () => {
     });
 
     it("should raise an error if a user attempts to get permissions of others' sheet", async () => {
-      const authToken2 = await permissionParams.user.getSignedJwtToken();
+      const user2 = UserFactory();
+      await user2.save();
+      const authToken2 = user2.getSignedJwtToken();
 
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet._id}/permissions`)
@@ -313,8 +304,7 @@ describe("Permission endpoints", () => {
     });
 
     it("should return all permissions of a sheet", async () => {
-      await buildPermissionList(2, sheet);
-      const permissions = await Permission.where({ sheet: sheet._id });
+      const permissions = await buildPermissionList(2, sheet);
 
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet._id}/permissions`)
@@ -325,22 +315,22 @@ describe("Permission endpoints", () => {
       expect(res.body.permissions.length).toEqual(3);
       expect(res.body.permissions).toMatchObject([
         {
-          _id: permissions[0]._id,
+          type: permission.type,
+          user: permission.user._id,
+          sheet: permission.sheet._id,
+          _id: permission._id,
+        },
+        {
           type: permissions[0].type,
-          user: permissions[0].user,
-          sheet: permissions[0].sheet,
+          user: permissions[0].user._id,
+          sheet: permissions[0].sheet._id,
+          _id: permissions[0]._id,
         },
         {
-          _id: permissions[1]._id,
           type: permissions[1].type,
-          user: permissions[1].user,
-          sheet: permissions[1].sheet,
-        },
-        {
-          _id: permissions[2]._id,
-          type: permissions[2].type,
-          user: permissions[2].user,
-          sheet: permissions[2].sheet,
+          user: permissions[1].user._id,
+          sheet: permissions[1].sheet._id,
+          _id: permissions[1]._id,
         },
       ]);
     });

@@ -12,11 +12,13 @@ const PermissionFactory = ({ type, user, sheet } = {}) =>
   });
 
 const buildPermissionList = async (quantity, sheet) => {
-  await Promise.all(
+  const permissions = await Promise.all(
     Array.from({ length: quantity }, () =>
       PermissionFactory({ user: UserFactory(), sheet }).save(),
     ),
   );
+
+  return permissions;
 };
 
 export { buildPermissionList, PermissionFactory };
