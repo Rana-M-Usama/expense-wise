@@ -25,4 +25,12 @@ const ExpenseFactory = ({
     owner: owner || User,
   });
 
-export default ExpenseFactory;
+const buildExpenseList = async (quantity, sheet) => {
+  await Promise.all(
+    Array.from({ length: quantity }, () =>
+      ExpenseFactory({ owner: sheet.owner, sheet }).save(),
+    ),
+  );
+};
+
+export { buildExpenseList, ExpenseFactory };

@@ -1,19 +1,19 @@
-import React, { useState } from "react";
 import {
-  Button,
-  CssBaseline,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Link,
-  Grid,
   Box,
+  Button,
+  Checkbox,
   Container,
+  CssBaseline,
+  FormControlLabel,
+  Grid,
+  Link,
+  TextField,
 } from "@mui/material";
+import React, { useState } from "react";
 
+import ForgotPasswordPage from "pages/forgetpassword/forgetpassword.page";
 import logo from "assets/logo.png";
 import useStyles from "pages/login/login.styles";
-import ForgotPasswordPage from "pages/forgetpassword/forgetpassword.page";
 
 const LoginPage = () => {
   const classes = useStyles();

@@ -25,7 +25,7 @@ describe("Sheet endpoints", () => {
     it("should raise an error if the auth token is invalid", async () => {
       const res = await request(app)
         .get("/api/v1/sheets/")
-        .set("authorization", "Bearer inValid")
+        .set("Authorization", "Bearer inValid")
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -39,7 +39,7 @@ describe("Sheet endpoints", () => {
 
       const res = await request(app)
         .get("/api/v1/sheets/")
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.OK);
 
       expect(res.body.success).toBeTruthy();
@@ -73,7 +73,7 @@ describe("Sheet endpoints", () => {
     it("should raise an error if the auth token is invalid", async () => {
       const res = await request(app)
         .get("/api/v1/sheets/63c8197c553b29d8b53b25be")
-        .set("authorization", "Bearer inValid")
+        .set("Authorization", "Bearer inValid")
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -83,7 +83,7 @@ describe("Sheet endpoints", () => {
     it("should raise an error if the id is invalid", async () => {
       const res = await request(app)
         .get("/api/v1/sheets/inValid")
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
@@ -98,7 +98,7 @@ describe("Sheet endpoints", () => {
       const sheet = await Sheet.findOne({ owner: user2.id });
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet._id}`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -110,7 +110,7 @@ describe("Sheet endpoints", () => {
     it("should raise an error if the specified sheet does not exist", async () => {
       const res = await request(app)
         .get("/api/v1/sheets/63c8197c553b29d8b53b25be")
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.NOT_FOUND);
 
       expect(res.body.success).toBeFalsy();
@@ -124,7 +124,7 @@ describe("Sheet endpoints", () => {
       const sheet = await Sheet.findOne({ owner: user.id });
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet._id}`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.OK);
 
       expect(res.body.success).toBeTruthy();
@@ -147,7 +147,7 @@ describe("Sheet endpoints", () => {
 
       const res = await request(app)
         .post("/api/v1/sheets/")
-        .set("authorization", "Bearer inValid")
+        .set("Authorization", "Bearer inValid")
         .send(sheet)
         .expect(httpStatus.UNAUTHORIZED);
 
@@ -164,7 +164,7 @@ describe("Sheet endpoints", () => {
 
       const res = await request(app)
         .post("/api/v1/sheets/")
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .send(sheet);
 
       expect(res.body.success).toBeTruthy();
@@ -187,7 +187,7 @@ describe("Sheet endpoints", () => {
 
       const res = await request(app)
         .put("/api/v1/sheets/")
-        .set("authorization", "Bearer inValid")
+        .set("Authorization", "Bearer inValid")
         .send(sheet)
         .expect(httpStatus.UNAUTHORIZED);
 
@@ -200,7 +200,7 @@ describe("Sheet endpoints", () => {
 
       const res = await request(app)
         .put(`/api/v1/sheets/${sheet._id}`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .send({ title: "Updated title", description: "Updated description" })
         .expect(httpStatus.OK);
 
@@ -219,7 +219,7 @@ describe("Sheet endpoints", () => {
 
       const res = await request(app)
         .put(`/api/v1/sheets/${sheet._id}`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .send({ title: "Updated title", description: "Updated description" })
         .expect(httpStatus.UNAUTHORIZED);
 
@@ -236,7 +236,7 @@ describe("Sheet endpoints", () => {
 
       const res = await request(app)
         .delete(`/api/v1/sheets/${sheet._id}`)
-        .set("authorization", "Bearer inValid")
+        .set("Authorization", "Bearer inValid")
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -248,7 +248,7 @@ describe("Sheet endpoints", () => {
 
       const res = await request(app)
         .delete(`/api/v1/sheets/${sheet._id}`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.OK);
 
       expect(res.body.success).toBeTruthy();
@@ -261,7 +261,7 @@ describe("Sheet endpoints", () => {
 
       const res = await request(app)
         .delete(`/api/v1/sheets/${sheet._id}`)
-        .set("authorization", `Bearer ${authToken}`);
+        .set("Authorization", `Bearer ${authToken}`);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body.errors).toEqual([
