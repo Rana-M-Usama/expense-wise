@@ -199,7 +199,7 @@ describe("Auth endpoints", () => {
     it("should return 200 and the user who is currently logged in", async () => {
       const res = await request(app)
         .get("/api/v1/auth/me")
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.OK);
 
       expect(res.body.success).toBe(true);
@@ -229,7 +229,7 @@ describe("Auth endpoints", () => {
     it("should return 200 and updated user", async () => {
       const res = await request(app)
         .put("/api/v1/auth/me")
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .send({
           firstName: "Updated firstName",
           lastName: "Updated lastName",
@@ -250,7 +250,7 @@ describe("Auth endpoints", () => {
     it("should return 400 and unauthorized message with invalid auth token", async () => {
       const res = await request(app)
         .put("/api/v1/auth/me")
-        .set("authorization", "Bearer invalidToken")
+        .set("Authorization", "Bearer invalidToken")
         .send(user)
         .expect(httpStatus.UNAUTHORIZED);
 
@@ -262,7 +262,7 @@ describe("Auth endpoints", () => {
     it("should return 200 and auth token", async () => {
       const res = await request(app)
         .put("/api/v1/auth/me/password")
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .send({
           currentPassword: "Admin123*",
           newPassword: "Admin123**",
@@ -317,7 +317,7 @@ describe("Auth endpoints", () => {
     it("should return 204 and reset the password", async () => {
       let res = await request(app)
         .get("/api/v1/auth/me")
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.OK);
 
       user = await User.findById(res.body.data._id);
@@ -334,7 +334,7 @@ describe("Auth endpoints", () => {
     it("should return 404 if password is invalid", async () => {
       let res = await request(app)
         .get("/api/v1/auth/me")
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.OK);
 
       user = await User.findById(res.body.data._id);

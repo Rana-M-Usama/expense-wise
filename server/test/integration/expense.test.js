@@ -30,7 +30,7 @@ describe("Expense endpoints", () => {
     it("should raise an error if the auth token is invalid", async () => {
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet._id}/expenses/`)
-        .set("authorization", "Bearer inValid")
+        .set("Authorization", "Bearer inValid")
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -44,7 +44,7 @@ describe("Expense endpoints", () => {
 
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet2._id}/expenses/`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -53,10 +53,20 @@ describe("Expense endpoints", () => {
       ]);
     });
 
+    it("should raise an error if the sheetId is invalid", async () => {
+      const res = await request(app)
+        .get("/api/v1/sheets/invalid/expenses/")
+        .set("Authorization", `Bearer ${authToken}`)
+        .expect(httpStatus.BAD_REQUEST);
+
+      expect(res.body.success).toBeFalsy();
+      expect(res.body.errors).toEqual(["Invalid sheet id"]);
+    });
+
     it("should raise an error if the sheetId is valid but the corresponding sheet does not exist", async () => {
       const res = await request(app)
         .get("/api/v1/sheets/63c8197c553b29d8b53b25be/expenses/")
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.NOT_FOUND);
 
       expect(res.body.success).toBeFalsy();
@@ -65,24 +75,12 @@ describe("Expense endpoints", () => {
       ]);
     });
 
-    it("should raise an error if the sheetId invalid", async () => {
-      const res = await request(app)
-        .get("/api/v1/sheets/invalid/expenses/")
-        .set("authorization", `Bearer ${authToken}`)
-        .expect(httpStatus.BAD_REQUEST);
-
-      expect(res.body.success).toBeFalsy();
-      expect(res.body.errors).toEqual(["Invalid sheet id"]);
-    });
-
     it("should return a list of all the sheets belonging to the owner", async () => {
       await buildExpenseList(2, sheet);
-
       const expenses = await Expense.where({ sheet: sheet._id });
-
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet._id}/expenses/`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.OK);
 
       expect(res.body.success).toBeTruthy();
@@ -127,7 +125,7 @@ describe("Expense endpoints", () => {
     it("should raise an error if the auth token is invalid", async () => {
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet._id}/expenses/${expense._id}`)
-        .set("authorization", "Bearer inValid")
+        .set("Authorization", "Bearer inValid")
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -136,15 +134,13 @@ describe("Expense endpoints", () => {
 
     it("should raise an error if the sheet does not belong to the owner", async () => {
       const sheet2 = SheetFactory();
-
       await sheet2.save();
       await buildExpenseList(2, sheet2);
-
       const expense2 = await Expense.findOne({ sheet: sheet._id });
 
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet2._id}/expenses/${expense2._id}`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -156,7 +152,7 @@ describe("Expense endpoints", () => {
     it("should raise an error if the expense id is valid but the corresponding expense does not exist", async () => {
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet._id}/expenses/63c8197c553b29d8b53b25be`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.NOT_FOUND);
 
       expect(res.body.success).toBeFalsy();
@@ -168,7 +164,7 @@ describe("Expense endpoints", () => {
     it("should raise an error if the expense id invalid", async () => {
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet._id}/expenses/invalid`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
@@ -182,7 +178,7 @@ describe("Expense endpoints", () => {
 
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet2._id}/expenses/${expense._id}`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -194,7 +190,7 @@ describe("Expense endpoints", () => {
     it("should return a list of all the sheets belonging to the owner", async () => {
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet._id}/expenses/${expense._id}`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.OK);
 
       expect(res.body.success).toBeTruthy();
@@ -241,7 +237,7 @@ describe("Expense endpoints", () => {
     it("should raise an error if the auth token is invalid", async () => {
       const res = await request(app)
         .post("/api/v1/sheets/:sheetId/expenses/")
-        .set("authorization", "Bearer inValid")
+        .set("Authorization", "Bearer inValid")
         .send(expenseParams)
         .expect(httpStatus.UNAUTHORIZED);
 
@@ -251,12 +247,10 @@ describe("Expense endpoints", () => {
 
     it("should raise an error if a user attempts to add an expense to a sheet that does not belong to them", async () => {
       const sheet2 = SheetFactory();
-
       await sheet2.save();
-
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet2._id}/expenses`)
-        .set("authorization", "Bearer inValid")
+        .set("Authorization", "Bearer inValid")
         .send(expenseParams)
         .expect(httpStatus.UNAUTHORIZED);
 
@@ -267,7 +261,7 @@ describe("Expense endpoints", () => {
     it("should create an expense and return it", async () => {
       const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/expenses/`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .send(expenseParams);
 
       expect(res.body.success).toBeTruthy();
@@ -284,7 +278,7 @@ describe("Expense endpoints", () => {
     });
   });
 
-  describe("PUT /api/v1/sheets/:sheetId/expenses/", () => {
+  describe("PUT /api/v1/sheets/:sheetId/expenses/:id", () => {
     let expense;
 
     beforeEach(async () => {
@@ -295,7 +289,7 @@ describe("Expense endpoints", () => {
     it("should raise an error if the auth token is invalid", async () => {
       const res = await request(app)
         .put(`/api/v1/sheets/${sheet._id}/expenses/${expense._id}`)
-        .set("authorization", "Bearer inValid")
+        .set("Authorization", "Bearer inValid")
         .send({})
         .expect(httpStatus.UNAUTHORIZED);
 
@@ -305,14 +299,12 @@ describe("Expense endpoints", () => {
 
     it("should raise an error if a user attempts to update an expense that does not belong to them", async () => {
       const sheet2 = SheetFactory();
-
       await sheet2.save();
       await buildExpenseList(2, sheet2);
-
       const expense2 = await Expense.findOne({ sheet: sheet._id });
       const res = await request(app)
         .put(`/api/v1/sheets/${sheet2._id}/expenses/${expense2._id}`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .send({})
         .expect(httpStatus.UNAUTHORIZED);
 
@@ -325,7 +317,7 @@ describe("Expense endpoints", () => {
     it("should update the expense and return updated one", async () => {
       const res = await request(app)
         .put(`/api/v1/sheets/${sheet._id}/expenses/${expense._id}`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .send({ title: "Updated title", status: "unpaid" })
         .expect(httpStatus.OK);
 
@@ -343,7 +335,7 @@ describe("Expense endpoints", () => {
     });
   });
 
-  describe("DELETE /api/v1/sheets/:sheetId/expenses/", () => {
+  describe("DELETE /api/v1/sheets/:sheetId/expenses/:id", () => {
     let expense;
 
     beforeEach(async () => {
@@ -354,7 +346,7 @@ describe("Expense endpoints", () => {
     it("should raise an error if the auth token is invalid", async () => {
       const res = await request(app)
         .delete(`/api/v1/sheets/${sheet._id}/expenses/${expense._id}`)
-        .set("authorization", "Bearer inValid")
+        .set("Authorization", "Bearer inValid")
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -370,7 +362,7 @@ describe("Expense endpoints", () => {
       const expense2 = await Expense.findOne({ sheet: sheet._id });
       const res = await request(app)
         .delete(`/api/v1/sheets/${sheet2._id}/expenses/${expense2._id}`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -382,7 +374,7 @@ describe("Expense endpoints", () => {
     it("should delete the expense and returns an empty object", async () => {
       const res = await request(app)
         .delete(`/api/v1/sheets/${sheet._id}/expenses/${expense._id}`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.OK);
 
       expect(res.body.success).toBeTruthy();
