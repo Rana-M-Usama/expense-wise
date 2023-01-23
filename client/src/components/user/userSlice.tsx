@@ -8,7 +8,6 @@ type currentUser = {
   email: string | null;
   imageUrl: string | null;
 };
-
 type UserState = {
   currentUser: currentUser;
 };
@@ -22,7 +21,6 @@ const initialState: UserState = {
     imageUrl: "",
   },
 };
-
 const userSlice = createSlice({
   name: "currentUser",
   initialState,
@@ -41,7 +39,6 @@ const userSlice = createSlice({
     },
   },
 });
-
 const userReducer = userSlice.reducer;
 const { setCurrentUser, setCurrentUserEmpty } = userSlice.actions;
 
