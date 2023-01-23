@@ -60,7 +60,7 @@ describe("Expense endpoints", () => {
         .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
-      expect(res.body.errors).toEqual(["Invalid sheet id"]);
+      expect(res.body.errors).toEqual(["Invalid sheet id."]);
     });
 
     it("should raise an error if the sheetId is valid but the corresponding sheet does not exist", async () => {
@@ -168,7 +168,7 @@ describe("Expense endpoints", () => {
         .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
-      expect(res.body.errors).toEqual(["Invalid expense id"]);
+      expect(res.body.errors).toEqual(["Invalid expense id."]);
     });
 
     it("should raise an error if the expense doesn't belongs to sheet", async () => {

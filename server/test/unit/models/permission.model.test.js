@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "@jest/globals";
 
-import PermissionFactory from "../../factories/permission.factory";
+import { PermissionFactory } from "../../factories/permission.factory";
 
 import { ADMIN, EDIT, VIEW } from "../../../constants/permission";
 

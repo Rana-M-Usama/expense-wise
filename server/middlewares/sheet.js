@@ -8,7 +8,7 @@ const findSheet = async (req, res, next) => {
   const id = req.params.sheetId || req.params.id;
 
   if (!isMongoId(id)) {
-    return next(new ErrorResponse("Invalid sheet id", httpStatus.BAD_REQUEST));
+    return next(new ErrorResponse("Invalid sheet id.", httpStatus.BAD_REQUEST));
   }
 
   req.sheet = await Sheet.findById(id);

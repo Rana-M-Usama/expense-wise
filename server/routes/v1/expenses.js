@@ -35,8 +35,9 @@ router
 
 router
   .route("/:id")
-  .get([findExpense, expensePolicy, viewSheetPolicy], getExpense)
-  .put([findExpense, expensePolicy, editSheetPolicy], updateExpense)
-  .delete([findExpense, expensePolicy, editSheetPolicy], deleteExpense);
+  .all(findExpense, expensePolicy)
+  .get(viewSheetPolicy, getExpense)
+  .put(editSheetPolicy, updateExpense)
+  .delete(editSheetPolicy, deleteExpense);
 
 export default router;

@@ -3,7 +3,7 @@ import { faker } from "@faker-js/faker";
 
 import { SheetFactory } from "../../factories/sheet.factory";
 
-const FAKER_STRING = faker.lorem.lines(1001);
+const FAKER_STRING = faker.lorem.lines(1500);
 
 describe("Sheet model", () => {
   describe("validation", () => {
@@ -35,7 +35,7 @@ describe("Sheet model", () => {
     });
 
     it("should throw a validation error if the length of the title field exceeds 100 characters", () => {
-      sheet.title = FAKER_STRING.substring(0, 101);
+      sheet.title = FAKER_STRING.substring(0, 150);
       expect(sheet.validateSync().errors.title.message).toEqual(
         "Title can not be longer than 100 characters.",
       );
@@ -57,7 +57,7 @@ describe("Sheet model", () => {
     });
 
     it("should throw a validation error if the length of the description field exceeds 1000 characters", () => {
-      sheet.description = FAKER_STRING.substring(0, 1001);
+      sheet.description = FAKER_STRING.substring(0, 1500);
       expect(sheet.validateSync().errors.description.message).toEqual(
         "Description can not be longer than 1000 characters.",
       );

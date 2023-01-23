@@ -7,8 +7,8 @@ import Permission from "../models/Permission";
 // @route     GET /api/v1/sheets/:sheetId/permissions
 // @access    Private
 const getPermissions = asyncHandler(async (req, res) => {
-  const permissions = await Permission.find({ sheetId: req.sheet._id });
-  return res.status(httpStatus.OK).json({ succes: true, permissions });
+  const permissions = await Permission.find({ sheet: req.sheet });
+  return res.status(httpStatus.OK).json({ success: true, permissions });
 });
 
 // @desc      Add permissions
@@ -28,6 +28,7 @@ const grantPermission = asyncHandler(async (req, res) => {
       req.body,
       {
         runValidators: true,
+        new: true,
       },
     );
   } else {
