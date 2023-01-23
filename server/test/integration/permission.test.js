@@ -423,10 +423,14 @@ describe("Permission endpoints", () => {
     });
 
     it("should delete a permission and return an empty object if a user has admin permission of a specified sheet", async () => {
-      const permission2 = await new Permission(permissionParams).save();
+      const permissionToBeDeleted = await new Permission(
+        permissionParams,
+      ).save();
 
       const res = await request(app)
-        .delete(`/api/v1/sheets/${sheet._id}/permissions/${permission2._id}`)
+        .delete(
+          `/api/v1/sheets/${sheet._id}/permissions/${permissionToBeDeleted._id}`,
+        )
         .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.OK);
 
