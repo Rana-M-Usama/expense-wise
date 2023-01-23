@@ -2,7 +2,9 @@ import { beforeEach, describe, expect, it } from "@jest/globals";
 import httpStatus from "http-status";
 import request from "supertest";
 
+import { ADMIN, EDIT, VIEW } from "../../constants/permission";
 import app from "../../app";
+import { buildPermissionList } from "../factories/permission.factory";
 import Permission from "../../models/Permission";
 import setupTestDB from "../utils/setupTestDB";
 import Sheet from "../../models/Sheet";
@@ -14,7 +16,7 @@ setupTestDB();
 
 describe("Permission endpoints", () => {
   let permission;
-  let permission2;
+  let permissionParams;
   let user;
   let user2;
   let sheet;
@@ -22,16 +24,16 @@ describe("Permission endpoints", () => {
 
   beforeEach(async () => {
     user = UserFactory();
-    sheet = SheetFactory({ owner: user });
     user2 = UserFactory();
+    sheet = SheetFactory({ owner: user });
 
-    await new User(user).save();
-    await new Sheet(sheet).save();
+    await user.save();
+    await sheet.save();
     permission = await Permission.findOne({ user, sheet });
     authToken = await user.getSignedJwtToken();
 
-    permission2 = {
-      type: "view",
+    permissionParams = {
+      type: VIEW,
       user: user2,
       sheet,
     };
@@ -41,8 +43,8 @@ describe("Permission endpoints", () => {
     it("should raise an error if the auth token is invalid", async () => {
       const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
-        .set("authorization", "Bearer invalid")
-        .send(permission2)
+        .set("Authorization", "Bearer invalid")
+        .send(permissionParams)
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -51,12 +53,11 @@ describe("Permission endpoints", () => {
 
     it("should raise an error if a user doesn't has rights to access sheet", async () => {
       const sheet2 = await new Sheet(SheetFactory()).save();
-      permission2.type = "view";
 
       const res = await request(app)
         .post(`/api/v1/sheets/${sheet2._id}/permissions`)
-        .set("authorization", `Bearer ${authToken}`)
-        .send(permission2)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(permissionParams)
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -70,8 +71,8 @@ describe("Permission endpoints", () => {
     it("should raise an error if a user provides an invalid id for sheet", async () => {
       const res = await request(app)
         .post("/api/v1/sheets/invalid/permissions")
-        .set("authorization", `Bearer ${authToken}`)
-        .send(permission2)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(permissionParams)
         .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
@@ -79,13 +80,14 @@ describe("Permission endpoints", () => {
     });
 
     it("should raise an error if a user having view permission attempts to assign edit permission", async () => {
-      await Permission.findOneAndUpdate(permission.id, { type: "view" });
-      permission2.type = "edit";
+      await Permission.findOneAndUpdate(permission.id, { type: VIEW });
+
+      permissionParams.type = EDIT;
 
       const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
-        .set("authorization", `Bearer ${authToken}`)
-        .send(permission2)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(permissionParams)
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -97,13 +99,14 @@ describe("Permission endpoints", () => {
     });
 
     it("should raise an error if a user having view permission attempts to assign admin permission", async () => {
-      await Permission.findOneAndUpdate(permission.id, { type: "view" });
-      permission2.type = "admin";
+      await Permission.findOneAndUpdate(permission.id, { type: VIEW });
+
+      permissionParams.type = ADMIN;
 
       const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
-        .set("authorization", `Bearer ${authToken}`)
-        .send(permission2)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(permissionParams)
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -115,13 +118,14 @@ describe("Permission endpoints", () => {
     });
 
     it("should raise an error if a user having edit permission attempts to assign admin permission", async () => {
-      await Permission.findOneAndUpdate(permission.id, { type: "edit" });
-      permission2.type = "admin";
+      await Permission.findOneAndUpdate(permission.id, { type: EDIT });
+
+      permissionParams.type = ADMIN;
 
       const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
-        .set("authorization", `Bearer ${authToken}`)
-        .send(permission2)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(permissionParams)
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -135,121 +139,125 @@ describe("Permission endpoints", () => {
     it("should be fine if a user having view permission attempts to assign view permission", async () => {
       const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
-        .set("authorization", `Bearer ${authToken}`)
-        .send(permission2)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(permissionParams)
         .expect(httpStatus.OK);
 
       expect(res.body.success).toBeTruthy();
       expect(res.body.data).toMatchObject({
         _id: expect.anything(),
-        user: permission2.user._id,
-        sheet: permission2.sheet._id,
-        type: "view",
+        user: permissionParams.user._id,
+        sheet: permissionParams.sheet._id,
+        type: VIEW,
       });
     });
 
     it("should be fine if a user having edit permission attempts to assign view permission", async () => {
-      await Permission.findOneAndUpdate(permission.id, { type: "edit" });
-      permission2.type = "view";
+      await Permission.findOneAndUpdate(permission.id, { type: EDIT });
+
+      permissionParams.type = VIEW;
 
       const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
-        .set("authorization", `Bearer ${authToken}`)
-        .send(permission2)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(permissionParams)
         .expect(httpStatus.OK);
 
       expect(res.body.success).toBeTruthy();
       expect(res.body.data).toMatchObject({
         _id: expect.anything(),
-        user: permission2.user._id,
-        sheet: permission2.sheet._id,
-        type: "view",
+        user: permissionParams.user._id,
+        sheet: permissionParams.sheet._id,
+        type: VIEW,
       });
     });
 
     it("should be fine if a user having edit permission attempts to assign edit", async () => {
-      await Permission.findOneAndUpdate(permission.id, { type: "edit" });
-      permission2.type = "edit";
+      await Permission.findOneAndUpdate(permission.id, { type: EDIT });
+
+      permissionParams.type = EDIT;
 
       const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
-        .set("authorization", `Bearer ${authToken}`)
-        .send(permission2)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(permissionParams)
         .expect(httpStatus.OK);
 
       expect(res.body.success).toBeTruthy();
       expect(res.body.data).toMatchObject({
         _id: expect.anything(),
-        user: permission2.user._id,
-        sheet: permission2.sheet._id,
-        type: "edit",
+        user: permissionParams.user._id,
+        sheet: permissionParams.sheet._id,
+        type: EDIT,
       });
     });
 
     it("should be fine if a user having admin permission attempts to assign view permission", async () => {
-      await Permission.findOneAndUpdate(permission.id, { type: "admin" });
-      permission2.type = "view";
+      await Permission.findOneAndUpdate(permission.id, { type: ADMIN });
+
+      permissionParams.type = VIEW;
 
       const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
-        .set("authorization", `Bearer ${authToken}`)
-        .send(permission2)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(permissionParams)
         .expect(httpStatus.OK);
 
       expect(res.body.success).toBeTruthy();
       expect(res.body.data).toMatchObject({
         _id: expect.anything(),
-        user: permission2.user._id,
-        sheet: permission2.sheet._id,
-        type: "view",
+        user: permissionParams.user._id,
+        sheet: permissionParams.sheet._id,
+        type: VIEW,
       });
     });
 
     it("should be fine if a user having admin permission attempts to assign edit permission", async () => {
-      await Permission.findOneAndUpdate(permission.id, { type: "admin" });
-      permission2.type = "edit";
+      await Permission.findOneAndUpdate(permission.id, { type: ADMIN });
+
+      permissionParams.type = EDIT;
 
       const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
-        .set("authorization", `Bearer ${authToken}`)
-        .send(permission2)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(permissionParams)
         .expect(httpStatus.OK);
 
       expect(res.body.success).toBeTruthy();
       expect(res.body.data).toMatchObject({
         _id: expect.anything(),
-        user: permission2.user._id,
-        sheet: permission2.sheet._id,
-        type: "edit",
+        user: permissionParams.user._id,
+        sheet: permissionParams.sheet._id,
+        type: EDIT,
       });
     });
 
     it("should be fine if a user having admin permission attempts to assign admin permission", async () => {
-      await Permission.findOneAndUpdate(permission.id, { type: "admin" });
-      permission2.type = "admin";
+      await Permission.findOneAndUpdate(permission.id, { type: ADMIN });
+
+      permissionParams.type = ADMIN;
 
       const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
-        .set("authorization", `Bearer ${authToken}`)
-        .send(permission2)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(permissionParams)
         .expect(httpStatus.OK);
 
       expect(res.body.success).toBeTruthy();
       expect(res.body.data).toMatchObject({
         _id: expect.anything(),
-        user: permission2.user._id,
-        sheet: permission2.sheet._id,
-        type: "admin",
+        user: permissionParams.user._id,
+        sheet: permissionParams.sheet._id,
+        type: ADMIN,
       });
     });
 
     it("should be fine if an admin changes the sheet owner's permissions to edit or view", async () => {
       await new User(user2).save();
-      await Permission.findOneAndUpdate(permission.id, { type: "admin" });
+      await Permission.findOneAndUpdate(permission.id, { type: ADMIN });
 
-      permission2.type = "admin";
-
-      await new Permission(permission2).save();
+      permissionParams.type = ADMIN;
+      await new Permission(permissionParams).save();
 
       const loginCredentials = {
         email: user2.email,
@@ -263,9 +271,9 @@ describe("Permission endpoints", () => {
 
       res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
-        .set("authorization", `Bearer ${res.body.data.token}`)
+        .set("Authorization", `Bearer ${res.body.data.token}`)
         .send({
-          type: "edit",
+          type: EDIT,
           user: permission.user._id,
           sheet: permission.sheet._id,
         })
@@ -276,7 +284,7 @@ describe("Permission endpoints", () => {
         _id: expect.anything(),
         user: permission.user._id,
         sheet: permission.sheet._id,
-        type: "edit",
+        type: EDIT,
       });
     });
   });
@@ -285,7 +293,7 @@ describe("Permission endpoints", () => {
     it("should raise an error if the auth token is invalid", async () => {
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet._id}/permissions`)
-        .set("authorization", "Bearer invalid")
+        .set("Authorization", "Bearer invalid")
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -295,8 +303,8 @@ describe("Permission endpoints", () => {
     it("should raise an error if a user provides an invalid id for sheet", async () => {
       const res = await request(app)
         .post("/api/v1/sheets/invalid/permissions")
-        .set("authorization", `Bearer ${authToken}`)
-        .send(permission2)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(permissionParams)
         .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
@@ -318,7 +326,7 @@ describe("Permission endpoints", () => {
 
       res = await request(app)
         .get(`/api/v1/sheets/${sheet._id}/permissions`)
-        .set("authorization", `Bearer ${res.body.data.token}`)
+        .set("Authorization", `Bearer ${res.body.data.token}`)
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -328,29 +336,46 @@ describe("Permission endpoints", () => {
     });
 
     it("should return all permissions of a sheet", async () => {
+      await buildPermissionList(2, sheet);
+      const permissions = await Permission.where({ sheet: sheet._id });
+
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet._id}/permissions`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.OK);
 
       expect(res.body.success).toBeTruthy();
-      expect(res.body.permissions.length).toEqual(1);
+      expect(res.body.permissions.length).toEqual(3);
       expect(res.body.permissions).toMatchObject([
         {
-          _id: expect.anything(),
-          sheet: permission.sheet._id,
-          type: "admin",
-          user: permission.user._id,
+          _id: permissions[0]._id,
+          type: permissions[0].type,
+          user: permissions[0].user,
+          sheet: permissions[0].sheet,
+        },
+        {
+          _id: permissions[1]._id,
+          type: permissions[1].type,
+          user: permissions[1].user,
+          sheet: permissions[1].sheet,
+        },
+        {
+          _id: permissions[2]._id,
+          type: permissions[2].type,
+          user: permissions[2].user,
+          sheet: permissions[2].sheet,
         },
       ]);
     });
   });
 
-  describe("DELETE /api/v1/sheets/:sheetId/permissions/:permissionId", () => {
+  describe("DELETE /api/v1/sheets/:sheetId/permissions/:Id", () => {
     it("should raise an error if the auth token is invalid", async () => {
       const res = await request(app)
-        .delete(`/api/v1/sheets/${sheet._id}/permissions/${permission2.id}`)
-        .set("authorization", "Bearer invalid")
+        .delete(
+          `/api/v1/sheets/${sheet._id}/permissions/${permissionParams._id}`,
+        )
+        .set("Authorization", "Bearer invalid")
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -358,11 +383,11 @@ describe("Permission endpoints", () => {
     });
 
     it("should raise an error if a user provides an invalid id for sheet", async () => {
-      await new Permission(permission2).save();
+      await new Permission(permissionParams).save();
 
       const res = await request(app)
-        .delete(`/api/v1/sheets/invalid/permissions/${permission2.id}`)
-        .set("authorization", `Bearer ${authToken}`)
+        .delete(`/api/v1/sheets/invalid/permissions/${permissionParams._id}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
@@ -372,7 +397,7 @@ describe("Permission endpoints", () => {
     it("should raise an error if a user provides an invalid id for permission", async () => {
       const res = await request(app)
         .delete(`/api/v1/sheets/${sheet._id}/permissions/invalid`)
-        .set("authorization", `Bearer ${authToken}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
@@ -380,12 +405,12 @@ describe("Permission endpoints", () => {
     });
 
     it("should raise an error if a user having view permission attempts to delete a permission", async () => {
-      const newPermission = await new Permission(permission2).save();
-      await Permission.findOneAndUpdate(permission.id, { type: "view" });
+      const permission2 = await new Permission(permissionParams).save();
+      await Permission.findOneAndUpdate(permission.id, { type: VIEW });
 
       const res = await request(app)
-        .delete(`/api/v1/sheets/${sheet._id}/permissions/${newPermission._id}`)
-        .set("authorization", `Bearer ${authToken}`)
+        .delete(`/api/v1/sheets/${sheet._id}/permissions/${permission2._id}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -397,12 +422,12 @@ describe("Permission endpoints", () => {
     });
 
     it("should raise an error if a user having edit permission attempts to delete a permission", async () => {
-      const newPermission = await new Permission(permission2).save();
-      await Permission.findOneAndUpdate(permission.id, { type: "edit" });
+      const permission2 = await new Permission(permissionParams).save();
+      await Permission.findOneAndUpdate(permission.id, { type: EDIT });
 
       const res = await request(app)
-        .delete(`/api/v1/sheets/${sheet._id}/permissions/${newPermission._id}`)
-        .set("authorization", `Bearer ${authToken}`)
+        .delete(`/api/v1/sheets/${sheet._id}/permissions/${permission2._id}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -415,7 +440,7 @@ describe("Permission endpoints", () => {
 
     it("should raise an error if a user attempts to delete a permission without having any permission", async () => {
       await new User(user2).save();
-      const newPermission = await new Permission(permission2).save();
+      const permission2 = await new Permission(permissionParams).save();
 
       const loginCredentials = {
         email: user2.email,
@@ -428,8 +453,8 @@ describe("Permission endpoints", () => {
         .expect(httpStatus.OK);
 
       res = await request(app)
-        .delete(`/api/v1/sheets/${sheet._id}/permissions/${newPermission._id}`)
-        .set("authorization", `Bearer ${res.body.data.token}`)
+        .delete(`/api/v1/sheets/${sheet._id}/permissions/${permission2._id}`)
+        .set("Authorization", `Bearer ${res.body.data.token}`)
         .expect(httpStatus.UNAUTHORIZED);
 
       expect(res.body.success).toBeFalsy();
@@ -441,11 +466,11 @@ describe("Permission endpoints", () => {
     });
 
     it("should delete a permission and return an empty object if a user has admin permission of a specified sheet", async () => {
-      const newPermission = await new Permission(permission2).save();
+      const permission2 = await new Permission(permissionParams).save();
 
       const res = await request(app)
-        .delete(`/api/v1/sheets/${sheet._id}/permissions/${newPermission._id}`)
-        .set("authorization", `Bearer ${authToken}`)
+        .delete(`/api/v1/sheets/${sheet._id}/permissions/${permission2._id}`)
+        .set("Authorization", `Bearer ${authToken}`)
         .expect(httpStatus.OK);
 
       expect(res.body.success).toBeTruthy();
