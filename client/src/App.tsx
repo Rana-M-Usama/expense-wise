@@ -3,10 +3,10 @@ import { ThemeProvider } from "@mui/material";
 
 import { helloWorldApi } from "api/helloWorld";
 import NavBar from "components/common/layouts/navbar/Navbar";
-import SingleSheet from "components/sheet/SingleSheet";
 import { theme } from "theme";
 
 import "App.css";
+import Sheets from "components/sheet/Sheets";
 
 const App = () => {
   const [data, setData] = useState("");
@@ -23,7 +23,7 @@ const App = () => {
         <NavBar />
       </header>
       <body className="App-body">
-        <SingleSheet />
+        <Sheets />
       </body>
     </ThemeProvider>
   );
