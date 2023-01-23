@@ -2,8 +2,8 @@ import { ThemeProvider } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 import { helloWorldApi } from "api/helloWorld";
-import { theme } from "theme";
 import LoginPage from "pages/login/login.page";
+import { theme } from "theme";
 
 import "App.css";
 
