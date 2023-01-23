@@ -3,7 +3,7 @@ import httpStatus from "http-status";
 import ErrorResponse from "../../utils/errorResponse";
 
 const permissionPolicy = async (req, res, next) => {
-  if (req.permission.sheet.id === req.sheet.id) {
+  if (req.permission.sheet.equals(req.sheet._id)) {
     return next();
   }
 
