@@ -87,7 +87,7 @@ describe("Sheet endpoints", () => {
         .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
-      expect(res.body.errors).toEqual(["Invalid sheet id"]);
+      expect(res.body.errors).toEqual(["Invalid sheet id."]);
     });
 
     it("should raise an error if the sheet does not belong to the owner", async () => {

@@ -9,7 +9,7 @@ const findExpense = async (req, res, next) => {
 
   if (!isMongoId(id)) {
     return next(
-      new ErrorResponse("Invalid expense id", httpStatus.BAD_REQUEST),
+      new ErrorResponse("Invalid expense id.", httpStatus.BAD_REQUEST),
     );
   }
 

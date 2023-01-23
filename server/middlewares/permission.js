@@ -9,7 +9,7 @@ const findPermission = async (req, res, next) => {
 
   if (!isMongoId(id)) {
     return next(
-      new ErrorResponse("Invalid permission id", httpStatus.BAD_REQUEST),
+      new ErrorResponse("Invalid permission id.", httpStatus.BAD_REQUEST),
     );
   }
 
