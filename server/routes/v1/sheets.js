@@ -43,8 +43,9 @@ router
 
 router
   .route("/:id")
-  .get([findSheet, sheetPolicy, viewSheetPolicy], getSheet)
-  .put([findSheet, sheetPolicy, editSheetPolicy], updateSheet)
-  .delete([findSheet, sheetPolicy, adminSheetPolicy], deleteSheet);
+  .all(findSheet, sheetPolicy)
+  .get(viewSheetPolicy, getSheet)
+  .put(editSheetPolicy, updateSheet)
+  .delete(adminSheetPolicy, deleteSheet);
 
 export default router;

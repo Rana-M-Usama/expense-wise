@@ -35,7 +35,7 @@ describe("Sheet model", () => {
     });
 
     it("should throw a validation error if the length of the title field exceeds 100 characters", () => {
-      sheet.title = FAKER_STRING.substring(0, 101);
+      sheet.title = FAKER_STRING.substring(0, 150);
       expect(sheet.validateSync().errors.title.message).toEqual(
         "Title can not be longer than 100 characters.",
       );

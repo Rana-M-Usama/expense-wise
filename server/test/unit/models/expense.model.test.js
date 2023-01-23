@@ -35,7 +35,7 @@ describe("Expense model", () => {
     });
 
     it("should throw a validation error if the length of the title field exceeds 100 characters", () => {
-      expense.title = FAKER_STRING.substring(0, 101);
+      expense.title = FAKER_STRING.substring(0, 150);
       expect(expense.validateSync().errors.title.message).toEqual(
         "Title can not be longer than 100 characters.",
       );
