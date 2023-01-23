@@ -1,8 +1,7 @@
-
-import { makeStyles } from '@mui/styles'
+import { makeStyles } from "@mui/styles";
 export default makeStyles((theme) => ({
   appBar: {
-    backgroundColor: '#424242',
+    backgroundColor: "#424242",
   },
 
   menuSliderContainer: {
@@ -10,12 +9,11 @@ export default makeStyles((theme) => ({
   },
 
   avatar: {
-    margin: '0.5rem auto',
-    padding: '1rem',
+    margin: "0.5rem auto",
+    padding: "1rem",
   },
 
   listItem: {
-    color: 'aliceblue',
+    color: "aliceblue",
   },
-
-}))
+}));
