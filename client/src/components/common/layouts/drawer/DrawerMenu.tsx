@@ -21,10 +21,10 @@ import { Link } from "react-router-dom";
 import logo from "assets/logo.png";
 import useStyles from "./DrawerMenu.styles";
 
-interface Props {
+type Props = {
   open: boolean;
   toggle: () => void;
-}
+};
 
 const listItems = [
   {
