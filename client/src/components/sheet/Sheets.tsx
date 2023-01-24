@@ -41,12 +41,12 @@ const SHEETS = [
   { id: 20, name: "Sheet20", author: "zain" },
 ];
 
-interface Props {
+type Props = {
   title: string;
   button: string;
   name: string;
   description: string;
-}
+};
 
 const Sheets = () => {
   const classes = useStyles();
@@ -64,11 +64,11 @@ const Sheets = () => {
   const [paginate, setpaginate] = useState(10);
 
   const count = Math.ceil(SHEETS.length / paginate);
-  const _DATA = usePagination(SHEETS, paginate);
+  const DATA = usePagination(SHEETS, paginate);
 
   const handleChange = (event: ChangeEvent<unknown>, page: number) => {
     setPage(page);
-    _DATA.jump(page);
+    DATA.jump(page);
   };
   const openModal = (props: Props) => {
     setModalProps(props);
@@ -106,7 +106,7 @@ const Sheets = () => {
           bgcolor: "#eeeeee",
         }}
       >
-        {_DATA.currentData().map((sheet: any) => (
+        {DATA.currentData().map((sheet: any) => (
           <React.Fragment>
             <ListItem
               key={sheet.id}
