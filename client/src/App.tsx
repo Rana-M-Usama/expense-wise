@@ -5,7 +5,6 @@ import { theme } from "theme";
 
 import "App.css";
 import Sheets from "components/sheet/Sheets";
-import SingleSheet from "components/sheet/SingleSheet";
 
 const App = () => {
   return (
@@ -14,7 +13,7 @@ const App = () => {
         <NavBar />
       </header>
       <body className="App-body">
-        <SingleSheet />
+        <Sheets />
       </body>
     </ThemeProvider>
   );
