@@ -30,16 +30,16 @@ const SHEETS = [
   { id: 12, name: "Sheet10", author: "ali" },
 ];
 
-interface Props {
+type Props = {
   title: string;
   button: string;
   name: string;
   description: string;
-}
+};
 
 const Sheets = () => {
   const classes = useStyles();
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [IsModalOpen, setIsModalOpen] = useState(false);
   const [modalProps, setModalProps] = useState<Props>({
     title: "",
     button: "",
@@ -47,13 +47,13 @@ const Sheets = () => {
     description: "",
   });
 
-  const openModal = (props: Props) => {
+  const showModal = (props: Props) => {
     setModalProps(props);
-    setModalIsOpen(true);
+    setIsModalOpen(true);
   };
 
-  const closeModal = () => {
-    setModalIsOpen(false);
+  const hideModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -65,7 +65,7 @@ const Sheets = () => {
       >
         <Button
           onClick={() =>
-            openModal({
+            showModal({
               title: " Create Expense Sheet",
               button: " Create",
               name: "",
@@ -75,7 +75,7 @@ const Sheets = () => {
         >
           <AddCircleRoundedIcon sx={{ width: 40, height: 45 }} />
         </Button>
-        <SheetModal isOpen={modalIsOpen} {...modalProps} onClose={closeModal} />
+        <SheetModal isOpen={IsModalOpen} {...modalProps} onClose={hideModal} />
       </Stack>
       <List
         sx={{
@@ -103,7 +103,7 @@ const Sheets = () => {
                         variant="outlined"
                         size="small"
                         onClick={() =>
-                          openModal({
+                          showModal({
                             title: " Update Expense Sheet",
                             button: "Update",
                             name: "Sheet 1",
