@@ -16,7 +16,6 @@ import SheetModal from "components/sheet/SheetModal";
 import usePagination from "./Pagination";
 
 import useStyles from "components/sheet/Sheets.styles";
-import { type } from "@testing-library/user-event/dist/type";
 
 const SHEETS = [
   { id: 1, name: "Sheet1", author: "currentUser" },
