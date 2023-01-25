@@ -10,9 +10,11 @@ import {
   Typography,
 } from "@mui/material";
 import { CloseOutlined, Mail } from "@mui/icons-material";
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 
-import useStyles from "pages/forgetpassword/forgetpassword.styles";
+import { forgotPasswordApi } from "api/auth";
+
+import useStyles from "pages/forgotpassword/forgotpassword.styles";
 
 interface Props {
   isOpen: boolean;
@@ -21,6 +23,25 @@ interface Props {
 
 const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
   const classes = useStyles();
+  const [forgotPasswordData, setForgotPasswordData] = useState({ email: "" });
+
+  const changeHandlerData = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setForgotPasswordData({ ...forgotPasswordData, [name]: value });
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    forgotPasswordApi(forgotPasswordData)
+      .then(response => {
+        setForgotPasswordData({ ...forgotPasswordData, email: "" });
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
   return (
     <Modal
@@ -59,6 +80,7 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
         <Container>
           <Box
             component="form"
+            onSubmit={handleSubmit}
             sx={{
               border: "1px solid #f0629270",
               p: 3,
@@ -67,7 +89,6 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
           >
             <TextField
               margin="normal"
-              name="email"
               id="email"
               autoComplete="email"
               label="Email Address"
@@ -75,6 +96,11 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
               fullWidth
               autoFocus
               className={classes.textField}
+              type="email"
+              placeholder="Email"
+              name="email"
+              value={forgotPasswordData.email}
+              onChange={changeHandlerData}
               InputProps={{
                 startAdornment: (
                   <InputAdornment disableTypography position="start">

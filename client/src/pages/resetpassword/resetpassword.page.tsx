@@ -1,20 +1,53 @@
-import React from "react";
 import {
+  Avatar,
+  Box,
   Button,
+  Container,
   CssBaseline,
   TextField,
-  Box,
-  Avatar,
   Typography,
-  Container,
 } from "@mui/material";
+import React, { ChangeEvent, useState } from "react";
 import { Lock } from "@mui/icons-material";
+import { resetPasswordApi } from "api/auth";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import useStyles from "pages/resetpassword/resetpassword.styles";
 
 const ResetPasswordPage = () => {
   const classes = useStyles();
-  const handleSubmit = () => {};
+  const navigate = useNavigate();
+
+  const [resetPasswordData, setResetPasswordData] = useState({
+    password: "",
+    confirmPassword: "",
+  });
+
+  const changeHandlerData = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setResetPasswordData({ ...resetPasswordData, [name]: value });
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const { resetToken } = useParams<{ resetToken: string | undefined }>();
+    if (resetPasswordData.password === resetPasswordData.confirmPassword) {
+      resetPasswordApi(resetPasswordData, resetToken)
+        .then(response => {
+          console.log(response);
+          setResetPasswordData({
+            ...resetPasswordData,
+            password: "",
+            confirmPassword: "",
+          });
+          navigate("/login");
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    } else console.log("Invalid data.");
+  };
 
   return (
     <Container component="main" className={classes.container}>
@@ -36,26 +69,32 @@ const ResetPasswordPage = () => {
           <TextField
             color="primary"
             margin="normal"
-            type="password"
             id="password"
-            name="password"
             required
             fullWidth
             label="New Password"
             autoComplete="current-password"
             className={classes.textField}
+            type="password"
+            placeholder="Password"
+            name="password"
+            value={resetPasswordData.password}
+            onChange={changeHandlerData}
           />
           <TextField
             color="primary"
             margin="normal"
-            type="password"
             id="password"
-            name="password"
             required
             fullWidth
             label="Confirm Password"
             autoComplete="current-password"
             className={classes.textField}
+            type="password"
+            placeholder="Confirm Password"
+            name="confirmPassword"
+            value={resetPasswordData.confirmPassword}
+            onChange={changeHandlerData}
           />
           <Button
             type="submit"

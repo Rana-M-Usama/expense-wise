@@ -1,23 +1,52 @@
-import React from "react";
 import {
-  Button,
-  CssBaseline,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Link,
-  Grid,
   Box,
+  Button,
+  Checkbox,
   Container,
+  CssBaseline,
+  FormControlLabel,
+  Grid,
+  Link,
+  TextField,
 } from "@mui/material";
+import React, { ChangeEvent, useState } from "react";
+import { signupApi } from "api/auth";
+import { useNavigate } from "react-router-dom";
 
 import logo from "assets/logo.png";
 import useStyles from "pages/signup/signup.styles";
 
 const SignupPage = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
 
-  const handleSubmit = () => {};
+  const [signupData, setSignupData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const changeHandlerData = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setSignupData({ ...signupData, [name]: value });
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (signupData.password === signupData.confirmPassword) {
+      signupApi(signupData)
+        .then(response => {
+          console.log(response);
+          navigate("/login");
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    } else console.log("Invalid data.");
+  };
 
   return (
     <Container component="main" className={classes.container}>
@@ -44,12 +73,16 @@ const SignupPage = () => {
               <TextField
                 className={classes.textField}
                 autoComplete="given-name"
-                name="firstName"
                 id="firstName"
                 label="First Name"
                 required
                 fullWidth
                 autoFocus
+                type="text"
+                placeholder="First Name"
+                name="firstName"
+                value={signupData.firstName}
+                onChange={changeHandlerData}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -59,8 +92,12 @@ const SignupPage = () => {
                 fullWidth
                 id="lastName"
                 label="Last Name"
-                name="lastName"
                 autoComplete="family-name"
+                type="text"
+                placeholder="Last Name"
+                name="lastName"
+                value={signupData.lastName}
+                onChange={changeHandlerData}
               />
             </Grid>
             <Grid item xs={12}>
@@ -69,9 +106,13 @@ const SignupPage = () => {
                 required
                 fullWidth
                 id="email"
-                name="email"
                 autoComplete="email"
                 label="Email Address"
+                type="text"
+                placeholder="Name"
+                name="email"
+                value={signupData.email}
+                onChange={changeHandlerData}
               />
             </Grid>
             <Grid item xs={12}>
@@ -79,21 +120,27 @@ const SignupPage = () => {
                 className={classes.textField}
                 required
                 fullWidth
-                name="password"
                 label="Password"
-                type="password"
                 id="password"
                 autoComplete="new-password"
+                type="password"
+                placeholder="Password"
+                name="password"
+                value={signupData.password}
+                onChange={changeHandlerData}
               />
               <TextField
                 className={classes.textField}
                 margin="normal"
-                type="password"
                 required
                 fullWidth
-                name="Confirm password"
                 label="Confirm Password"
                 id="Confirm password"
+                type="password"
+                placeholder="Confirm password"
+                name="confirmPassword"
+                value={signupData.confirmPassword}
+                onChange={changeHandlerData}
               />
             </Grid>
             <Grid item xs={12}>

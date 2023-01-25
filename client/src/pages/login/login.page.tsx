@@ -9,17 +9,43 @@ import {
   Link,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
+import { loginApi } from "api/auth";
+import { setCurrentUser } from "components/user/userSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-import ForgotPasswordPage from "pages/forgetpassword/forgetpassword.page";
+import ForgotPasswordPage from "pages/forgotpassword/forgotpassword.page";
 import logo from "assets/logo.png";
 import useStyles from "pages/login/login.styles";
 
 const LoginPage = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
 
-  const handleSubmit = () => {};
+  const changeHandlerData = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setLoginData({ ...loginData, [name]: value });
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    loginApi(loginData)
+      .then(response => {
+        console.log(response);
+        setLoginData({ ...loginData, email: "", password: "" });
+        dispatch(setCurrentUser(response.data.data.user));
+        localStorage.setItem("token", response.data.data.token);
+        navigate("/profile");
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
   return (
     <Container component="main" className={classes.container}>
@@ -42,7 +68,6 @@ const LoginPage = () => {
       >
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
-            name="email"
             margin="normal"
             autoComplete="email"
             id="email"
@@ -51,10 +76,14 @@ const LoginPage = () => {
             autoFocus
             label="Email Address"
             className={classes.textField}
+            type="email"
+            placeholder="Email"
+            name="email"
+            value={loginData.email}
+            onChange={changeHandlerData}
           />
           <TextField
             margin="normal"
-            name="password"
             label="Password"
             type="password"
             id="password"
@@ -62,6 +91,9 @@ const LoginPage = () => {
             fullWidth
             autoComplete="current-password"
             className={classes.textField}
+            name="password"
+            value={loginData.password}
+            onChange={changeHandlerData}
           />
           <FormControlLabel
             control={<Checkbox value="remember" />}
@@ -91,11 +123,11 @@ const LoginPage = () => {
               </Link>
             </Grid>
           </Grid>
-          <ForgotPasswordPage
-            isOpen={modalIsOpen}
-            onClose={() => setModalIsOpen(false)}
-          />
         </Box>
+        <ForgotPasswordPage
+          isOpen={modalIsOpen}
+          onClose={() => setModalIsOpen(false)}
+        />
       </Box>
     </Container>
   );

@@ -15,10 +15,10 @@ type UserState = {
 
 const initialState: UserState = {
   currentUser: {
-    id: 1,
-    firstName: "test",
-    lastName: "user",
-    email: "test@gmail.com",
+    id: null,
+    firstName: "",
+    lastName: "",
+    email: "",
     imageUrl: "",
   },
 };
@@ -31,13 +31,7 @@ const userSlice = createSlice({
       state.currentUser = action.payload;
     },
     setCurrentUserEmpty: state => {
-      state.currentUser = {
-        id: null,
-        firstName: null,
-        lastName: null,
-        imageUrl: null,
-        email: null,
-      };
+      state.currentUser = { ...initialState.currentUser };
     },
   },
 });
