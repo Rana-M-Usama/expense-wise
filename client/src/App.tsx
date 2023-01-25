@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import React from "react";
 import { ThemeProvider } from "@mui/material";
+import { ToastContainer } from "react-toastify";
 
 import LoginPage from "pages/login/login.page";
 import ProfilePage from "pages/profile/profile.page";
@@ -25,6 +26,7 @@ const App = () => {
           </Routes>
         </BrowserRouter>
       </header>
+      <ToastContainer />
     </ThemeProvider>
   );
 };

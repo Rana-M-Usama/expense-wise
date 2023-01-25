@@ -13,6 +13,7 @@ import { CloseOutlined, Mail } from "@mui/icons-material";
 import React, { ChangeEvent, useState } from "react";
 
 import { forgotPasswordApi } from "api/auth";
+import Toast from "components/tostify/Toast";
 
 import useStyles from "pages/forgotpassword/forgotpassword.styles";
 
@@ -34,12 +35,12 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
     event.preventDefault();
 
     forgotPasswordApi(forgotPasswordData)
-      .then(response => {
+      .then(() => {
         setForgotPasswordData({ ...forgotPasswordData, email: "" });
-        console.log(response);
+        Toast("success", "Successfully mail send.");
       })
       .catch(error => {
-        console.log(error);
+        Toast("danger", error.message);
       });
   };
 
@@ -75,7 +76,7 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
             <CloseOutlined />
           </IconButton>
         </Box>
-        <Typography variant="h4">Forget Password?</Typography>
+        <Typography variant="h4">Forgot Password?</Typography>
         <Typography sx={{ m: 1 }}>You can reset your password here</Typography>
         <Container>
           <Box

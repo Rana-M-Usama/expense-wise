@@ -9,10 +9,12 @@ import {
 } from "@mui/material";
 import React, { ChangeEvent, useState } from "react";
 import { Stack } from "@mui/system";
-import { updateProfileApi } from "api/auth";
 import { useSelector } from "react-redux";
 
 import type { RootState } from "app/store";
+import Toast from "components/tostify/Toast";
+import { updateProfileApi } from "api/auth";
+
 import userImage from "assets/user.png";
 import useStyles from "pages//profile/profile.styles";
 
@@ -40,11 +42,11 @@ const ProfilePage = () => {
       lastName: profileData.lastName,
       imageUrl: profileData.imageUrl,
     })
-      .then(response => {
-        console.log(response);
+      .then(() => {
+        Toast("success", "Successfully update profile.");
       })
       .catch(error => {
-        console.log(error);
+        Toast("danger", error.message);
       });
   };
 

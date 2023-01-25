@@ -8,10 +8,11 @@ import {
   Typography,
 } from "@mui/material";
 import React, { ChangeEvent, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Lock } from "@mui/icons-material";
+
 import { resetPasswordApi } from "api/auth";
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import Toast from "components/tostify/Toast";
 
 import useStyles from "pages/resetpassword/resetpassword.styles";
 
@@ -34,8 +35,8 @@ const ResetPasswordPage = () => {
     const { resetToken } = useParams<{ resetToken: string | undefined }>();
     if (resetPasswordData.password === resetPasswordData.confirmPassword) {
       resetPasswordApi(resetPasswordData, resetToken)
-        .then(response => {
-          console.log(response);
+        .then(() => {
+          Toast("success", "Successfully reset password.");
           setResetPasswordData({
             ...resetPasswordData,
             password: "",
@@ -44,9 +45,9 @@ const ResetPasswordPage = () => {
           navigate("/login");
         })
         .catch(error => {
-          console.log(error);
+          Toast("danger", error.message);
         });
-    } else console.log("Invalid data.");
+    } else Toast("danger", "Invalid data.");
   };
 
   return (

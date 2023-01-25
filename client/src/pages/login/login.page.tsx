@@ -10,12 +10,14 @@ import {
   TextField,
 } from "@mui/material";
 import React, { ChangeEvent, useState } from "react";
-import { loginApi } from "api/auth";
-import { setCurrentUser } from "components/user/userSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import ForgotPasswordPage from "pages/forgotpassword/forgotpassword.page";
+import { loginApi } from "api/auth";
+import { setCurrentUser } from "components/user/userSlice";
+import Toast from "components/tostify/Toast";
+
 import logo from "assets/logo.png";
 import useStyles from "pages/login/login.styles";
 
@@ -36,14 +38,14 @@ const LoginPage = () => {
 
     loginApi(loginData)
       .then(response => {
-        console.log(response);
+        Toast("success", "Successfully login.");
         setLoginData({ ...loginData, email: "", password: "" });
         dispatch(setCurrentUser(response.data.data.user));
         localStorage.setItem("token", response.data.data.token);
         navigate("/profile");
       })
       .catch(error => {
-        console.log(error);
+        Toast("danger", error.message);
       });
   };
 

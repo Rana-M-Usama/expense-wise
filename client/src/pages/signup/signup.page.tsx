@@ -10,8 +10,10 @@ import {
   TextField,
 } from "@mui/material";
 import React, { ChangeEvent, useState } from "react";
-import { signupApi } from "api/auth";
 import { useNavigate } from "react-router-dom";
+
+import { signupApi } from "api/auth";
+import Toast from "components/tostify/Toast";
 
 import logo from "assets/logo.png";
 import useStyles from "pages/signup/signup.styles";
@@ -38,14 +40,14 @@ const SignupPage = () => {
 
     if (signupData.password === signupData.confirmPassword) {
       signupApi(signupData)
-        .then(response => {
-          console.log(response);
+        .then(() => {
+          Toast("success", "Successfully signup.");
           navigate("/login");
         })
         .catch(error => {
-          console.log(error);
+          Toast("danger", error.message);
         });
-    } else console.log("Invalid data.");
+    } else Toast("danger", "Invalid data.");
   };
 
   return (
@@ -108,8 +110,8 @@ const SignupPage = () => {
                 id="email"
                 autoComplete="email"
                 label="Email Address"
-                type="text"
-                placeholder="Name"
+                type="email"
+                placeholder="Email"
                 name="email"
                 value={signupData.email}
                 onChange={changeHandlerData}
