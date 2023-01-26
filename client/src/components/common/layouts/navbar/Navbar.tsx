@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -6,31 +6,31 @@ import {
   IconButton,
   MenuItem,
   Menu,
-} from '@mui/material'
-import { Menu as MenuIcon, AccountCircle } from '@mui/icons-material'
+} from "@mui/material";
+import { Menu as MenuIcon, AccountCircle } from "@mui/icons-material";
 
-import DrawerMenu from '../drawer/DrawerMenu'
+import DrawerMenu from "../drawer/DrawerMenu";
 
 const Navbar = () => {
-  const [auth, setAuth] = useState(true)
-  const [drawerOpen, setdrawerOpen] = useState(false)
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [auth, setAuth] = useState(true);
+  const [drawerOpen, setdrawerOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAuth(event.target.checked)
-  }
+    setAuth(event.target.checked);
+  };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleClose = () => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
 
   const toggleSlider = () => {
-    setdrawerOpen(!drawerOpen)
-  }
+    setdrawerOpen(!drawerOpen);
+  };
 
   return (
     <AppBar>
@@ -65,13 +65,13 @@ const Navbar = () => {
               id="menu-appbar"
               anchorEl={anchorEl}
               anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               open={Boolean(anchorEl)}
               onClose={handleClose}
@@ -83,7 +83,7 @@ const Navbar = () => {
         )}
       </Toolbar>
     </AppBar>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
