@@ -39,7 +39,7 @@ type Props = {
 
 const Sheets = () => {
   const classes = useStyles();
-  const [IsModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalProps, setModalProps] = useState<Props>({
     title: "",
     button: "",
@@ -52,9 +52,7 @@ const Sheets = () => {
     setIsModalOpen(true);
   };
 
-  const hideModal = () => {
-    setIsModalOpen(false);
-  };
+  const hideModal = () => setIsModalOpen(false);
 
   return (
     <Container maxWidth="md">
@@ -75,7 +73,7 @@ const Sheets = () => {
         >
           <AddCircleRoundedIcon sx={{ width: 40, height: 45 }} />
         </Button>
-        <SheetModal isOpen={IsModalOpen} {...modalProps} onClose={hideModal} />
+        <SheetModal isOpen={isModalOpen} {...modalProps} onClose={hideModal} />
       </Stack>
       <List
         sx={{

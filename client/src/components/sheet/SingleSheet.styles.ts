@@ -1,5 +1,5 @@
-import { TableCell, TableRow, tableCellClasses, Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { TableCell, TableRow, tableCellClasses, Button } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -30,4 +30,4 @@ const StyledButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-export { StyledTableCell, StyledTableRow , StyledButton };
+export { StyledTableCell, StyledTableRow, StyledButton };
