@@ -13,23 +13,23 @@ import DrawerMenu from "../drawer/DrawerMenu";
 
 const Navbar = () => {
   const [auth, setAuth] = useState(true);
-  const [drawerOpen, setdrawerOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState<null | HTMLElement>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAuth(event.target.checked);
   };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+    setMenuOpen(event.currentTarget);
   };
 
   const handleClose = () => {
-    setAnchorEl(null);
+    setMenuOpen(null);
   };
 
   const toggleSlider = () => {
-    setdrawerOpen(!drawerOpen);
+    setDrawerOpen(!drawerOpen);
   };
 
   return (
@@ -63,7 +63,7 @@ const Navbar = () => {
             </IconButton>
             <Menu
               id="menu-appbar"
-              anchorEl={anchorEl}
+              anchorEl={menuOpen}
               anchorOrigin={{
                 vertical: "top",
                 horizontal: "right",
@@ -73,7 +73,7 @@ const Navbar = () => {
                 vertical: "top",
                 horizontal: "right",
               }}
-              open={Boolean(anchorEl)}
+              open={Boolean(menuOpen)}
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>Profile</MenuItem>
