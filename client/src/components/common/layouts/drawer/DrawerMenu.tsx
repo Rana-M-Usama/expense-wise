@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   Avatar,
   Box,
@@ -9,51 +9,52 @@ import {
   ListItemIcon,
   ListItemText,
   ListItem,
-} from '@mui/material'
+} from "@mui/material";
 import {
   Payment,
   BorderHorizontal,
   Info,
   Home as Dashboard,
-} from '@mui/icons-material'
+} from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
-import logo from 'assets/logo.png'
-import useStyles from './DrawerMenu.styles'
+import logo from "assets/logo.png";
+import useStyles from "./DrawerMenu.styles";
 
-interface Props {
-  open: boolean
-  toggle: () => void
-}
+type Props = {
+  open: boolean;
+  toggle: () => void;
+};
 
 const listItems = [
   {
     listIcon: <Dashboard />,
-    listText: 'Home',
-    to: '/',
+    listText: "Home",
+    to: "/",
   },
   {
     listIcon: <Payment />,
-    listText: 'Expenses',
-    to: '/expenses',
+    listText: "Expenses",
+    to: "/expenses",
   },
   {
     listIcon: <BorderHorizontal />,
-    listText: 'Sheets',
-    to: '/sheets',
+    listText: "Sheets",
+    to: "/sheets",
   },
   {
     listIcon: <Info />,
-    listText: 'About',
-    to: 'about',
+    listText: "About",
+    to: "about",
   },
-]
+];
 
 const DrawerMenu: React.FC<Props> = ({ open, toggle }) => {
-  const classes = useStyles()
+  const classes = useStyles();
 
   const sideList = () => (
     <Box className={classes.menuSliderContainer}>
-      <Box sx={{ alignItems: 'center' }}>
+      <Box sx={{ alignItems: "center" }}>
         <Avatar
           className={classes.avatar}
           sx={{ width: 150, height: 150 }}
@@ -65,7 +66,13 @@ const DrawerMenu: React.FC<Props> = ({ open, toggle }) => {
       <List>
         {listItems.map((listItem, index) => (
           <ListItem key={listItem.listText} disablePadding>
-            <ListItemButton className={classes.listItem} key={index}>
+            <ListItemButton
+              className={classes.listItem}
+              component={Link}
+              to={listItem.to}
+              onClick={toggle}
+              key={index}
+            >
               <ListItemIcon className={classes.listItem}>
                 {listItem.listIcon}
               </ListItemIcon>
@@ -75,13 +82,13 @@ const DrawerMenu: React.FC<Props> = ({ open, toggle }) => {
         ))}
       </List>
     </Box>
-  )
+  );
 
   return (
     <Drawer open={open} anchor="left" onClose={toggle}>
       {sideList()}
     </Drawer>
-  )
-}
+  );
+};
 
-export default DrawerMenu
+export default DrawerMenu;
