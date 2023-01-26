@@ -13,8 +13,8 @@ import DrawerMenu from "../drawer/DrawerMenu";
 
 const Navbar = () => {
   const [auth, setAuth] = useState(true);
-  const [drawerOpen, setdrawerOpen] = useState(false);
-  const [menuOpen, setmenuOpen] = useState<null | HTMLElement>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState<null | HTMLElement>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAuth(event.target.checked);
