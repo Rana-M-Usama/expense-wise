@@ -12,9 +12,9 @@ const App = () => {
       <header className="App-header">
         <NavBar />
       </header>
-      <body className="App-body">
+      <div className="App-body">
         <Sheets />
-      </body>
+      </div>
     </ThemeProvider>
   );
 };
