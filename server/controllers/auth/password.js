@@ -2,13 +2,13 @@ import crypto from "crypto";
 import httpStatus from "http-status";
 
 import asyncHandler from "../../middlewares/async";
+import emailService from "../../utils/sendEmail";
 import ErrorResponse from "../../utils/errorResponse";
-import sendEmail from "../../utils/sendEmail";
-import sendTokenResponse from "../helpers/sendTokenResponse";
+import sendSessionResponse from "../helpers/sendSessionResponse";
 import User from "../../models/User";
 
 // @desc      Update password
-// @route     PUT /api/v1/auth/update-password
+// @route     PUT /api/v1/auth/me/password
 // @access    Private
 const updatePassword = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id).select("+password");
@@ -22,7 +22,7 @@ const updatePassword = asyncHandler(async (req, res, next) => {
   user.password = req.body.newPassword;
   await user.save();
 
-  sendTokenResponse(user, httpStatus.OK, res);
+  sendSessionResponse(user, httpStatus.OK, res, true);
 });
 
 // @desc      Forgot password
@@ -30,6 +30,12 @@ const updatePassword = asyncHandler(async (req, res, next) => {
 // @access    Public
 const forgotPassword = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
+
+  if (!req.body.email) {
+    return next(
+      new ErrorResponse("Email is required.", httpStatus.BAD_REQUEST),
+    );
+  }
 
   if (!user) {
     return next(
@@ -53,7 +59,7 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
     );
 
   try {
-    await sendEmail({
+    await emailService.sendEmail({
       email: user.email,
       subject: "Password reset token",
       message,
@@ -111,7 +117,7 @@ const resetPassword = asyncHandler(async (req, res, next) => {
   user.resetPasswordExpire = undefined;
   await user.save();
 
-  sendTokenResponse(user, httpStatus.OK, res);
+  sendSessionResponse(user, httpStatus.OK, res, false);
 });
 
 export { updatePassword, forgotPassword, resetPassword };

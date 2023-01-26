@@ -1,46 +1,63 @@
 import httpStatus from "http-status";
 
 import ErrorResponse from "../../utils/errorResponse";
-import Sheet from "../../models/Sheet";
+import Permission from "../../models/Permission";
 
 const sheetPolicy = async (req, res, next) => {
-  const id = req.params.sheetId || req.params.id;
-  req.sheet = await Sheet.findById(id);
+  req.user.permission = await Permission.findOne({
+    sheet: req.sheet,
+    user: req.user.id,
+  });
 
-  if (!req.sheet) {
-    return next(
-      new ErrorResponse(
-        `No sheet found with the id of ${id}.`,
-        httpStatus.NOT_FOUND,
-      ),
-    );
+  if (req.user.permission) {
+    return next();
   }
 
-  if (req.sheet.owner.toString() !== req.user.id) {
-    return next(
-      new ErrorResponse(
-        "Your are not authorized to access this sheet.",
-        httpStatus.UNAUTHORIZED,
-      ),
-    );
+  next(
+    new ErrorResponse(
+      "You are not authorized for this action.",
+      httpStatus.UNAUTHORIZED,
+    ),
+  );
+};
+
+const viewSheetPolicy = async (req, res, next) => {
+  if (req.sheet.hasViewPermission(req.user)) {
+    return next();
   }
 
-  next();
+  next(
+    new ErrorResponse(
+      "You are not authorized to access this sheet.",
+      httpStatus.UNAUTHORIZED,
+    ),
+  );
 };
 
-const getSheetPolicy = async (req, res, next) => {
-  // Access rights logic will lay down here....
-  next();
+const editSheetPolicy = async (req, res, next) => {
+  if (req.sheet.hasEditPermission(req.user)) {
+    return next();
+  }
+
+  next(
+    new ErrorResponse(
+      "You are not authorized to edit this sheet.",
+      httpStatus.UNAUTHORIZED,
+    ),
+  );
 };
 
-const updateSheetPolicy = async (req, res, next) => {
-  // Access rights logic will lay down here....
-  next();
+const adminSheetPolicy = async (req, res, next) => {
+  if (req.sheet.hasAdminPermission(req.user)) {
+    return next();
+  }
+
+  next(
+    new ErrorResponse(
+      "You are not authorized for this action.",
+      httpStatus.UNAUTHORIZED,
+    ),
+  );
 };
 
-const deleteSheetPolicy = async (req, res, next) => {
-  // Access rights logic will lay down here....
-  next();
-};
-
-export { sheetPolicy, getSheetPolicy, updateSheetPolicy, deleteSheetPolicy };
+export { sheetPolicy, adminSheetPolicy, editSheetPolicy, viewSheetPolicy };

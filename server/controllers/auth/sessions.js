@@ -2,7 +2,7 @@ import httpStatus from "http-status";
 
 import asyncHandler from "../../middlewares/async";
 import ErrorResponse from "../../utils/errorResponse";
-import sendTokenResponse from "../helpers/sendTokenResponse";
+import sendSessionResponse from "../helpers/sendSessionResponse";
 import User from "../../models/User";
 
 // @desc      Login user
@@ -33,7 +33,7 @@ const login = asyncHandler(async (req, res, next) => {
     );
   }
 
-  sendTokenResponse(user, httpStatus.OK, res);
+  sendSessionResponse(user, httpStatus.OK, res, true);
 });
 
 // @desc      Log user out / clear cookie

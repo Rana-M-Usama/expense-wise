@@ -36,7 +36,7 @@ const UserSchema = new mongoose.Schema(
       select: false,
       match: [
         /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z\d@$!%*#?&]{6,}$/,
-        "Please provide a valid password, minimum six characters," +
+        "Please provide a valid password, minimum six characters, " +
           "at least one capital letter and a number.",
       ],
     },

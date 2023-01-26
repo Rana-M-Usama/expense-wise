@@ -13,18 +13,16 @@ const {
   env,
 } = config;
 
-const DEVELOPMENT = "development";
+const transporter = nodemailer.createTransport({
+  host: SMTP_HOST,
+  port: SMTP_PORT,
+  auth: {
+    user: SMTP_EMAIL,
+    pass: SMTP_PASSWORD,
+  },
+});
 
 const sendEmail = async (options) => {
-  const transporter = nodemailer.createTransport({
-    host: SMTP_HOST,
-    port: SMTP_PORT,
-    auth: {
-      user: SMTP_EMAIL,
-      pass: SMTP_PASSWORD,
-    },
-  });
-
   const message = {
     from: `${FROM_NAME} <${FROM_EMAIL}>`,
     to: options.email,
@@ -34,9 +32,9 @@ const sendEmail = async (options) => {
 
   const info = await transporter.sendMail(message);
 
-  if (env === DEVELOPMENT) {
+  if (env === "development") {
     logger.info("Message sent: %s", info.messageId);
   }
 };
 
-export default sendEmail;
+export default { sendEmail, transporter };

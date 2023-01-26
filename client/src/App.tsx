@@ -1,20 +1,21 @@
-import { Routes, Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+import React from "react";
 import { ThemeProvider } from "@mui/material";
 
-import { theme } from "theme";
-import Sheets from "components/sheet/Sheets";
 import About from "components/about/About";
 import Expense from "components/expense/Expense";
 import Home from "components/home/Home";
-import NavBar from "components/common/layouts/navbar/Navbar";
+import Sheets from "components/sheet/Sheets";
+import { theme } from "theme";
 
 import "App.css";
+import LoginPage from "pages/login/login.page";
 
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <header className="App-header">
-        <NavBar />
+        <LoginPage />
       </header>
       <div className="App-body">
         <Routes>
