@@ -7,7 +7,6 @@ import About from "components/about/About";
 import Expense from "components/expense/Expense";
 import Home from "components/home/Home";
 import NavBar from "components/common/layouts/navbar/Navbar";
-import Sheet from "components/sheet/Sheet";
 
 import "App.css";
 
@@ -16,16 +15,15 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <header className="App-header">
         <NavBar />
-        <div className="App-body">
-          <Sheets />
-        </div>
+      </header>
+      <div className="App-body">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/sheets" element={<Sheet />} />
+          <Route path="/sheets" element={<Sheets />} />
           <Route path="/expenses" element={<Expense />} />
           <Route path="/about" element={<About />} />
         </Routes>
-      </header>
+      </div>
     </ThemeProvider>
   );
 };
