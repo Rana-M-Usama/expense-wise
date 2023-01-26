@@ -3,7 +3,6 @@ import React from "react";
 import { ThemeProvider } from "@mui/material";
 
 import About from "components/about/About";
-import Expense from "components/expense/Expense";
 import LoginPage from "pages/login/login.page";
 import Navbar from "components/common/layouts/navbar/Navbar";
 import Sheets from "components/sheet/Sheets";
@@ -24,7 +23,6 @@ const App = () => {
           <Route path="/sheets" element={<Sheets />} />
           <Route path="/expenses" element={<SingleSheet />} />
           <Route path="/about" element={<About />} />
-          
         </Routes>
       </div>
     </ThemeProvider>

@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { Box } from "@mui/system";
 import {
   Avatar,
   Button,
-  TextField,
-  Typography,
-  MenuItem,
   FormControl,
   InputLabel,
-  Select,
+  MenuItem,
   Modal,
+  Select,
+  TextField,
+  Typography,
 } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box } from "@mui/system";
 
 import {
-  validateTitle,
   validateAmount,
   validateAmountType,
   validateStatus,
+  validateTitle,
   validateType,
 } from "validators/expense/expense";
 import logo from "assets/logo.png";
@@ -35,6 +35,7 @@ type Props = Response & {
   isOpen: boolean;
   isUpdate: boolean;
   onClose: () => void;
+  // eslint-disable-next-line no-unused-vars
   onSubmit: (data: Response) => void;
 };
 
@@ -71,7 +72,6 @@ const ExpenseModal = (props: Props) => {
     formData.amountType.value = amountTypeValue;
 
     setData(formData);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [titleValue, typeValue, amountValue, statusValue, amountTypeValue]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -139,7 +139,7 @@ const ExpenseModal = (props: Props) => {
             id="title"
             label="Title"
             value={data.title.value}
-            onChange={(e) => {
+            onChange={e => {
               let formData = { ...data };
               formData.title.value = e.target.value;
               setData(formData);
@@ -160,7 +160,7 @@ const ExpenseModal = (props: Props) => {
             id="type"
             label="type"
             value={data.type.value}
-            onChange={(e) => {
+            onChange={e => {
               let formData = { ...data };
               formData.type.value = e.target.value;
               setData(formData);
@@ -179,7 +179,7 @@ const ExpenseModal = (props: Props) => {
             id="amount"
             label="amount"
             value={data.amount.value}
-            onChange={(e) => {
+            onChange={e => {
               let formData = { ...data };
               formData.amount.value = e.target.value;
               setData(formData);
@@ -205,7 +205,7 @@ const ExpenseModal = (props: Props) => {
               label="Status*"
               id="status"
               value={data.status.value}
-              onChange={(e) => {
+              onChange={e => {
                 let formData = { ...data };
                 formData.status.value = e.target.value;
                 setData(formData);
@@ -235,7 +235,7 @@ const ExpenseModal = (props: Props) => {
               label="Amount Type*"
               id="amountType"
               value={data.amountType.value}
-              onChange={(e) => {
+              onChange={e => {
                 let formData = { ...data };
                 formData.amountType.value = e.target.value;
                 setData(formData);

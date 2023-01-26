@@ -1,24 +1,25 @@
-import React, { useState } from "react";
 import {
+  Button,
   Container,
+  Grid,
+  IconButton,
+  Paper,
   Table,
   TableBody,
   TableHead,
   TableRow,
   Typography,
-  Button,
-  IconButton,
-  Grid,
-  Paper,
 } from "@mui/material";
+import React, { useState } from "react";
+
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
 import {
-  StyledTableCell,
-  StyledTableRow,
   RecievedAmount,
   RemainingAmount,
+  StyledTableCell,
+  StyledTableRow,
   TotalAmount,
 } from "components/sheet/SingleSheet.styles";
 import ExpenseModal from "components/expense/ExpenseModal";
@@ -101,8 +102,10 @@ const SingleSheet = () => {
         onSubmit={(data: Response) => {
           if (data.idValue === "") {
             console.log("Create", data);
+            setIsModalOpen(false);
           } else {
             console.log("Update", data);
+            setIsModalOpen(false);
           }
         }}
       />
@@ -123,13 +126,15 @@ const SingleSheet = () => {
       <Table aria-label="customized table" component={Paper}>
         <TableHead>
           <TableRow>
-            {Object.values(headerRow).map((heading) => (
-              <StyledTableCell align="center">{heading}</StyledTableCell>
+            {Object.values(headerRow).map(heading => (
+              <StyledTableCell key={heading} align="center">
+                {heading}
+              </StyledTableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rows.map(row => (
             <StyledTableRow key={row.title}>
               <StyledTableCell component="th" scope="row">
                 {row.title}
