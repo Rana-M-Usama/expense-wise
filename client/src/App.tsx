@@ -7,6 +7,7 @@ import Expense from "components/expense/Expense";
 import LoginPage from "pages/login/login.page";
 import Navbar from "components/common/layouts/navbar/Navbar";
 import Sheets from "components/sheet/Sheets";
+import SingleSheet from "components/sheet/SingleSheet";
 import { theme } from "theme";
 
 import "App.css";
@@ -21,8 +22,9 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/sheets" element={<Sheets />} />
-          <Route path="/expenses" element={<Expense />} />
+          <Route path="/expenses" element={<SingleSheet />} />
           <Route path="/about" element={<About />} />
+          
         </Routes>
       </div>
     </ThemeProvider>

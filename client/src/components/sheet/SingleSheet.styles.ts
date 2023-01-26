@@ -20,14 +20,4 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const StyledButton = styled(Button)(({ theme }) => ({
-  color: "##f44336 !important",
-  border: "1px solid ##f44336 !important",
-  "&:hover": {
-    background: "#f44336 !important",
-    border: "1px solid #f4433680",
-    color: "white !important",
-  },
-}));
-
-export { StyledTableCell, StyledTableRow, StyledButton };
+export { StyledTableCell, StyledTableRow };
