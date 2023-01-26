@@ -102,10 +102,10 @@ const SingleSheet = () => {
         onSubmit={(data: Response) => {
           if (data.idValue === "") {
             console.log("Create", data);
-            setIsModalOpen(false);
+            hideModal();
           } else {
             console.log("Update", data);
-            setIsModalOpen(false);
+            hideModal();
           }
         }}
       />

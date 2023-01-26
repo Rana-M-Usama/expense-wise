@@ -39,28 +39,25 @@ type Props = Response & {
   onSubmit: (data: Response) => void;
 };
 
-const ExpenseModal = (props: Props) => {
-  const {
-    isOpen,
-    idValue,
-    titleValue,
-    typeValue,
-    amountValue,
-    statusValue,
-    amountTypeValue,
-    isUpdate,
-    onClose,
-    onSubmit,
-  } = props;
-
+const ExpenseModal = ({
+  isOpen,
+  idValue,
+  titleValue,
+  typeValue,
+  amountValue,
+  statusValue,
+  amountTypeValue,
+  isUpdate,
+  onClose,
+  onSubmit,
+}: Props) => {
   const classes = useStyles();
-
   const [data, setData] = useState({
-    title: { value: titleValue, error: false, errorMessage: "" },
-    type: { value: typeValue, error: false, errorMessage: "" },
-    amount: { value: amountValue, error: false, errorMessage: "" },
-    status: { value: statusValue, error: false, errorMessage: "" },
-    amountType: { value: amountTypeValue, error: false, errorMessage: "" },
+    title: { value: "", error: false, errorMessage: "" },
+    type: { value: "", error: false, errorMessage: "" },
+    amount: { value: "", error: false, errorMessage: "" },
+    status: { value: "", error: false, errorMessage: "" },
+    amountType: { value: "", error: false, errorMessage: "" },
   });
 
   useEffect(() => {
@@ -72,7 +69,14 @@ const ExpenseModal = (props: Props) => {
     formData.amountType.value = amountTypeValue;
 
     setData(formData);
-  }, [titleValue, typeValue, amountValue, statusValue, amountTypeValue]);
+  }, [
+    titleValue,
+    typeValue,
+    amountValue,
+    statusValue,
+    amountTypeValue,
+    onSubmit,
+  ]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
