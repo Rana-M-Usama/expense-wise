@@ -4,11 +4,11 @@ import { Routes, Route } from "react-router-dom";
 import { theme } from "./theme";
 
 import "./App.css";
-import NavBar from "components/common/layouts/navbar/Navbar";
-import Home from "components/home/Home";
-import Sheet from "components/sheet/Sheet";
-import Expense from "components/expense/Expense";
 import About from "components/about/About";
+import Expense from "components/expense/Expense";
+import Home from "components/home/Home";
+import NavBar from "components/common/layouts/navbar/Navbar";
+import Sheet from "components/sheet/Sheet";
 
 const App = () => {
   return (
