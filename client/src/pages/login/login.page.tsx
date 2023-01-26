@@ -38,7 +38,7 @@ const LoginPage = () => {
 
     loginApi(loginData)
       .then(response => {
-        Toast("success", "Successfully login.");
+        Toast("success", "Successfully logined in.");
         setLoginData({ ...loginData, email: "", password: "" });
         dispatch(setCurrentUser(response.data.data.user));
         localStorage.setItem("token", response.data.data.token);

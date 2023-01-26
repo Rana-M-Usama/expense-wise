@@ -37,7 +37,7 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
     forgotPasswordApi(forgotPasswordData)
       .then(() => {
         setForgotPasswordData({ ...forgotPasswordData, email: "" });
-        Toast("success", "Successfully mail send.");
+        Toast("success", "Email sent successfully.");
       })
       .catch(error => {
         Toast("danger", error.message);

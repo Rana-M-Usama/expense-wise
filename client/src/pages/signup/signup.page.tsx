@@ -41,7 +41,7 @@ const SignupPage = () => {
     if (signupData.password === signupData.confirmPassword) {
       signupApi(signupData)
         .then(() => {
-          Toast("success", "Successfully signup.");
+          Toast("success", "Successfully signed up.");
           navigate("/login");
         })
         .catch(error => {

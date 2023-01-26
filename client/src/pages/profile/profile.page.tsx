@@ -43,7 +43,7 @@ const ProfilePage = () => {
       imageUrl: profileData.imageUrl,
     })
       .then(() => {
-        Toast("success", "Successfully update profile.");
+        Toast("success", "Profile updated successfully.");
       })
       .catch(error => {
         Toast("danger", error.message);
