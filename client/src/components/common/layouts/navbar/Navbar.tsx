@@ -21,15 +21,15 @@ const Navbar = () => {
   };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setmenuOpen(event.currentTarget);
+    setMenuOpen(event.currentTarget);
   };
 
   const handleClose = () => {
-    setmenuOpen(null);
+    setMenuOpen(null);
   };
 
   const toggleSlider = () => {
-    setdrawerOpen(!drawerOpen);
+    setDrawerOpen(!drawerOpen);
   };
 
   return (
