@@ -1,24 +1,20 @@
-import { useState } from "react";
+import { AccountCircle, Menu as MenuIcon } from "@mui/icons-material";
 import {
   AppBar,
+  IconButton,
+  Menu,
+  MenuItem,
   Toolbar,
   Typography,
-  IconButton,
-  MenuItem,
-  Menu,
 } from "@mui/material";
-import { Menu as MenuIcon, AccountCircle } from "@mui/icons-material";
-
-import DrawerMenu from "../drawer/DrawerMenu";
+import DrawerMenu from "components/common/layouts/drawer/DrawerMenu";
+import React from "react";
+import { useState } from "react";
 
 const Navbar = () => {
-  const [auth, setAuth] = useState(true);
+  const [auth] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState<null | HTMLElement>(null);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAuth(event.target.checked);
-  };
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setMenuOpen(event.currentTarget);

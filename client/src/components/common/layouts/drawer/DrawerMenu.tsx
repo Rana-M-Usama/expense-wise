@@ -1,22 +1,22 @@
-import React from "react";
 import {
   Avatar,
   Box,
   Divider,
   Drawer,
   List,
+  ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  ListItem,
 } from "@mui/material";
 import {
-  Payment,
   BorderHorizontal,
-  Info,
   Home as Dashboard,
+  Info,
+  Payment,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import React from "react";
 
 import logo from "assets/logo.png";
 import useStyles from "./DrawerMenu.styles";

@@ -11,16 +11,16 @@ const usePagination = (data: Array<object>, itemsPerPage: number) => {
   };
 
   const next = () => {
-    setCurrentPage((currentPage) => Math.min(currentPage + 1, maxPage));
+    setCurrentPage(currentPage => Math.min(currentPage + 1, maxPage));
   };
 
   const prev = () => {
-    setCurrentPage((currentPage) => Math.max(currentPage - 1, 1));
+    setCurrentPage(currentPage => Math.max(currentPage - 1, 1));
   };
 
   const jump = (page: number) => {
     const pageNumber = Math.max(1, page);
-    setCurrentPage((currentPage) => Math.min(pageNumber, maxPage));
+    setCurrentPage(() => Math.min(pageNumber, maxPage));
   };
 
   return { next, prev, jump, currentData, currentPage, maxPage };

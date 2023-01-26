@@ -1,7 +1,7 @@
-import React from "react";
-import Modal from "@mui/material/Modal";
-import { Box } from "@mui/system";
 import { Avatar, Button, TextField, Typography } from "@mui/material";
+import { Box } from "@mui/system";
+import Modal from "@mui/material/Modal";
+import React from "react";
 
 import logo from "assets/logo.png";
 import useStyles from "components/sheet/SheetModal.styles";

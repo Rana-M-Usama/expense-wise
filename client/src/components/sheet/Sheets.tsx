@@ -1,20 +1,19 @@
-import React, { ChangeEvent, useState } from "react";
 import {
-  Container,
   Button,
-  Stack,
-  List,
-  ListItemText,
-  ListItem,
+  Container,
   Divider,
+  List,
+  ListItem,
+  ListItemText,
   Pagination,
+  Stack,
 } from "@mui/material";
+import React, { ChangeEvent, useState } from "react";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import { Box } from "@mui/system";
 
-
 import SheetModal from "components/sheet/SheetModal";
-import usePagination from "./Pagination";
+import usePagination from "components/sheet/Pagination";
 
 import useStyles from "components/sheet/Sheets.styles";
 
@@ -59,7 +58,7 @@ const Sheets = () => {
   });
 
   let [page, setPage] = useState(1);
-  const [paginate, setpaginate] = useState(10);
+  const [paginate] = useState(10);
 
   const count = Math.ceil(SHEETS.length / paginate);
   const DATA = usePagination(SHEETS, paginate);
@@ -103,14 +102,12 @@ const Sheets = () => {
         }}
       >
         {DATA.currentData().map((sheet: any) => (
-          <React.Fragment>
+          <React.Fragment key={sheet.id}>
             <ListItem
-              key={sheet.id}
               secondaryAction={
                 <Box sx={{ "& button": { m: 1 } }}>
                   {sheet.author === "currentUser" ? (
                     <>
-                      {console.log(sheet)}
                       <Button
                         className={classes.openButton}
                         variant="outlined"
@@ -127,8 +124,7 @@ const Sheets = () => {
                             title: " Update Expense Sheet",
                             button: "Update",
                             name: "Sheet 1",
-                            description:
-                              "fjgo jgtoijg atioetj oiet goitjgoetjgotj go et goejteoigj ietuhgetj oetjg iethg [oetjg irejguathg oiajtg oaetgh [oietj goie",
+                            description: "fjgo jgtoijg atioetj oiet",
                           })
                         }
                       >
