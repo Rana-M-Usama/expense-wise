@@ -99,7 +99,7 @@ const SingleSheet = () => {
         {...modalProps}
         onClose={hideModal}
         onSubmit={(data: Response) => {
-          if (data.idValue == "") {
+          if (data.idValue === "") {
             console.log("Create", data);
           } else {
             console.log("Update", data);

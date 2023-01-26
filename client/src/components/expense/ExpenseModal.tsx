@@ -12,6 +12,13 @@ import {
   Modal,
 } from "@mui/material";
 
+import {
+  validateTitle,
+  validateAmount,
+  validateAmountType,
+  validateStatus,
+  validateType,
+} from "validators/expense/expense";
 import logo from "assets/logo.png";
 import useStyles from "components/expense/ExpenseModal.styles";
 
@@ -69,57 +76,13 @@ const ExpenseModal = (props: Props) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const regex = /^[0-9]*\.?[0-9]+$/;
     let { title, type, amount, status, amountType } = data;
 
-    if (title.value === "") {
-      title.error = true;
-      title.errorMessage = "Title is required.";
-    } else if (title.value.length > 100) {
-      title.error = true;
-      title.errorMessage = "Title can not be longer than 100 characters.";
-    } else {
-      title.error = false;
-      title.errorMessage = "";
-    }
-
-    if (type.value === "") {
-      type.error = true;
-      type.errorMessage = "Type is required";
-    } else if (type.value.length > 100) {
-      type.error = true;
-      type.errorMessage = "Type can not be longer than 100 characters.";
-    } else {
-      type.error = false;
-      type.errorMessage = "";
-    }
-
-    if (amount.value === "") {
-      amount.error = true;
-      amount.errorMessage = "Amount is required";
-    } else if (!regex.test(amount.value)) {
-      amount.error = true;
-      amount.errorMessage = "Amount must be valid positive number.";
-    } else {
-      amount.error = false;
-      amount.errorMessage = "";
-    }
-
-    if (status.value === "") {
-      status.error = true;
-      status.errorMessage = "Status is required";
-    } else {
-      status.error = false;
-      status.errorMessage = "";
-    }
-
-    if (amountType.value === "") {
-      amountType.error = true;
-      amountType.errorMessage = "Amount type is required";
-    } else {
-      amountType.error = false;
-      amountType.errorMessage = "";
-    }
+    title = { ...title, ...validateTitle(title.value) };
+    type = { ...type, ...validateType(type.value) };
+    amount = { ...amount, ...validateAmount(amount.value) };
+    status = { ...status, ...validateStatus(status.value) };
+    amountType = { ...amountType, ...validateAmountType(amountType.value) };
 
     setData({ title, type, amount, status, amountType });
 
