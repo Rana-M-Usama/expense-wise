@@ -123,7 +123,12 @@ const SingleSheet = () => {
       >
         Add expense
       </Button>
-      <Table aria-label="customized table" component={Paper}>
+      <Table
+        aria-label="customized table"
+        sx={{ minWidth: 650, mb: 5 }}
+        size="small"
+        component={Paper}
+      >
         <TableHead>
           <TableRow>
             {Object.values(headerRow).map(heading => (
@@ -174,13 +179,13 @@ const SingleSheet = () => {
         spacing={{ xs: 2, md: 3 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
-        <Grid item xs={2} sm={4} md={4} sx={{ mt: 10, mb: 10 }}>
+        <Grid item xs={2} sm={4} md={4}>
           <RecievedAmount>Recieved Amount: 1000</RecievedAmount>
         </Grid>
-        <Grid item xs={2} sm={4} md={4} sx={{ mt: 10, mb: 10 }}>
+        <Grid item xs={2} sm={4} md={4}>
           <RemainingAmount>Remaining Amount: 12000</RemainingAmount>
         </Grid>
-        <Grid item xs={2} sm={4} md={4} sx={{ mt: 10, mb: 10 }}>
+        <Grid item xs={2} sm={4} md={4}>
           <TotalAmount>Total Amount: 13000</TotalAmount>
         </Grid>
       </Grid>
