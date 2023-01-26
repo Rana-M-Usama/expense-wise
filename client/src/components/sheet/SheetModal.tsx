@@ -15,8 +15,14 @@ type Props = {
   onClose: () => void;
 };
 
-const SheetModal = (props: Props) => {
-  const { isOpen, title, button, name, description, onClose } = props;
+const SheetModal = ({
+  isOpen,
+  title,
+  button,
+  name,
+  description,
+  onClose,
+}: Props) => {
   const classes = useStyles();
 
   return (
