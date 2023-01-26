@@ -2,28 +2,21 @@ import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 
 const Toast = (type, title) => {
+  const toastConfig = {
+    position: "bottom-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  };
+
   if (type === "success") {
-    toast.success(title, {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+    toast.success(title, { ...toastConfig });
   } else if (type === "danger") {
-    toast.error(title, {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+    toast.error(title, { ...toastConfig });
   }
 };
 
