@@ -6,14 +6,14 @@ import { Avatar, Button, TextField, Typography } from "@mui/material";
 import logo from "assets/logo.png";
 import useStyles from "components/sheet/SheetModal.styles";
 
-interface Props {
+type Props = {
   isOpen: boolean;
   title: string;
   button: string;
   name: string;
   description: string;
   onClose: () => void;
-}
+};
 
 const SheetModal = (props: Props) => {
   const { isOpen, title, button, name, description, onClose } = props;
