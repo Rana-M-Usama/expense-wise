@@ -1,4 +1,5 @@
 import { Paper, TableCell, tableCellClasses, TableRow } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import { styled } from "@mui/material/styles";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -44,7 +45,17 @@ const TotalAmount = styled(Paper)(({ theme }) => ({
   color: "white",
 }));
 
+const useStyles = makeStyles(() => ({
+  addExpense: {
+    "&:hover": {
+      color: "white",
+      background: "#E31C79 !important",
+    },
+  },
+}));
+
 export {
+  useStyles,
   StyledTableCell,
   StyledTableRow,
   RecievedAmount,

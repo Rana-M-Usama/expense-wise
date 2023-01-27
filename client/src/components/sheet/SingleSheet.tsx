@@ -21,6 +21,7 @@ import {
   StyledTableCell,
   StyledTableRow,
   TotalAmount,
+  useStyles,
 } from "components/sheet/SingleSheet.styles";
 import ExpenseModal from "components/expense/ExpenseModal";
 
@@ -71,6 +72,7 @@ type Props = Response & {
 };
 
 const SingleSheet = () => {
+  const classes = useStyles();
   const initialProps = {
     idValue: "",
     titleValue: "",
@@ -116,6 +118,7 @@ const SingleSheet = () => {
         Sheet 1
       </Typography>
       <Button
+        className={classes.addExpense}
         sx={{ mb: 2 }}
         variant="outlined"
         size="small"
