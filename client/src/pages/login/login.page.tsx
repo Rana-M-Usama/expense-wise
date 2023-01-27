@@ -10,6 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
 import ForgotPasswordPage from "pages/forgetpassword/forgetpassword.page";
 import logo from "assets/logo.png";
@@ -78,15 +79,15 @@ const LoginPage = () => {
           <Grid container>
             <Grid item xs>
               <Link
+                component="button"
                 onClick={() => setModalIsOpen(true)}
-                href="#"
                 variant="body2"
               >
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link component={RouterLink} to="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
