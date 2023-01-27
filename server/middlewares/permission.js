@@ -1,7 +1,7 @@
 import httpStatus from "http-status";
 
 import ErrorResponse from "../utils/errorResponse";
-import isMongoId from "../utils/helpers";
+import { isMongoId } from "../utils/helpers";
 import Permission from "../models/Permission";
 
 const findPermission = async (req, res, next) => {

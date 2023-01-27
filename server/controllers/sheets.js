@@ -1,5 +1,11 @@
 import httpStatus from "http-status";
 
+import {
+  pendingAmount,
+  receivedAmount,
+  spentAmount,
+  totalAmount,
+} from "../utils/helpers";
 import asyncHandler from "../middlewares/async";
 import Sheet from "../models/Sheet";
 
@@ -60,4 +66,62 @@ const deleteSheet = asyncHandler(async (req, res) => {
   });
 });
 
-export { getSheets, getSheet, addSheet, updateSheet, deleteSheet };
+// @desc      Received Amount
+// @route     GET /api/v1/sheets/:id/receivedAmount
+// @access    Private
+const getReceivedAmount = asyncHandler(async (req, res) => {
+  const amount = await receivedAmount(req.sheet);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    data: { receivedAmount: amount },
+  });
+});
+
+// @desc      Pending Amount
+// @route     GET /api/v1/sheets/:id/pendingAmount
+// @access    Private
+const getPendingAmount = asyncHandler(async (req, res) => {
+  const amount = await pendingAmount(req.sheet);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    data: { pendingAmount: amount },
+  });
+});
+
+// @desc      Spent Amount
+// @route     GET /api/v1/sheets/:id/spentAmount
+// @access    Private
+const getSpentAmount = asyncHandler(async (req, res) => {
+  const amount = await spentAmount(req.sheet);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    data: { spentAmount: amount },
+  });
+});
+
+// @desc      Total Amount
+// @route     GET /api/v1/sheets/:id/totalAmount
+// @access    Private
+const getTotalAmount = asyncHandler(async (req, res) => {
+  const amount = await totalAmount(req.sheet);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    data: { totalAmount: amount },
+  });
+});
+
+export {
+  getSheets,
+  getSheet,
+  addSheet,
+  updateSheet,
+  deleteSheet,
+  getReceivedAmount,
+  getPendingAmount,
+  getSpentAmount,
+  getTotalAmount,
+};
