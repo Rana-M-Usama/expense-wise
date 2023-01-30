@@ -3,12 +3,8 @@ import express from "express";
 import {
   addSheet,
   deleteSheet,
-  getPendingAmount,
-  getReceivedAmount,
   getSheet,
   getSheets,
-  getSpentAmount,
-  getTotalAmount,
   updateSheet,
 } from "../../controllers/sheets";
 import {
@@ -50,17 +46,5 @@ router
   .get(viewSheetPolicy, getSheet)
   .put(editSheetPolicy, updateSheet)
   .delete(adminSheetPolicy, deleteSheet);
-router
-  .route("/:id/received-amount")
-  .get([findSheet, sheetPolicy, viewSheetPolicy], getReceivedAmount);
-router
-  .route("/:id/pending-amount")
-  .get([findSheet, sheetPolicy, viewSheetPolicy], getPendingAmount);
-router
-  .route("/:id/spent-amount")
-  .get([findSheet, sheetPolicy, viewSheetPolicy], getSpentAmount);
-router
-  .route("/:id/total-amount")
-  .get([findSheet, sheetPolicy, viewSheetPolicy], getTotalAmount);
 
 export default router;

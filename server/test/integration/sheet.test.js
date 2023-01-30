@@ -121,28 +121,8 @@ describe("Sheet endpoints", () => {
     });
 
     it("should return the sheet that belongs to the owner, identified by the specified ID", async () => {
-      await buildSheetList(2, user);
-      const sheet = await Sheet.findOne({ owner: user.id });
-      const res = await request(app)
-        .get(`/api/v1/sheets/${sheet._id}`)
-        .set("Authorization", `Bearer ${authToken}`)
-        .expect(httpStatus.OK);
+      const sheet = await SheetFactory({ owner: user }).save();
 
-      expect(res.body.success).toBeTruthy();
-      expect(res.body.data).toMatchObject({
-        _id: sheet._id,
-        description: sheet.description,
-        title: sheet.title,
-        owner: sheet.owner,
-      });
-    });
-  });
-
-  describe("Amount routes", () => {
-    let sheet;
-
-    beforeEach(async () => {
-      sheet = await SheetFactory({ owner: user }).save();
       await ExpenseFactory({
         status: "paid",
         amount: 1200,
@@ -164,149 +144,24 @@ describe("Sheet endpoints", () => {
         owner: user,
         sheet,
       }).save();
-    });
 
-    describe("GET /api/v1/sheets/:id/received-amount", () => {
-      it("should raise an error if the auth token is invalid", async () => {
-        const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/received-amount`)
-          .set("Authorization", "Bearer inValid")
-          .expect(httpStatus.UNAUTHORIZED);
+      const res = await request(app)
+        .get(`/api/v1/sheets/${sheet._id}`)
+        .set("Authorization", `Bearer ${authToken}`)
+        .expect(httpStatus.OK);
 
-        expect(res.body.success).toBeFalsy();
-        expect(res.body.errors).toEqual(["Please provide a valid token."]);
+      expect(res.body.success).toBeTruthy();
+      expect(res.body.data).toMatchObject({
+        _id: sheet._id,
+        description: sheet.description,
+        title: sheet.title,
+        owner: sheet.owner._id,
       });
-
-      it("should raise an error if a user attempts to retrieve the received amount of a sheet that does not belong to them", async () => {
-        const user2 = await UserFactory().save();
-        sheet = await SheetFactory({ owner: user2 }).save();
-
-        const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/received-amount`)
-          .set("Authorization", `Bearer ${authToken}`);
-
-        expect(res.body.success).toBeFalsy();
-        expect(res.body.errors).toEqual([
-          "You are not authorized for this action.",
-        ]);
-      });
-
-      it("should get the received amount of a sheet", async () => {
-        const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/received-amount`)
-          .set("Authorization", `Bearer ${authToken}`)
-          .expect(httpStatus.OK);
-
-        expect(res.body.success).toBeTruthy();
-        expect(res.body.data).toEqual({ receivedAmount: 1200 });
-      });
-    });
-
-    describe("GET /api/v1/sheets/:id/pending-amount", () => {
-      it("should raise an error if the auth token is invalid", async () => {
-        const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/pending-amount`)
-          .set("Authorization", "Bearer inValid")
-          .expect(httpStatus.UNAUTHORIZED);
-
-        expect(res.body.success).toBeFalsy();
-        expect(res.body.errors).toEqual(["Please provide a valid token."]);
-      });
-
-      it("should raise an error if a user attempts to retrieve the pending amount of a sheet that does not belong to them", async () => {
-        const user2 = await UserFactory().save();
-        sheet = await SheetFactory({ owner: user2 }).save();
-
-        const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/pending-amount`)
-          .set("Authorization", `Bearer ${authToken}`);
-
-        expect(res.body.success).toBeFalsy();
-        expect(res.body.errors).toEqual([
-          "You are not authorized for this action.",
-        ]);
-      });
-
-      it("should get the pending amount of a sheet", async () => {
-        const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/pending-amount`)
-          .set("Authorization", `Bearer ${authToken}`)
-          .expect(httpStatus.OK);
-
-        expect(res.body.success).toBeTruthy();
-        expect(res.body.data).toEqual({ pendingAmount: 2000 });
-      });
-    });
-
-    describe("GET /api/v1/sheets/:id/spent-amount", () => {
-      it("should raise an error if the auth token is invalid", async () => {
-        const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/spent-amount`)
-          .set("Authorization", "Bearer inValid")
-          .expect(httpStatus.UNAUTHORIZED);
-
-        expect(res.body.success).toBeFalsy();
-        expect(res.body.errors).toEqual(["Please provide a valid token."]);
-      });
-
-      it("should raise an error if a user attempts to retrieve the spent amount of a sheet that does not belong to them", async () => {
-        const user2 = await UserFactory().save();
-        sheet = await SheetFactory({ owner: user2 }).save();
-
-        const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/spent-amount`)
-          .set("Authorization", `Bearer ${authToken}`);
-
-        expect(res.body.success).toBeFalsy();
-        expect(res.body.errors).toEqual([
-          "You are not authorized for this action.",
-        ]);
-      });
-
-      it("should get the spent amount of a sheet", async () => {
-        const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/spent-amount`)
-          .set("Authorization", `Bearer ${authToken}`)
-          .expect(httpStatus.OK);
-
-        expect(res.body.success).toBeTruthy();
-        expect(res.body.data).toEqual({ spentAmount: 800 });
-      });
-    });
-
-    describe("GET /api/v1/sheets/:id/total-amount", () => {
-      it("should raise an error if the auth token is invalid", async () => {
-        const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/total-amount`)
-          .set("Authorization", "Bearer inValid")
-          .expect(httpStatus.UNAUTHORIZED);
-
-        expect(res.body.success).toBeFalsy();
-        expect(res.body.errors).toEqual(["Please provide a valid token."]);
-      });
-
-      it("should raise an error if a user attempts to retrieve the total amount of a sheet that does not belong to them", async () => {
-        const user2 = await UserFactory().save();
-        sheet = await SheetFactory({ owner: user2 }).save();
-
-        const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/total-amount`)
-          .set("Authorization", `Bearer ${authToken}`);
-
-        expect(res.body.success).toBeFalsy();
-        expect(res.body.errors).toEqual([
-          "You are not authorized for this action.",
-        ]);
-      });
-
-      it("should get the total amount of a sheet", async () => {
-        const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/total-amount`)
-          .set("Authorization", `Bearer ${authToken}`)
-          .expect(httpStatus.OK);
-
-        expect(res.body.success).toBeTruthy();
-        expect(res.body.data).toEqual({ totalAmount: 3200 });
+      expect(res.body.amounts).toMatchObject({
+        pendingAmount: 2000,
+        receivedAmount: 1200,
+        spentAmount: 800,
+        totalAmount: 3200,
       });
     });
   });

@@ -1,10 +1,10 @@
 import httpStatus from "http-status";
 
 import {
-  pendingAmount,
-  receivedAmount,
-  spentAmount,
-  totalAmount,
+  calculatePendingAmount,
+  calculateReceivedAmount,
+  calculateSpentAmount,
+  calculateTotalAmount,
 } from "../utils/helpers";
 import asyncHandler from "../middlewares/async";
 import Sheet from "../models/Sheet";
@@ -19,12 +19,18 @@ const getSheets = asyncHandler(async (req, res) =>
 // @desc      Get single sheet
 // @route     GET /api/v1/sheets/:id
 // @access    Private
-const getSheet = asyncHandler(async (req, res) =>
-  res.status(httpStatus.OK).json({
+const getSheet = asyncHandler(async (req, res) => {
+  const receivedAmount = await calculateReceivedAmount(req.sheet);
+  const pendingAmount = await calculatePendingAmount(req.sheet);
+  const spentAmount = await calculateSpentAmount(req.sheet);
+  const totalAmount = await calculateTotalAmount(req.sheet);
+
+  return res.status(httpStatus.OK).json({
     success: true,
     data: req.sheet,
-  }),
-);
+    amounts: { receivedAmount, pendingAmount, spentAmount, totalAmount },
+  });
+});
 
 // @desc      Add sheet
 // @route     POST /api/v1/sheets/
@@ -66,62 +72,4 @@ const deleteSheet = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc      Received Amount
-// @route     GET /api/v1/sheets/:id/received-amount
-// @access    Private
-const getReceivedAmount = asyncHandler(async (req, res) => {
-  const amount = await receivedAmount(req.sheet);
-
-  res.status(httpStatus.OK).json({
-    success: true,
-    data: { receivedAmount: amount },
-  });
-});
-
-// @desc      Pending Amount
-// @route     GET /api/v1/sheets/:id/pending-amount
-// @access    Private
-const getPendingAmount = asyncHandler(async (req, res) => {
-  const amount = await pendingAmount(req.sheet);
-
-  res.status(httpStatus.OK).json({
-    success: true,
-    data: { pendingAmount: amount },
-  });
-});
-
-// @desc      Spent Amount
-// @route     GET /api/v1/sheets/:id/spent-amount
-// @access    Private
-const getSpentAmount = asyncHandler(async (req, res) => {
-  const amount = await spentAmount(req.sheet);
-
-  res.status(httpStatus.OK).json({
-    success: true,
-    data: { spentAmount: amount },
-  });
-});
-
-// @desc      Total Amount
-// @route     GET /api/v1/sheets/:id/total-amount
-// @access    Private
-const getTotalAmount = asyncHandler(async (req, res) => {
-  const amount = await totalAmount(req.sheet);
-
-  res.status(httpStatus.OK).json({
-    success: true,
-    data: { totalAmount: amount },
-  });
-});
-
-export {
-  getSheets,
-  getSheet,
-  addSheet,
-  updateSheet,
-  deleteSheet,
-  getReceivedAmount,
-  getPendingAmount,
-  getSpentAmount,
-  getTotalAmount,
-};
+export { getSheets, getSheet, addSheet, updateSheet, deleteSheet };
