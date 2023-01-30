@@ -138,7 +138,7 @@ describe("Sheet endpoints", () => {
     });
   });
 
-  describe("GET /api/v1/sheets/:id/received-amount | pendingAmount | spentAmount | totalAmount", () => {
+  describe("Amount routes", () => {
     let sheet;
 
     beforeEach(async () => {
