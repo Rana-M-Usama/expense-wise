@@ -37,6 +37,14 @@ const RemainingAmount = styled(Paper)(({ theme }) => ({
   color: "white",
 }));
 
+const SpentAmount = styled(Paper)(({ theme }) => ({
+  backgroundColor: "#ff5722",
+  ...theme.typography.body2,
+  padding: theme.spacing(2),
+  textAlign: "center",
+  color: "white",
+}));
+
 const TotalAmount = styled(Paper)(({ theme }) => ({
   backgroundColor: "#212121",
   ...theme.typography.body2,
@@ -56,6 +64,7 @@ const useStyles = makeStyles(() => ({
 
 export {
   useStyles,
+  SpentAmount,
   StyledTableCell,
   StyledTableRow,
   RecievedAmount,

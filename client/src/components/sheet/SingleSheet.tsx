@@ -18,6 +18,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import {
   RecievedAmount,
   RemainingAmount,
+  SpentAmount,
   StyledTableCell,
   StyledTableRow,
   TotalAmount,
@@ -180,16 +181,19 @@ const SingleSheet = () => {
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
+        columns={{ xs: 8, sm: 16, md: 16 }}
       >
-        <Grid item xs={2} sm={4} md={4}>
-          <RecievedAmount>Recieved Amount: 1000</RecievedAmount>
+        <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
+          <RecievedAmount>Recieved: 10000</RecievedAmount>
         </Grid>
-        <Grid item xs={2} sm={4} md={4}>
-          <RemainingAmount>Remaining Amount: 12000</RemainingAmount>
+        <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
+          <RemainingAmount>Remaining: 12000</RemainingAmount>
         </Grid>
-        <Grid item xs={2} sm={4} md={4}>
-          <TotalAmount>Total Amount: 13000</TotalAmount>
+        <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
+          <TotalAmount>Total: 13000</TotalAmount>
+        </Grid>
+        <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
+          <SpentAmount>Spent: 10000</SpentAmount>
         </Grid>
       </Grid>
     </Container>
