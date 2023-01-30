@@ -6,7 +6,7 @@ import About from "components/about/About";
 import LoginPage from "pages/login/login.page";
 import Sheets from "components/sheet/Sheets";
 import SignupPage from "pages/signup/signup.page";
-import SingleSheet from "components/sheet/SingleSheet";
+import SingleSheet from "components/sheet/ExpenseSheet";
 
 import "App.css";
 import { theme } from "theme";

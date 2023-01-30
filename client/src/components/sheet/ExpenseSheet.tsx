@@ -16,14 +16,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
 import {
-  RecievedAmount,
-  RemainingAmount,
-  SpentAmount,
+  AmountBox,
   StyledTableCell,
   StyledTableRow,
-  TotalAmount,
   useStyles,
-} from "components/sheet/SingleSheet.styles";
+} from "components/sheet/ExpenseSheet.styles";
 import ExpenseModal from "components/expense/ExpenseModal";
 
 const createData = (
@@ -72,7 +69,7 @@ type Props = Response & {
   isUpdate: boolean;
 };
 
-const SingleSheet = () => {
+const ExpenseSheet = () => {
   const classes = useStyles();
   const initialProps = {
     idValue: "",
@@ -184,20 +181,20 @@ const SingleSheet = () => {
         columns={{ xs: 8, sm: 16, md: 16 }}
       >
         <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
-          <RecievedAmount>Recieved: 10000</RecievedAmount>
+          <AmountBox>Recieved: 10000</AmountBox>
         </Grid>
         <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
-          <RemainingAmount>Remaining: 12000</RemainingAmount>
+          <AmountBox>Remaining: 12000</AmountBox>
         </Grid>
         <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
-          <TotalAmount>Total: 13000</TotalAmount>
+          <AmountBox>Total: 13000</AmountBox>
         </Grid>
         <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
-          <SpentAmount>Spent: 10000</SpentAmount>
+          <AmountBox>Spent: 10000</AmountBox>
         </Grid>
       </Grid>
     </Container>
   );
 };
 
-export default SingleSheet;
+export default ExpenseSheet;

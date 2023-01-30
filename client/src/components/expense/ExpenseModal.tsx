@@ -6,10 +6,11 @@ import {
   MenuItem,
   Modal,
   Select,
+  SelectChangeEvent,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Box } from "@mui/system";
 
 import {
@@ -61,14 +62,13 @@ const ExpenseModal = ({
   });
 
   useEffect(() => {
-    let formData = { ...data };
-    formData.title.value = titleValue;
-    formData.type.value = typeValue;
-    formData.amount.value = amountValue;
-    formData.status.value = statusValue;
-    formData.amountType.value = amountTypeValue;
-
-    setData(formData);
+    setData({
+      title: { value: titleValue, error: false, errorMessage: "" },
+      type: { value: typeValue, error: false, errorMessage: "" },
+      amount: { value: amountValue, error: false, errorMessage: "" },
+      status: { value: statusValue, error: false, errorMessage: "" },
+      amountType: { value: amountTypeValue, error: false, errorMessage: "" },
+    });
   }, [
     titleValue,
     typeValue,
@@ -77,6 +77,28 @@ const ExpenseModal = ({
     amountTypeValue,
     onSubmit,
   ]);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setData({
+      ...data,
+      [e.target.name]: {
+        value: e.target.value,
+        error: false,
+        errorMessage: "",
+      },
+    });
+  };
+
+  const handleSelectChange = (e: SelectChangeEvent<string>) => {
+    setData({
+      ...data,
+      [e.target.name]: {
+        value: e.target.value,
+        error: false,
+        errorMessage: "",
+      },
+    });
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -143,11 +165,7 @@ const ExpenseModal = ({
             id="title"
             label="Title"
             value={data.title.value}
-            onChange={e => {
-              let formData = { ...data };
-              formData.title.value = e.target.value;
-              setData(formData);
-            }}
+            onChange={handleChange}
             name="title"
             error={data.title.error}
           />
@@ -164,11 +182,7 @@ const ExpenseModal = ({
             id="type"
             label="type"
             value={data.type.value}
-            onChange={e => {
-              let formData = { ...data };
-              formData.type.value = e.target.value;
-              setData(formData);
-            }}
+            onChange={handleChange}
             name="type"
             error={data.type.error}
           />
@@ -183,11 +197,7 @@ const ExpenseModal = ({
             id="amount"
             label="amount"
             value={data.amount.value}
-            onChange={e => {
-              let formData = { ...data };
-              formData.amount.value = e.target.value;
-              setData(formData);
-            }}
+            onChange={handleChange}
             name="amount"
             error={data.amount.error}
           />
@@ -209,11 +219,7 @@ const ExpenseModal = ({
               label="Status*"
               id="status"
               value={data.status.value}
-              onChange={e => {
-                let formData = { ...data };
-                formData.status.value = e.target.value;
-                setData(formData);
-              }}
+              onChange={handleSelectChange}
               name="status"
               error={data.status.error}
             >
@@ -239,11 +245,7 @@ const ExpenseModal = ({
               label="Amount Type*"
               id="amountType"
               value={data.amountType.value}
-              onChange={e => {
-                let formData = { ...data };
-                formData.amountType.value = e.target.value;
-                setData(formData);
-              }}
+              onChange={handleSelectChange}
               name="amountType"
               error={data.amountType.error}
             >
