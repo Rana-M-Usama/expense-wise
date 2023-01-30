@@ -138,7 +138,7 @@ describe("Sheet endpoints", () => {
     });
   });
 
-  describe("GET /api/v1/sheets/:id/receivedAmount | pendingAmount | spentAmount | totalAmount", () => {
+  describe("GET /api/v1/sheets/:id/received-amount | pendingAmount | spentAmount | totalAmount", () => {
     let sheet;
 
     beforeEach(async () => {
@@ -166,10 +166,10 @@ describe("Sheet endpoints", () => {
       }).save();
     });
 
-    describe("GET /api/v1/sheets/:id/receivedAmount", () => {
+    describe("GET /api/v1/sheets/:id/received-amount", () => {
       it("should raise an error if the auth token is invalid", async () => {
         const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/receivedAmount`)
+          .get(`/api/v1/sheets/${sheet._id}/received-amount`)
           .set("Authorization", "Bearer inValid")
           .expect(httpStatus.UNAUTHORIZED);
 
@@ -182,7 +182,7 @@ describe("Sheet endpoints", () => {
         sheet = await SheetFactory({ owner: user2 }).save();
 
         const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/receivedAmount`)
+          .get(`/api/v1/sheets/${sheet._id}/received-amount`)
           .set("Authorization", `Bearer ${authToken}`);
 
         expect(res.body.success).toBeFalsy();
@@ -193,7 +193,7 @@ describe("Sheet endpoints", () => {
 
       it("should get the received amount of a sheet", async () => {
         const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/receivedAmount`)
+          .get(`/api/v1/sheets/${sheet._id}/received-amount`)
           .set("Authorization", `Bearer ${authToken}`)
           .expect(httpStatus.OK);
 
@@ -202,10 +202,10 @@ describe("Sheet endpoints", () => {
       });
     });
 
-    describe("GET /api/v1/sheets/:id/pendingAmount", () => {
+    describe("GET /api/v1/sheets/:id/pending-amount", () => {
       it("should raise an error if the auth token is invalid", async () => {
         const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/pendingAmount`)
+          .get(`/api/v1/sheets/${sheet._id}/pending-amount`)
           .set("Authorization", "Bearer inValid")
           .expect(httpStatus.UNAUTHORIZED);
 
@@ -218,7 +218,7 @@ describe("Sheet endpoints", () => {
         sheet = await SheetFactory({ owner: user2 }).save();
 
         const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/pendingAmount`)
+          .get(`/api/v1/sheets/${sheet._id}/pending-amount`)
           .set("Authorization", `Bearer ${authToken}`);
 
         expect(res.body.success).toBeFalsy();
@@ -229,7 +229,7 @@ describe("Sheet endpoints", () => {
 
       it("should get the pending amount of a sheet", async () => {
         const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/pendingAmount`)
+          .get(`/api/v1/sheets/${sheet._id}/pending-amount`)
           .set("Authorization", `Bearer ${authToken}`)
           .expect(httpStatus.OK);
 
@@ -238,10 +238,10 @@ describe("Sheet endpoints", () => {
       });
     });
 
-    describe("GET /api/v1/sheets/:id/spentAmount", () => {
+    describe("GET /api/v1/sheets/:id/spent-amount", () => {
       it("should raise an error if the auth token is invalid", async () => {
         const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/spentAmount`)
+          .get(`/api/v1/sheets/${sheet._id}/spent-amount`)
           .set("Authorization", "Bearer inValid")
           .expect(httpStatus.UNAUTHORIZED);
 
@@ -254,7 +254,7 @@ describe("Sheet endpoints", () => {
         sheet = await SheetFactory({ owner: user2 }).save();
 
         const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/spentAmount`)
+          .get(`/api/v1/sheets/${sheet._id}/spent-amount`)
           .set("Authorization", `Bearer ${authToken}`);
 
         expect(res.body.success).toBeFalsy();
@@ -265,7 +265,7 @@ describe("Sheet endpoints", () => {
 
       it("should get the spent amount of a sheet", async () => {
         const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/spentAmount`)
+          .get(`/api/v1/sheets/${sheet._id}/spent-amount`)
           .set("Authorization", `Bearer ${authToken}`)
           .expect(httpStatus.OK);
 
@@ -274,10 +274,10 @@ describe("Sheet endpoints", () => {
       });
     });
 
-    describe("GET /api/v1/sheets/:id/totalAmount", () => {
+    describe("GET /api/v1/sheets/:id/total-amount", () => {
       it("should raise an error if the auth token is invalid", async () => {
         const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/totalAmount`)
+          .get(`/api/v1/sheets/${sheet._id}/total-amount`)
           .set("Authorization", "Bearer inValid")
           .expect(httpStatus.UNAUTHORIZED);
 
@@ -290,7 +290,7 @@ describe("Sheet endpoints", () => {
         sheet = await SheetFactory({ owner: user2 }).save();
 
         const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/totalAmount`)
+          .get(`/api/v1/sheets/${sheet._id}/total-amount`)
           .set("Authorization", `Bearer ${authToken}`);
 
         expect(res.body.success).toBeFalsy();
@@ -301,7 +301,7 @@ describe("Sheet endpoints", () => {
 
       it("should get the total amount of a sheet", async () => {
         const res = await request(app)
-          .get(`/api/v1/sheets/${sheet._id}/totalAmount`)
+          .get(`/api/v1/sheets/${sheet._id}/total-amount`)
           .set("Authorization", `Bearer ${authToken}`)
           .expect(httpStatus.OK);
 

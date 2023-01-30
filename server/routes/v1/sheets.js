@@ -51,16 +51,16 @@ router
   .put(editSheetPolicy, updateSheet)
   .delete(adminSheetPolicy, deleteSheet);
 router
-  .route("/:id/receivedAmount")
+  .route("/:id/received-amount")
   .get([findSheet, sheetPolicy, viewSheetPolicy], getReceivedAmount);
 router
-  .route("/:id/pendingAmount")
+  .route("/:id/pending-amount")
   .get([findSheet, sheetPolicy, viewSheetPolicy], getPendingAmount);
 router
-  .route("/:id/spentAmount")
+  .route("/:id/spent-amount")
   .get([findSheet, sheetPolicy, viewSheetPolicy], getSpentAmount);
 router
-  .route("/:id/totalAmount")
+  .route("/:id/total-amount")
   .get([findSheet, sheetPolicy, viewSheetPolicy], getTotalAmount);
 
 export default router;

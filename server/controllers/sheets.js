@@ -67,7 +67,7 @@ const deleteSheet = asyncHandler(async (req, res) => {
 });
 
 // @desc      Received Amount
-// @route     GET /api/v1/sheets/:id/receivedAmount
+// @route     GET /api/v1/sheets/:id/received-amount
 // @access    Private
 const getReceivedAmount = asyncHandler(async (req, res) => {
   const amount = await receivedAmount(req.sheet);
@@ -79,7 +79,7 @@ const getReceivedAmount = asyncHandler(async (req, res) => {
 });
 
 // @desc      Pending Amount
-// @route     GET /api/v1/sheets/:id/pendingAmount
+// @route     GET /api/v1/sheets/:id/pending-amount
 // @access    Private
 const getPendingAmount = asyncHandler(async (req, res) => {
   const amount = await pendingAmount(req.sheet);
@@ -91,7 +91,7 @@ const getPendingAmount = asyncHandler(async (req, res) => {
 });
 
 // @desc      Spent Amount
-// @route     GET /api/v1/sheets/:id/spentAmount
+// @route     GET /api/v1/sheets/:id/spent-amount
 // @access    Private
 const getSpentAmount = asyncHandler(async (req, res) => {
   const amount = await spentAmount(req.sheet);
@@ -103,7 +103,7 @@ const getSpentAmount = asyncHandler(async (req, res) => {
 });
 
 // @desc      Total Amount
-// @route     GET /api/v1/sheets/:id/totalAmount
+// @route     GET /api/v1/sheets/:id/total-amount
 // @access    Private
 const getTotalAmount = asyncHandler(async (req, res) => {
   const amount = await totalAmount(req.sheet);
