@@ -1,8 +1,11 @@
 import {
+  Box,
   Button,
   Container,
   Grid,
   IconButton,
+  Menu,
+  MenuItem,
   Paper,
   Table,
   TableBody,
@@ -10,10 +13,10 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-
+import React, { MouseEvent, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import {
   AmountBox,
@@ -70,7 +73,6 @@ type Props = Response & {
 };
 
 const ExpenseSheet = () => {
-  const classes = useStyles();
   const initialProps = {
     idValue: "",
     titleValue: "",
@@ -80,6 +82,15 @@ const ExpenseSheet = () => {
     amountTypeValue: "",
     isUpdate: false,
   };
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState<null | Element>(null);
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget as Element);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const [IsModalOpen, setIsModalOpen] = useState(false);
   const [modalProps, setModalProps] = useState<Props>(initialProps);
 
@@ -115,15 +126,34 @@ const ExpenseSheet = () => {
       >
         Sheet 1
       </Typography>
-      <Button
-        className={classes.addExpense}
-        sx={{ mb: 2 }}
-        variant="outlined"
-        size="small"
-        onClick={() => showModal({ ...modalProps })}
-      >
-        Add expense
-      </Button>
+      <Box display="flex" justifyContent="space-between">
+        <Button
+          className={classes.addExpense}
+          sx={{ mb: 2 }}
+          variant="outlined"
+          size="small"
+          onClick={() => showModal({ ...modalProps })}
+        >
+          Add expense
+        </Button>
+        <IconButton
+          aria-controls="simple-menu"
+          aria-haspopup="true"
+          onClick={handleClick}
+        >
+          <MoreVertIcon />
+        </IconButton>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={handleClose}>Delete Sheet</MenuItem>
+          <MenuItem onClick={handleClose}>Sheet Permissions</MenuItem>
+        </Menu>
+      </Box>
       <Table
         aria-label="customized table"
         sx={{ minWidth: 650, mb: 5 }}
