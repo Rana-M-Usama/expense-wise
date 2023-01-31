@@ -1,5 +1,3 @@
-export const hoverButtonBorderColor = "#E31C7980";
-
 export const colors = {
   editButton: {
     color: "#455a64",
@@ -38,8 +36,12 @@ export const colors = {
   },
   tableCell: {
     backgroundColor: "#E31C79",
+    color: "#ffffff",
   },
   userAvatar: {
     border: "#9e9e9e70",
+  },
+  amountBox: {
+    backgroundColor: "#607d8b",
   },
 };
