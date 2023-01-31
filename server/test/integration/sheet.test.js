@@ -156,12 +156,12 @@ describe("Sheet endpoints", () => {
         description: sheet.description,
         title: sheet.title,
         owner: sheet.owner._id,
-      });
-      expect(res.body.amounts).toMatchObject({
-        pendingAmount: 2000,
-        receivedAmount: 1200,
-        spentAmount: 800,
-        totalAmount: 3200,
+        amounts: {
+          pendingAmount: 2000,
+          receivedAmount: 1200,
+          spentAmount: 800,
+          totalAmount: 3200,
+        },
       });
     });
   });

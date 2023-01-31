@@ -1,11 +1,6 @@
 import httpStatus from "http-status";
 
-import {
-  calculatePendingAmount,
-  calculateReceivedAmount,
-  calculateSpentAmount,
-  calculateTotalAmount,
-} from "../utils/helpers";
+import { amountStats } from "../utils/helpers";
 import asyncHandler from "../middlewares/async";
 import Sheet from "../models/Sheet";
 
@@ -20,15 +15,11 @@ const getSheets = asyncHandler(async (req, res) =>
 // @route     GET /api/v1/sheets/:id
 // @access    Private
 const getSheet = asyncHandler(async (req, res) => {
-  const receivedAmount = await calculateReceivedAmount(req.sheet);
-  const pendingAmount = await calculatePendingAmount(req.sheet);
-  const spentAmount = await calculateSpentAmount(req.sheet);
-  const totalAmount = await calculateTotalAmount(req.sheet);
+  const amounts = await amountStats(req.sheet);
 
   return res.status(httpStatus.OK).json({
     success: true,
-    data: req.sheet,
-    amounts: { receivedAmount, pendingAmount, spentAmount, totalAmount },
+    data: { ...req.sheet._doc, amounts },
   });
 });
 
