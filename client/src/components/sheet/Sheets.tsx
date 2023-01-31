@@ -84,7 +84,7 @@ const Sheets = () => {
         <Button
           onClick={() =>
             showModal({
-              title: " Create Expense Sheet",
+              title: " Create Sheet",
               button: " Create",
               name: "",
               description: "",
@@ -116,7 +116,7 @@ const Sheets = () => {
                         size="small"
                         onClick={() =>
                           showModal({
-                            title: " Update Expense Sheet",
+                            title: " Update Sheet",
                             button: "Update",
                             name: "Sheet 1",
                             description: "fjgo jgtoijg atioetj oiet",
