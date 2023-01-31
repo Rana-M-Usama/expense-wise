@@ -3,13 +3,13 @@ import React from "react";
 import { ThemeProvider } from "@mui/material";
 
 import About from "components/about/About";
-import Expense from "components/expense/Expense";
 import LoginPage from "pages/login/login.page";
 import Sheets from "components/sheet/Sheets";
-import { theme } from "theme";
+import SignupPage from "pages/signup/signup.page";
+import SingleSheet from "components/sheet/ExpenseSheet";
 
 import "App.css";
-import SignupPage from "pages/signup/signup.page";
+import { theme } from "theme";
 
 const App = () => {
   return (
@@ -21,7 +21,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/sheets" element={<Sheets />} />
-          <Route path="/expenses" element={<Expense />} />
+          <Route path="/expenses" element={<SingleSheet />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/about" element={<About />} />
         </Routes>
