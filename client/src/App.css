@@ -10,7 +10,13 @@
 }
 
 .App-header {
-  min-height: 100vh;
+  min-height: 10vh;
+  font-size: calc(10px + 2vmin);
+}
+
+.App-body {
+  min-height: 90vh;
+  display: flex;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,6 +32,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

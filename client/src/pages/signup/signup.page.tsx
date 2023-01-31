@@ -10,8 +10,8 @@ import {
   TextField,
 } from "@mui/material";
 import React, { ChangeEvent, useEffect, useState } from "react";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useNavigate } from "react-router-dom";
 
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
@@ -175,7 +175,7 @@ const SignupPage = () => {
               </Button>
               <Grid container justifyContent="flex-end">
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link component={RouterLink} to="/" variant="body2">
                     Already have an account? Sign in
                   </Link>
                 </Grid>
