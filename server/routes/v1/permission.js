@@ -10,10 +10,13 @@ import {
   grantPermission,
 } from "../../controllers/permissions";
 import {
+  findPermission,
+  findUserWithEmail,
+} from "../../middlewares/permission";
+import {
   grantPermissionPolicy,
   permissionPolicy,
 } from "../../middlewares/authorize/permissionPolicy";
-import findPermission from "../../middlewares/permission";
 import findSheet from "../../middlewares/sheet";
 
 const router = express.Router({ mergeParams: true });
@@ -22,7 +25,7 @@ router.use(findSheet, sheetPolicy);
 router
   .route("/")
   .get(getPermissions)
-  .post(grantPermissionPolicy, grantPermission);
+  .post([findUserWithEmail, grantPermissionPolicy], grantPermission);
 
 router
   .route("/:id")
