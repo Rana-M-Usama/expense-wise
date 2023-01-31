@@ -178,7 +178,7 @@ const Permission = ({
             color="primary"
             sx={{ mt: 2 }}
           >
-            {isUpdate ? "Update Expense" : "Add Expense"}
+            {isUpdate ? "Update Permission" : "Add Permission"}
           </Button>
         </form>
       </Box>
