@@ -31,7 +31,7 @@ const useHttp = () => {
         return response.data;
       } catch (error: any) {
         setLoading(false);
-        setError(error.response.data.errors.join());
+        setError(error.response.data.errors.join(" "));
         throw error;
       }
     },

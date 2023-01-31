@@ -10,10 +10,11 @@ import {
   Typography,
 } from "@mui/material";
 import { CloseOutlined, Mail } from "@mui/icons-material";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 
-import { forgotPasswordApi } from "api/auth";
 import Toast from "components/tostify/Toast";
+import useHttp from "utils/useHttp";
 
 import useStyles from "pages/forgotpassword/forgotpassword.styles";
 
@@ -25,6 +26,7 @@ interface Props {
 const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
   const classes = useStyles();
   const [forgotPasswordData, setForgotPasswordData] = useState({ email: "" });
+  const { loading, request, error, clearError } = useHttp();
 
   const changeHandlerData = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -33,16 +35,20 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    await request("/auth/forgot-password", "POST", forgotPasswordData);
 
-    forgotPasswordApi(forgotPasswordData)
-      .then(() => {
-        setForgotPasswordData({ ...forgotPasswordData, email: "" });
-        Toast("success", "Email sent successfully.");
-      })
-      .catch(error => {
-        Toast("danger", error.message);
-      });
+    if (!error) {
+      setForgotPasswordData({ ...forgotPasswordData, email: "" });
+      Toast("success", "Email sent successfully.");
+    }
   };
+
+  useEffect(() => {
+    if (error) {
+      Toast("danger", error);
+      clearError();
+    }
+  }, [error]);
 
   return (
     <Modal
@@ -116,7 +122,7 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
               variant="contained"
               className={classes.button}
             >
-              Send My Password
+              {loading ? <CircularProgress /> : "Send My Password"}
             </Button>
           </Box>
         </Container>
