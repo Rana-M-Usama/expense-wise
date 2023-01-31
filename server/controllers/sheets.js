@@ -1,6 +1,6 @@
 import httpStatus from "http-status";
 
-import { amountStats } from "../utils/helpers";
+import { getAmountStats } from "../utils/helpers";
 import asyncHandler from "../middlewares/async";
 import Sheet from "../models/Sheet";
 
@@ -15,7 +15,7 @@ const getSheets = asyncHandler(async (req, res) =>
 // @route     GET /api/v1/sheets/:id
 // @access    Private
 const getSheet = asyncHandler(async (req, res) => {
-  const amounts = await amountStats(req.sheet);
+  const amounts = await getAmountStats(req.sheet);
 
   return res.status(httpStatus.OK).json({
     success: true,

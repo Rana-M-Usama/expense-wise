@@ -5,7 +5,7 @@ const calculateAmount = (data, status, amountType) =>
     .filter((item) => item.status === status && item.amountType === amountType)
     .reduce((sum, expense) => sum + expense.amount, 0);
 
-const amountStats = async (sheetId) => {
+const getAmountStats = async (sheetId) => {
   const expenses = await Expense.find({ sheet: sheetId });
   const receivedAmount = calculateAmount(expenses, "paid", "incoming");
   const pendingAmount = calculateAmount(expenses, "unpaid", "incoming");
@@ -23,4 +23,4 @@ const isMongoId = (id) => {
   return checkForHexRegExp.test(id);
 };
 
-export { isMongoId, amountStats };
+export { isMongoId, getAmountStats };
