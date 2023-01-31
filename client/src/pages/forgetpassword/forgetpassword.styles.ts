@@ -1,3 +1,4 @@
+import { colors } from "constants/colors";
 import { makeStyles } from "@mui/styles";
 
 export default makeStyles(() => ({
@@ -15,18 +16,6 @@ export default makeStyles(() => ({
     },
   },
 
-  avatar: {
-    margin: "10px !important",
-    width: "70px !important",
-    height: "70px !important",
-    backgroundColor: "#ff80ab !important",
-  },
-
-  icon: {
-    width: "50% !important",
-    height: "50% !important",
-  },
-
   modal: {
     display: "flex",
     alignItems: "center",
@@ -37,22 +26,14 @@ export default makeStyles(() => ({
     left: "50%",
     padding: 2,
     borderRadius: 5,
-    backgroundColor: "white",
+    backgroundColor: colors.modal.backgroundColor,
     transform: "translate(-50%, -50%)",
-  },
-
-  img: {
-    height: "200px",
-  },
-
-  button: {
-    "&:hover": { backgroundColor: "#f06292 !important" },
   },
 
   textField: {
     "& .MuiOutlinedInput-root:hover": {
       "& > fieldset": {
-        borderColor: "#f06292",
+        borderColor: colors.textField.hoverBorderColor,
       },
     },
   },

@@ -105,13 +105,7 @@ const SignupPage = () => {
               />
             </Grid>
           </Grid>
-          <Button
-            className={classes.button}
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-          >
+          <Button type="submit" fullWidth variant="contained" color="primary">
             Sign Up
           </Button>
           <Grid container justifyContent="flex-end">

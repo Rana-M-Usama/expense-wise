@@ -6,11 +6,12 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import React from "react";
 
 import {
+  StyledButton,
   StyledTableCell,
   StyledTableRow,
-  StyledButton,
 } from "components/sheet/SingleSheet.styles";
 
 const createData = (
@@ -19,7 +20,7 @@ const createData = (
   fat: number,
   carbs: number,
   protein: number,
-  action: string
+  action: string,
 ) => {
   return { name, calories, fat, carbs, protein, action };
 };
@@ -55,13 +56,13 @@ const SingleSheet = () => {
       <Table aria-label="customized table">
         <TableHead>
           <TableRow>
-            {Object.values(headerRow).map((heading) => (
-              <StyledTableCell>{heading}</StyledTableCell>
+            {Object.values(headerRow).map(heading => (
+              <StyledTableCell key={heading}>{heading}</StyledTableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rows.map(row => (
             <StyledTableRow key={row.name}>
               <StyledTableCell component="th" scope="row">
                 {row.name}

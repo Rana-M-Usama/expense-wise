@@ -1,9 +1,10 @@
+import { Button, TableCell, tableCellClasses, TableRow } from "@mui/material";
+import { colors } from "constants/colors";
 import { styled } from "@mui/material/styles";
-import { TableCell, TableRow, tableCellClasses, Button } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#E31C79",
+    backgroundColor: colors.tableCell.backgroundColor,
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -20,13 +21,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const StyledButton = styled(Button)(({ theme }) => ({
-  color: "##f44336 !important",
-  border: "1px solid ##f44336 !important",
+const StyledButton = styled(Button)(() => ({
+  color: `${colors.deleteButton.color} !important`,
+  border: `1px solid ${colors.deleteButton.border} !important`,
   "&:hover": {
-    background: "#f44336 !important",
-    border: "1px solid #f4433680",
-    color: "white !important",
+    color: `${colors.deleteButton.hoverColor} !important`,
+    border: `1px solid ${colors.deleteButton.hoverBorderColor}`,
+    background: `${colors.deleteButton.hoverBackgroundColor} !important`,
   },
 }));
 

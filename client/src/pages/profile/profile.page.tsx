@@ -1,17 +1,17 @@
-import React from "react";
 import {
-  TextField,
-  Grid,
-  Container,
-  Typography,
+  Avatar,
   Box,
   Button,
-  Avatar,
+  Container,
+  Grid,
+  TextField,
+  Typography,
 } from "@mui/material";
+import React from "react";
 import { Stack } from "@mui/system";
 
-import useStyles from "pages//profile/profile.styles";
 import userImage from "assets/user.png";
+import useStyles from "pages//profile/profile.styles";
 
 const ProfilePage = () => {
   const classes = useStyles();

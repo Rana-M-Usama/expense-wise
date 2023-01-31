@@ -1,14 +1,14 @@
-import React from "react";
 import {
+  Avatar,
+  Box,
   Button,
+  Container,
   CssBaseline,
   TextField,
-  Box,
-  Avatar,
   Typography,
-  Container,
 } from "@mui/material";
 import { Lock } from "@mui/icons-material";
+import React from "react";
 
 import useStyles from "pages/resetpassword/resetpassword.styles";
 
@@ -57,12 +57,7 @@ const ResetPasswordPage = () => {
             autoComplete="current-password"
             className={classes.textField}
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            className={classes.button}
-          >
+          <Button type="submit" fullWidth variant="contained">
             Reset Password
           </Button>
         </Box>

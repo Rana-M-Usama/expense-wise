@@ -4,18 +4,19 @@ import { ThemeProvider } from "@mui/material";
 
 import About from "components/about/About";
 import Expense from "components/expense/Expense";
-import LoginPage from "pages/login/login.page";
 import Sheets from "components/sheet/Sheets";
 import { theme } from "theme";
 
 import "App.css";
+import LoginPage from "pages/login/login.page";
+import Navbar from "components/common/layouts/navbar/Navbar";
 import SignupPage from "pages/signup/signup.page";
 
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <header className="App-header">
-        {/* Navbar will be show if user is signed in */}
+        <Navbar />
       </header>
       <div className="App-body">
         <Routes>
