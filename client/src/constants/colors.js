@@ -1,21 +1,6 @@
 export const hoverButtonBorderColor = "#E31C7980";
 
 export const colors = {
-  theme: {
-    primaryColor: "#E31C79",
-    secondaryColor: "#ff80ab",
-  },
-  textField: {
-    hoverBorderColor: "#f06292",
-  },
-  modal: {
-    backgroundColor: "#ffffff",
-  },
-  openButton: {
-    hoverColor: "#ffffff",
-    hoverBorderColor: "#E31C7980",
-    hoverBackgroundColor: "#E31C79",
-  },
   editButton: {
     color: "#455a64",
     border: "#455a64",
@@ -33,10 +18,28 @@ export const colors = {
   list: {
     backgroundColor: "#eeeeee",
   },
-  tableCell: {
-    backgroundColor: "#E31C79",
+  modal: {
+    backgroundColor: "#ffffff",
   },
   modalBox: {
     border: "#f0629270",
+  },
+  openButton: {
+    hoverColor: "#ffffff",
+    hoverBorderColor: "#E31C7980",
+    hoverBackgroundColor: "#E31C79",
+  },
+  theme: {
+    primaryColor: "#E31C79",
+    secondaryColor: "#ff80ab",
+  },
+  textField: {
+    hoverBorderColor: "#f06292",
+  },
+  tableCell: {
+    backgroundColor: "#E31C79",
+  },
+  userAvatar: {
+    border: "#9e9e9e70",
   },
 };
