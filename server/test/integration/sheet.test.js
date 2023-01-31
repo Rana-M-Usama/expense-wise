@@ -5,6 +5,7 @@ import request from "supertest";
 
 import { buildSheetList, SheetFactory } from "../factories/sheet.factory";
 import app from "../../app";
+import { ExpenseFactory } from "../factories/expense.factory";
 import setupTestDB from "../utils/setupTestDB";
 import Sheet from "../../models/Sheet";
 import UserFactory from "../factories/user.factory";
@@ -120,8 +121,30 @@ describe("Sheet endpoints", () => {
     });
 
     it("should return the sheet that belongs to the owner, identified by the specified ID", async () => {
-      await buildSheetList(2, user);
-      const sheet = await Sheet.findOne({ owner: user.id });
+      const sheet = await SheetFactory({ owner: user }).save();
+
+      await ExpenseFactory({
+        status: "paid",
+        amount: 1200,
+        amountType: "incoming",
+        owner: user,
+        sheet,
+      }).save();
+      await ExpenseFactory({
+        status: "unpaid",
+        amount: 2000,
+        amountType: "incoming",
+        owner: user,
+        sheet,
+      }).save();
+      await ExpenseFactory({
+        status: "paid",
+        amount: 800,
+        amountType: "outgoing",
+        owner: user,
+        sheet,
+      }).save();
+
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet._id}`)
         .set("Authorization", `Bearer ${authToken}`)
@@ -132,7 +155,13 @@ describe("Sheet endpoints", () => {
         _id: sheet._id,
         description: sheet.description,
         title: sheet.title,
-        owner: sheet.owner,
+        owner: sheet.owner._id,
+        amounts: {
+          pendingAmount: 2000,
+          receivedAmount: 1200,
+          spentAmount: 800,
+          totalAmount: 3200,
+        },
       });
     });
   });
