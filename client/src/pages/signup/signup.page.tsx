@@ -1,15 +1,16 @@
-import React from "react";
 import {
-  Button,
-  CssBaseline,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Link,
-  Grid,
   Box,
+  Button,
+  Checkbox,
   Container,
+  CssBaseline,
+  FormControlLabel,
+  Grid,
+  Link,
+  TextField,
 } from "@mui/material";
+import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 
 import logo from "assets/logo.png";
 import useStyles from "pages/signup/signup.styles";
@@ -115,7 +116,7 @@ const SignupPage = () => {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link component={RouterLink} to="/" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>

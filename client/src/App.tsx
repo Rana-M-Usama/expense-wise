@@ -1,26 +1,31 @@
+import { Route, Routes } from "react-router-dom";
+import React from "react";
 import { ThemeProvider } from "@mui/material";
-import React, { useEffect, useState } from "react";
 
-import { helloWorldApi } from "api/helloWorld";
+import About from "components/about/About";
 import LoginPage from "pages/login/login.page";
-import { theme } from "theme";
+import Sheets from "components/sheet/Sheets";
+import SignupPage from "pages/signup/signup.page";
+import SingleSheet from "components/sheet/ExpenseSheet";
 
 import "App.css";
+import { theme } from "theme";
 
 const App = () => {
-  const [data, setData] = useState("");
-
-  useEffect(() => {
-    helloWorldApi().then(response => {
-      setData(response.expensewise);
-    });
-  }, [data]);
-
   return (
     <ThemeProvider theme={theme}>
       <header className="App-header">
-        <LoginPage />
+        {/* Navbar will be show if user is signed in */}
       </header>
+      <div className="App-body">
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/sheets" element={<Sheets />} />
+          <Route path="/expenses" element={<SingleSheet />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </div>
     </ThemeProvider>
   );
 };
