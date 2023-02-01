@@ -83,12 +83,12 @@ const ExpenseSheet = () => {
     isUpdate: false,
   };
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState<null | Element>(null);
+  const [sheetOption, setSheetOption] = useState<null | Element>(null);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget as Element);
+    setSheetOption(event.currentTarget as Element);
   };
   const handleClose = () => {
-    setAnchorEl(null);
+    setSheetOption(null);
   };
 
   const [IsModalOpen, setIsModalOpen] = useState(false);
@@ -145,9 +145,9 @@ const ExpenseSheet = () => {
         </IconButton>
         <Menu
           id="simple-menu"
-          anchorEl={anchorEl}
+          anchorEl={sheetOption}
           keepMounted
-          open={Boolean(anchorEl)}
+          open={Boolean(sheetOption)}
           onClose={handleClose}
         >
           <MenuItem onClick={handleClose}>Delete Sheet</MenuItem>

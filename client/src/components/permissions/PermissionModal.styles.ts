@@ -1,6 +1,6 @@
 import { makeStyles } from "@mui/styles";
 
-import { colors } from "constants/colors";
+import { styles } from "constants/styles";
 
 export default makeStyles(() => ({
   modal: {
@@ -29,7 +29,7 @@ export default makeStyles(() => ({
   textfield: {
     "& .MuiOutlinedInput-root:hover": {
       "& > fieldset": {
-        borderColor: colors.textField.hoverBorderColor,
+        borderColor: styles.textField.hoverBorderColor,
       },
     },
   },
