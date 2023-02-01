@@ -1,5 +1,5 @@
-import { colors } from "constants/colors";
 import { makeStyles } from "@mui/styles";
+import { styles } from "constants/styles";
 
 export default makeStyles(() => ({
   container: {
@@ -26,14 +26,14 @@ export default makeStyles(() => ({
     left: "50%",
     padding: 2,
     borderRadius: 5,
-    backgroundColor: colors.modal.backgroundColor,
+    backgroundColor: styles.modal.backgroundColor,
     transform: "translate(-50%, -50%)",
   },
 
   textField: {
     "& .MuiOutlinedInput-root:hover": {
       "& > fieldset": {
-        borderColor: colors.textField.hoverBorderColor,
+        borderColor: styles.textField.hoverBorderColor,
       },
     },
   },

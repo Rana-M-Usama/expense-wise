@@ -10,7 +10,7 @@ import {
 import React from "react";
 import { Stack } from "@mui/system";
 
-import { colors } from "constants/colors";
+import { styles } from "constants/styles";
 import userImage from "assets/user.png";
 import useStyles from "pages//profile/profile.styles";
 
@@ -41,7 +41,7 @@ const ProfilePage = () => {
           sx={{
             width: 200,
             height: 200,
-            border: `5px solid ${colors.userAvatar.border}`,
+            border: `5px solid ${styles.userAvatar.border}`,
           }}
         />
       </Stack>

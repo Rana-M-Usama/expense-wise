@@ -1,5 +1,5 @@
-import { colors } from "constants/colors";
 import { makeStyles } from "@mui/styles";
+import { styles } from "constants/styles";
 
 export default makeStyles(() => ({
   container: {
@@ -15,6 +15,6 @@ export default makeStyles(() => ({
 
   textfield: {
     borderRadius: 7,
-    backgroundColor: colors.list.backgroundColor,
+    backgroundColor: styles.list.backgroundColor,
   },
 }));

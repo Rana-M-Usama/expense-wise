@@ -2,12 +2,12 @@ import { Paper, TableCell, tableCellClasses, TableRow } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { styled } from "@mui/material/styles";
 
-import { colors } from "constants/colors";
+import { styles } from "constants/styles";
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: colors.theme.primaryColor,
-    color: colors.tableCell.color,
+    backgroundColor: styles.theme.primaryColor,
+    color: styles.tableCell.color,
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -24,7 +24,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const AmountBox = styled(Paper)(({ theme }) => ({
-  backgroundColor: colors.amountBox.backgroundColor,
+  backgroundColor: styles.amountBox.backgroundColor,
   ...theme.typography.body2,
   padding: theme.spacing(2),
   textAlign: "center",
@@ -35,7 +35,7 @@ const useStyles = makeStyles(() => ({
   addExpense: {
     "&:hover": {
       color: "white",
-      background: `${colors.theme.primaryColor} !important`,
+      background: `${styles.theme.primaryColor} !important`,
     },
   },
 }));

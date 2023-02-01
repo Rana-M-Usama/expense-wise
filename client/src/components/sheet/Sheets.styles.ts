@@ -1,34 +1,34 @@
-import { colors } from "constants/colors";
 import { makeStyles } from "@mui/styles";
+import { styles } from "constants/styles";
 
 export default makeStyles(() => ({
   openButton: {
     "&:hover": {
-      color: colors.openButton.hoverColor,
-      border: `1px solid ${colors.openButton.hoverBorderColor}`,
-      background: `${colors.openButton.hoverBackgroundColor} !important`,
+      color: styles.openButton.hoverColor,
+      border: `1px solid ${styles.openButton.hoverBorderColor}`,
+      background: `${styles.openButton.hoverBackgroundColor} !important`,
     },
   },
   editButton: {
-    color: `${colors.editButton.color} !important`,
-    border: `1px solid ${colors.editButton.border} !important`,
+    color: `${styles.editButton.color} !important`,
+    border: `1px solid ${styles.editButton.border} !important`,
     "&:hover": {
-      color: `${colors.editButton.hoverColor} !important`,
-      border: `1px solid ${colors.editButton.hoverBorderColor}`,
-      background: `${colors.editButton.hoverBackgroundColor} !important`,
+      color: `${styles.editButton.hoverColor} !important`,
+      border: `1px solid ${styles.editButton.hoverBorderColor}`,
+      background: `${styles.editButton.hoverBackgroundColor} !important`,
     },
   },
   deleteButton: {
-    color: `${colors.deleteButton.color} !important`,
-    border: `1px solid ${colors.deleteButton.border} !important`,
+    color: `${styles.deleteButton.color} !important`,
+    border: `1px solid ${styles.deleteButton.border} !important`,
     "&:hover": {
-      color: `${colors.deleteButton.hoverColor} !important`,
-      border: `1px solid ${colors.deleteButton.hoverBorderColor}`,
-      background: `${colors.deleteButton.hoverBackgroundColor} !important`,
+      color: `${styles.deleteButton.hoverColor} !important`,
+      border: `1px solid ${styles.deleteButton.hoverBorderColor}`,
+      background: `${styles.deleteButton.hoverBackgroundColor} !important`,
     },
   },
   list: {
     borderRadius: 10,
-    backgroundColor: colors.list.backgroundColor,
+    backgroundColor: styles.list.backgroundColor,
   },
 }));

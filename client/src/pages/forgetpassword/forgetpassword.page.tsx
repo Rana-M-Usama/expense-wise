@@ -12,7 +12,7 @@ import {
 import { CloseOutlined, Mail } from "@mui/icons-material";
 import React from "react";
 
-import { colors } from "constants/colors";
+import { styles } from "constants/styles";
 import useStyles from "pages/forgetpassword/forgetpassword.styles";
 
 interface Props {
@@ -61,7 +61,7 @@ const ForgetPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
           <Box
             component="form"
             sx={{
-              border: `1px solid ${colors.modalBox.border}`,
+              border: `1px solid ${styles.modalBox.border}`,
               p: 3,
               mb: 2,
             }}
