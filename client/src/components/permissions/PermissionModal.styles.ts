@@ -1,5 +1,6 @@
-import { colors } from "constants/colors";
 import { makeStyles } from "@mui/styles";
+
+import { colors } from "constants/colors";
 
 export default makeStyles(() => ({
   modal: {
