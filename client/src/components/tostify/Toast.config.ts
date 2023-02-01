@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 
-const toastStyle = {
+const toastConfig = {
   position: toast.POSITION.TOP_RIGHT,
   autoClose: 5000,
   hideProgressBar: false,
@@ -10,4 +10,4 @@ const toastStyle = {
   progress: undefined,
 };
 
-export default toastStyle;
+export default toastConfig;

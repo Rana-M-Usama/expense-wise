@@ -1,13 +1,13 @@
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 
-import toastStyle from "components/tostify/Toast.styles";
+import toastConfig from "components/tostify/Toast.config";
 
 const Toast = (type: string, title: string) => {
   if (type === "success") {
-    toast.success(title, toastStyle);
+    toast.success(title, toastConfig);
   } else if (type === "danger") {
-    toast.error(title, toastStyle);
+    toast.error(title, toastConfig);
   }
 };
 

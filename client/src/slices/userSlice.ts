@@ -2,11 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 type currentUser = {
-  id: number | null;
-  firstName: string | null;
-  lastName: string | null;
-  email: string | null;
-  imageUrl: string | null;
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  imageUrl: string;
 };
 
 type UserState = {
@@ -15,7 +15,7 @@ type UserState = {
 
 const initialState: UserState = {
   currentUser: {
-    id: null,
+    id: "",
     firstName: "",
     lastName: "",
     email: "",

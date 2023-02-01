@@ -15,7 +15,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useDispatch } from "react-redux";
 
 import ForgotPasswordPage from "pages/forgotpassword/forgotpassword.page";
-import { setCurrentUser } from "components/user/userSlice";
+import { setCurrentUser } from "slices/userSlice";
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
 
@@ -122,24 +122,24 @@ const LoginPage = () => {
               >
                 Sign in
               </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link
-                    component="button"
-                    onClick={() => setModalIsOpen(true)}
-                    href="#"
-                    variant="body2"
-                  >
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link component={RouterLink} to="/signup" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
             </Box>
+            <Grid container>
+              <Grid item xs>
+                <Link
+                  component="button"
+                  onClick={() => setModalIsOpen(true)}
+                  href="#"
+                  variant="body2"
+                >
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link component={RouterLink} to="/signup" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
             <ForgotPasswordPage
               isOpen={modalIsOpen}
               onClose={() => setModalIsOpen(false)}

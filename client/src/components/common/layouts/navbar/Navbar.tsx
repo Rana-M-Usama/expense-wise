@@ -7,12 +7,20 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import DrawerMenu from "components/common/layouts/drawer/DrawerMenu";
-import React from "react";
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import { setCurrentUserEmpty } from "slices/userSlice";
+import Toast from "components/tostify/Toast";
+import useHttp from "utils/useHttp";
 
 const Navbar = () => {
   const [auth] = useState(true);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { request, error, clearError } = useHttp();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState<null | HTMLElement>(null);
 
@@ -27,6 +35,26 @@ const Navbar = () => {
   const toggleSlider = () => {
     setDrawerOpen(!drawerOpen);
   };
+
+  const logout = async (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    await request("/auth/logout", "GET");
+
+    if (!error) {
+      dispatch(setCurrentUserEmpty());
+      Toast("success", "Successfully logged out.");
+      localStorage.setItem("token", "");
+      localStorage.removeItem("token");
+      navigate("/");
+    }
+  };
+
+  useEffect(() => {
+    if (error) {
+      Toast("danger", error);
+      clearError();
+    }
+  }, [error]);
 
   return (
     <AppBar>
@@ -73,7 +101,7 @@ const Navbar = () => {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={logout}>Logout</MenuItem>
             </Menu>
           </div>
         )}
