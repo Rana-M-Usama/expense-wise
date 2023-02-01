@@ -1,5 +1,5 @@
-import { colors } from "constants/colors";
 import { makeStyles } from "@mui/styles";
+import { styles } from "constants/styles";
 
 export default makeStyles(() => ({
   container: {
@@ -18,7 +18,7 @@ export default makeStyles(() => ({
 
   avatar: {
     margin: "10px !important",
-    backgroundColor: `${colors.theme.primaryColor} !important`,
+    backgroundColor: `${styles.theme.primaryColor} !important`,
     width: "70px !important",
     height: "70px !important",
   },
@@ -35,7 +35,7 @@ export default makeStyles(() => ({
   textField: {
     "& .MuiOutlinedInput-root:hover": {
       "& > fieldset": {
-        borderColor: colors.textField.hoverBorderColor,
+        borderColor: styles.textField.hoverBorderColor,
       },
     },
   },

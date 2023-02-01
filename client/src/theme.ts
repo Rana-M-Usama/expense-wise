@@ -1,13 +1,13 @@
-import { colors } from "constants/colors";
 import { createTheme } from "@mui/material";
+import { styles } from "constants/styles";
 
 export const theme = createTheme({
   palette: {
     primary: {
-      main: colors.theme.primaryColor,
+      main: styles.theme.primaryColor,
     },
     secondary: {
-      main: colors.theme.secondaryColor,
+      main: styles.theme.secondaryColor,
     },
   },
 });
