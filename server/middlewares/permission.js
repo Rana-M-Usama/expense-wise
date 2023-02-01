@@ -3,6 +3,7 @@ import httpStatus from "http-status";
 import ErrorResponse from "../utils/errorResponse";
 import { isMongoId } from "../utils/helpers";
 import Permission from "../models/Permission";
+import User from "../models/User";
 
 const findPermission = async (req, res, next) => {
   const { id } = req.params;
@@ -27,4 +28,19 @@ const findPermission = async (req, res, next) => {
   );
 };
 
-export default findPermission;
+const findUserWithEmail = async (req, res, next) => {
+  req.body.user = await User.findOne({ email: req.body.userEmail });
+
+  if (!req.body.user) {
+    next(
+      new ErrorResponse(
+        `User not found with this email: ${req.body.userEmail}.`,
+        httpStatus.UNAUTHORIZED,
+      ),
+    );
+  }
+
+  next();
+};
+
+export { findPermission, findUserWithEmail };
