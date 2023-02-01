@@ -47,7 +47,7 @@ const ResetPasswordPage = () => {
           password: "",
           confirmPassword: "",
         });
-        navigate("/login");
+        navigate("/");
       }
     } else Toast("danger", "Invalid data.");
   };

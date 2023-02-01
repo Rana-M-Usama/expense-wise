@@ -45,7 +45,7 @@ const SignupPage = () => {
 
       if (!error) {
         Toast("success", "Successfully signed up.");
-        navigate("/login");
+        navigate("/");
       }
     } else Toast("danger", "Invalid data.");
   };

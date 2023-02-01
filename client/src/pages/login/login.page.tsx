@@ -27,23 +27,26 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
   const { loading, request, error, clearError } = useHttp();
+  const [loginCredentials, setLoginCredentials] = useState({
+    email: "",
+    password: "",
+  });
 
   const changeHandlerData = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setLoginData({ ...loginData, [name]: value });
+    setLoginCredentials({ ...loginCredentials, [name]: value });
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const response = await request("/auth/login", "POST", loginData);
+    const response = await request("/auth/login", "POST", loginCredentials);
 
     if (!error) {
       dispatch(setCurrentUser(response.data.user));
-      Toast("success", "Successfully logined in.");
+      Toast("success", "Successfully logged in.");
       localStorage.setItem("token", response.data.token);
-      setLoginData({ ...loginData, email: "", password: "" });
+      setLoginCredentials({ ...loginCredentials, email: "", password: "" });
       navigate("/profile");
     }
   };
@@ -91,7 +94,7 @@ const LoginPage = () => {
                 type="email"
                 placeholder="Email"
                 name="email"
-                value={loginData.email}
+                value={loginCredentials.email}
                 onChange={changeHandlerData}
               />
               <TextField
@@ -104,7 +107,7 @@ const LoginPage = () => {
                 autoComplete="current-password"
                 className={classes.textField}
                 name="password"
-                value={loginData.password}
+                value={loginCredentials.password}
                 onChange={changeHandlerData}
               />
               <FormControlLabel
