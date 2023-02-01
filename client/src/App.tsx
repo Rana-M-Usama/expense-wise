@@ -9,13 +9,14 @@ import SignupPage from "pages/signup/signup.page";
 import SingleSheet from "components/sheet/ExpenseSheet";
 
 import "App.css";
+import Navbar from "components/common/layouts/navbar/Navbar";
 import { theme } from "theme";
 
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <header className="App-header">
-        {/* Navbar will be show if user is signed in */}
+        <Navbar />
       </header>
       <div className="App-body">
         <Routes>

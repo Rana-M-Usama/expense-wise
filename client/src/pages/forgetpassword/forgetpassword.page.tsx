@@ -12,6 +12,7 @@ import {
 import { CloseOutlined, Mail } from "@mui/icons-material";
 import React from "react";
 
+import { styles } from "constants/styles";
 import useStyles from "pages/forgetpassword/forgetpassword.styles";
 
 interface Props {
@@ -19,7 +20,7 @@ interface Props {
   onClose: () => void;
 }
 
-const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
+const ForgetPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
   const classes = useStyles();
 
   return (
@@ -60,7 +61,7 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
           <Box
             component="form"
             sx={{
-              border: "1px solid #f0629270",
+              border: `1px solid ${styles.modalBox.border}`,
               p: 3,
               mb: 2,
             }}
@@ -83,12 +84,7 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
                 ),
               }}
             />
-            <Button
-              fullWidth
-              type="submit"
-              variant="contained"
-              className={classes.button}
-            >
+            <Button fullWidth type="submit" variant="contained">
               Send My Password
             </Button>
           </Box>
@@ -98,4 +94,4 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
   );
 };
 
-export default ForgotPasswordPage;
+export default ForgetPasswordPage;

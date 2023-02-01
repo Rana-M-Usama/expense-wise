@@ -67,15 +67,12 @@ const DrawerMenu: React.FC<Props> = ({ open, toggle }) => {
         {listItems.map((listItem, index) => (
           <ListItem key={listItem.listText} disablePadding>
             <ListItemButton
-              className={classes.listItem}
               component={Link}
               to={listItem.to}
               onClick={toggle}
               key={index}
             >
-              <ListItemIcon className={classes.listItem}>
-                {listItem.listIcon}
-              </ListItemIcon>
+              <ListItemIcon>{listItem.listIcon}</ListItemIcon>
               <ListItemText primary={listItem.listText} />
             </ListItemButton>
           </ListItem>

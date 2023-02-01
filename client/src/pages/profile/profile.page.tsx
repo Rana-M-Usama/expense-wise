@@ -1,17 +1,18 @@
-import React from "react";
 import {
-  TextField,
-  Grid,
-  Container,
-  Typography,
+  Avatar,
   Box,
   Button,
-  Avatar,
+  Container,
+  Grid,
+  TextField,
+  Typography,
 } from "@mui/material";
+import React from "react";
 import { Stack } from "@mui/system";
 
-import useStyles from "pages//profile/profile.styles";
+import { styles } from "constants/styles";
 import userImage from "assets/user.png";
+import useStyles from "pages//profile/profile.styles";
 
 const ProfilePage = () => {
   const classes = useStyles();
@@ -40,7 +41,7 @@ const ProfilePage = () => {
           sx={{
             width: 200,
             height: 200,
-            border: "5px solid #9e9e9e70",
+            border: `5px solid ${styles.userAvatar.border}`,
           }}
         />
       </Stack>
