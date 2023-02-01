@@ -7,9 +7,11 @@ import Sheet from "../models/Sheet";
 // @desc      Get sheets
 // @route     GET /api/v1/sheets
 // @access    Private
-const getSheets = asyncHandler(async (req, res) =>
-  res.status(httpStatus.OK).json(res.advancedResults),
-);
+const getSheets = asyncHandler(async (req, res) => {
+  const sheets = res.advancedResults.data.map((result) => result.sheet);
+
+  res.status(httpStatus.OK).json({ ...res.advancedResults, data: sheets });
+});
 
 // @desc      Get single sheet
 // @route     GET /api/v1/sheets/:id

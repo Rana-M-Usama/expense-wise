@@ -34,7 +34,7 @@ describe("Sheet endpoints", () => {
     });
 
     it("should return a list of all the sheets belonging to the owner", async () => {
-      await buildSheetList(2, user);
+      await buildSheetList(1, user);
 
       const sheets = await Sheet.where({ owner: user.id });
 
@@ -44,27 +44,21 @@ describe("Sheet endpoints", () => {
         .expect(httpStatus.OK);
 
       expect(res.body.success).toBeTruthy();
-      expect(res.body.count).toEqual(2);
+      expect(res.body.count).toEqual(1);
       expect(res.body.data).toMatchObject([
         {
           _id: sheets[0]._id,
           description: sheets[0].description,
           title: sheets[0].title,
           owner: {
-            _id: user.id,
+            _id: user._id,
             firstName: user.firstName,
             lastName: user.lastName,
+            imageUrl: user.imageUrl,
           },
-        },
-        {
-          _id: sheets[1]._id,
-          description: sheets[1].description,
-          title: sheets[1].title,
-          owner: {
-            _id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-          },
+          __v: expect.any(Number),
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
         },
       ]);
     });

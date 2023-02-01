@@ -16,9 +16,9 @@ import {
 import advancedResults from "../../middlewares/advancedResults";
 import ExpenseRouter from "./expenses";
 import findSheet from "../../middlewares/sheet";
+import Permission from "../../models/Permission";
 import PermissionRouter from "./permission";
 import protect from "../../middlewares/auth";
-import Sheet from "../../models/Sheet";
 
 const router = express.Router({ mergeParams: true });
 
@@ -30,12 +30,16 @@ router
   .route("/")
   .get(
     advancedResults(
-      Sheet,
+      Permission,
       {
-        path: "owner",
-        select: "firstName lastName",
+        path: "sheet",
+        populate: {
+          path: "owner",
+          select: "firstName lastName imageUrl",
+        },
       },
       true,
+      "sheet,-_id",
     ),
     getSheets,
   )
