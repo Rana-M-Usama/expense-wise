@@ -44,6 +44,11 @@ const listItems = [
   },
   {
     listIcon: <Info />,
+    listText: "Permissions",
+    to: "/permissions",
+  },
+  {
+    listIcon: <Info />,
     listText: "About",
     to: "about",
   },

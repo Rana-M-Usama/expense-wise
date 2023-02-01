@@ -4,6 +4,7 @@ import { ThemeProvider } from "@mui/material";
 
 import About from "components/about/About";
 import LoginPage from "pages/login/login.page";
+import Permissions from "components/permissions/Permissions";
 import Sheets from "components/sheet/Sheets";
 import SignupPage from "pages/signup/signup.page";
 import SingleSheet from "components/sheet/ExpenseSheet";
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="/sheets" element={<Sheets />} />
           <Route path="/expenses" element={<SingleSheet />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/permissions" element={<Permissions />} />
           <Route path="/about" element={<About />} />
         </Routes>
       </div>
