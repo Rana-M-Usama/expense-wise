@@ -165,7 +165,6 @@ const SignupPage = () => {
                 </Grid>
               </Grid>
               <Button
-                className={classes.button}
                 type="submit"
                 fullWidth
                 variant="contained"

@@ -1,0 +1,11 @@
+export const hoverColor = "#ffffff";
+export const editButtonColor = "#455a64";
+export const deleteButtonColor = "#f44336";
+export const primaryColor = "#E31C79";
+export const secondaryColor = "#ff80ab";
+export const hoverBorderColor = "#f06292";
+export const userAvatarBorder = "#9e9e9e70";
+export const amountBoxBackground = "#607d8b";
+export const listBackground = "#eeeeee";
+export const modalBackground = "#ffffff";
+export const modalBoxBorder = "#f0629270";

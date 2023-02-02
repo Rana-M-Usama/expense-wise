@@ -9,6 +9,7 @@ import Permission from "../../models/Permission";
 import setupTestDB from "../utils/setupTestDB";
 import Sheet from "../../models/Sheet";
 import { SheetFactory } from "../factories/sheet.factory";
+import User from "../../models/User";
 import UserFactory from "../factories/user.factory";
 
 setupTestDB();
@@ -17,15 +18,18 @@ describe("Permission endpoints", () => {
   let permission;
   let permissionParams;
   let user;
+  let duplicateUser;
   let sheet;
   let authToken;
 
   beforeEach(async () => {
     user = UserFactory();
+    duplicateUser = await UserFactory().save();
+
     sheet = SheetFactory({ owner: user });
     permissionParams = {
       type: VIEW,
-      user: UserFactory(),
+      userEmail: duplicateUser.email,
       sheet,
     };
 
@@ -33,7 +37,6 @@ describe("Permission endpoints", () => {
     await sheet.save();
     permission = await Permission.findOne({ user, sheet });
     authToken = await user.getSignedJwtToken();
-    await permissionParams.user.save();
   });
 
   describe("POST /api/v1/sheets/:sheetId/permissions", () => {
@@ -136,12 +139,15 @@ describe("Permission endpoints", () => {
         .send(permissionParams)
         .expect(httpStatus.OK);
 
+      user = await User.findOne({ email: permissionParams.userEmail });
+
       expect(res.body.success).toBeTruthy();
       expect(res.body.data).toMatchObject({
-        _id: expect.anything(),
-        user: permissionParams.user._id,
         sheet: permissionParams.sheet._id,
         type: VIEW,
+        user: {
+          _id: user._id,
+        },
       });
     });
 
@@ -155,12 +161,15 @@ describe("Permission endpoints", () => {
         .send(permissionParams)
         .expect(httpStatus.OK);
 
+      user = await User.findOne({ email: permissionParams.userEmail });
+
       expect(res.body.success).toBeTruthy();
       expect(res.body.data).toMatchObject({
-        _id: expect.anything(),
-        user: permissionParams.user._id,
         sheet: permissionParams.sheet._id,
         type: VIEW,
+        user: {
+          _id: user._id,
+        },
       });
     });
 
@@ -174,12 +183,15 @@ describe("Permission endpoints", () => {
         .send(permissionParams)
         .expect(httpStatus.OK);
 
+      user = await User.findOne({ email: permissionParams.userEmail });
+
       expect(res.body.success).toBeTruthy();
       expect(res.body.data).toMatchObject({
-        _id: expect.anything(),
-        user: permissionParams.user._id,
         sheet: permissionParams.sheet._id,
         type: EDIT,
+        user: {
+          _id: user._id,
+        },
       });
     });
 
@@ -193,12 +205,15 @@ describe("Permission endpoints", () => {
         .send(permissionParams)
         .expect(httpStatus.OK);
 
+      user = await User.findOne({ email: permissionParams.userEmail });
+
       expect(res.body.success).toBeTruthy();
       expect(res.body.data).toMatchObject({
-        _id: expect.anything(),
-        user: permissionParams.user._id,
         sheet: permissionParams.sheet._id,
         type: VIEW,
+        user: {
+          _id: user._id,
+        },
       });
     });
 
@@ -212,12 +227,15 @@ describe("Permission endpoints", () => {
         .send(permissionParams)
         .expect(httpStatus.OK);
 
+      user = await User.findOne({ email: permissionParams.userEmail });
+
       expect(res.body.success).toBeTruthy();
       expect(res.body.data).toMatchObject({
-        _id: expect.anything(),
-        user: permissionParams.user._id,
         sheet: permissionParams.sheet._id,
         type: EDIT,
+        user: {
+          _id: user._id,
+        },
       });
     });
 
@@ -231,37 +249,43 @@ describe("Permission endpoints", () => {
         .send(permissionParams)
         .expect(httpStatus.OK);
 
+      user = await User.findOne({ email: permissionParams.userEmail });
+
       expect(res.body.success).toBeTruthy();
       expect(res.body.data).toMatchObject({
-        _id: expect.anything(),
-        user: permissionParams.user._id,
         sheet: permissionParams.sheet._id,
         type: ADMIN,
+        user: {
+          _id: user._id,
+        },
       });
     });
 
     it("should be fine if an admin changes the sheet owner's permissions to edit or view", async () => {
-      await Permission.findOneAndUpdate(permission.id, { type: ADMIN });
-      permissionParams.type = ADMIN;
-      await new Permission(permissionParams).save();
-      const authToken2 = await permissionParams.user.getSignedJwtToken();
+      const user2 = await UserFactory().save();
+      await new Permission({
+        type: ADMIN,
+        user: user2,
+        sheet,
+      }).save();
+      const authToken2 = await user2.getSignedJwtToken();
 
       const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
         .set("Authorization", `Bearer ${authToken2}`)
         .send({
           type: EDIT,
-          user: permission.user._id,
+          userEmail: user.email,
           sheet: permission.sheet._id,
         })
         .expect(httpStatus.OK);
 
+      user = await User.findOne({ email: user.email });
       expect(res.body.success).toBeTruthy();
       expect(res.body.data).toMatchObject({
-        _id: expect.anything(),
-        user: permission.user._id,
-        sheet: permission.sheet._id,
+        sheet: permissionParams.sheet._id,
         type: EDIT,
+        user: user.id,
       });
     });
   });
@@ -350,8 +374,12 @@ describe("Permission endpoints", () => {
     });
 
     it("should raise an error if a user provides an invalid id for sheet", async () => {
-      await new Permission(permissionParams).save();
-
+      const user2 = await UserFactory().save();
+      await new Permission({
+        type: ADMIN,
+        user: user2,
+        sheet,
+      }).save();
       const res = await request(app)
         .delete(`/api/v1/sheets/invalid/permissions/${permissionParams._id}`)
         .set("Authorization", `Bearer ${authToken}`)
@@ -360,7 +388,6 @@ describe("Permission endpoints", () => {
       expect(res.body.success).toBeFalsy();
       expect(res.body.errors).toEqual(["Invalid sheet id."]);
     });
-
     it("should raise an error if a user provides an invalid id for permission", async () => {
       const res = await request(app)
         .delete(`/api/v1/sheets/${sheet._id}/permissions/invalid`)
@@ -372,9 +399,13 @@ describe("Permission endpoints", () => {
     });
 
     it("should raise an error if a user having view permission attempts to delete a permission", async () => {
-      const permission2 = await new Permission(permissionParams).save();
+      const user2 = await UserFactory().save();
+      const permission2 = await new Permission({
+        type: ADMIN,
+        user: user2,
+        sheet,
+      }).save();
       await Permission.findOneAndUpdate(permission.id, { type: VIEW });
-
       const res = await request(app)
         .delete(`/api/v1/sheets/${sheet._id}/permissions/${permission2._id}`)
         .set("Authorization", `Bearer ${authToken}`)
@@ -389,9 +420,13 @@ describe("Permission endpoints", () => {
     });
 
     it("should raise an error if a user having edit permission attempts to delete a permission", async () => {
-      const permission2 = await new Permission(permissionParams).save();
+      const user2 = await UserFactory().save();
+      const permission2 = await new Permission({
+        type: ADMIN,
+        user: user2,
+        sheet,
+      }).save();
       await Permission.findOneAndUpdate(permission.id, { type: EDIT });
-
       const res = await request(app)
         .delete(`/api/v1/sheets/${sheet._id}/permissions/${permission2._id}`)
         .set("Authorization", `Bearer ${authToken}`)
@@ -406,9 +441,13 @@ describe("Permission endpoints", () => {
     });
 
     it("should raise an error if a user attempts to delete a permission without having any permission", async () => {
-      const permission2 = await new Permission(permissionParams).save();
-      const authToken2 = await permissionParams.user.getSignedJwtToken();
-
+      const user2 = await UserFactory().save();
+      const permission2 = await new Permission({
+        type: VIEW,
+        user: user2,
+        sheet,
+      }).save();
+      const authToken2 = await permission2.user.getSignedJwtToken();
       const res = await request(app)
         .delete(`/api/v1/sheets/${sheet._id}/permissions/${permission2._id}`)
         .set("Authorization", `Bearer ${authToken2}`)
@@ -423,10 +462,12 @@ describe("Permission endpoints", () => {
     });
 
     it("should delete a permission and return an empty object if a user has admin permission of a specified sheet", async () => {
-      const permissionToBeDeleted = await new Permission(
-        permissionParams,
-      ).save();
-
+      const user2 = await UserFactory().save();
+      const permissionToBeDeleted = await new Permission({
+        type: ADMIN,
+        user: user2,
+        sheet,
+      }).save();
       const res = await request(app)
         .delete(
           `/api/v1/sheets/${sheet._id}/permissions/${permissionToBeDeleted._id}`,

@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import About from "components/about/About";
 import LoginPage from "pages/login/login.page";
 import Navbar from "components/common/layouts/navbar/Navbar";
+import Permissions from "components/permissions/Permissions";
 import ProfilePage from "pages/profile/profile.page";
 import ResetPassword from "pages/resetpassword/resetpassword.page";
 import type { RootState } from "app/store";
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/sheets" element={<Sheets />} />
           <Route path="/expenses" element={<SingleSheet />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/permissions" element={<Permissions />} />
           <Route path="/about" element={<About />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/reset-password" element={<ResetPassword />} />

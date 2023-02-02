@@ -1,4 +1,5 @@
 import { makeStyles } from "@mui/styles";
+
 import { styles } from "constants/styles";
 
 export default makeStyles(() => ({
@@ -9,7 +10,7 @@ export default makeStyles(() => ({
     padding: 20,
     borderRadius: "10px",
     position: "absolute",
-    backgroundColor: styles.modal.backgroundColor,
+    backgroundColor: "white",
     boxShadow: "20 !important",
     transform: "translate(-50%, -50%)",
   },
@@ -31,5 +32,11 @@ export default makeStyles(() => ({
         borderColor: styles.textField.hoverBorderColor,
       },
     },
+  },
+
+  errorMessage: {
+    color: "red",
+    fontSize: "0.8rem",
+    marginTop: "8px",
   },
 }));

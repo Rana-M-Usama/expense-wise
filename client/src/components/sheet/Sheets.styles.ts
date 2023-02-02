@@ -1,29 +1,34 @@
 import { makeStyles } from "@mui/styles";
+import { styles } from "constants/styles";
 
 export default makeStyles(() => ({
   openButton: {
     "&:hover": {
-      color: "white",
-      border: "1px solid #E31C7980",
-      background: "#E31C79 !important",
+      color: styles.openButton.hoverColor,
+      border: `1px solid ${styles.openButton.hoverBorderColor}`,
+      background: `${styles.openButton.hoverBackgroundColor} !important`,
     },
   },
   editButton: {
-    color: "#455a64 !important",
-    border: "1px solid #455a64 !important",
+    color: `${styles.editButton.color} !important`,
+    border: `1px solid ${styles.editButton.border} !important`,
     "&:hover": {
-      color: "white !important",
-      border: "1px solid #455a6480",
-      background: "#455a64 !important",
+      color: `${styles.editButton.hoverColor} !important`,
+      border: `1px solid ${styles.editButton.hoverBorderColor}`,
+      background: `${styles.editButton.hoverBackgroundColor} !important`,
     },
   },
   deleteButton: {
-    color: "##f44336 !important",
-    border: "1px solid ##f44336 !important",
+    color: `${styles.deleteButton.color} !important`,
+    border: `1px solid ${styles.deleteButton.border} !important`,
     "&:hover": {
-      color: "white !important",
-      border: "1px solid #f4433680",
-      background: "#f44336 !important",
+      color: `${styles.deleteButton.hoverColor} !important`,
+      border: `1px solid ${styles.deleteButton.hoverBorderColor}`,
+      background: `${styles.deleteButton.hoverBackgroundColor} !important`,
     },
+  },
+  list: {
+    borderRadius: 10,
+    backgroundColor: styles.list.backgroundColor,
   },
 }));

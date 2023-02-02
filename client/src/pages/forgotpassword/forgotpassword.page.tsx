@@ -16,6 +16,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
 
+import { styles } from "constants/styles";
 import useStyles from "pages/forgotpassword/forgotpassword.styles";
 
 interface Props {
@@ -23,7 +24,7 @@ interface Props {
   onClose: () => void;
 }
 
-const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
+const ForgetPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
   const classes = useStyles();
   const [forgotPasswordData, setForgotPasswordData] = useState({ email: "" });
   const { loading, request, error, clearError } = useHttp();
@@ -89,7 +90,7 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
             component="form"
             onSubmit={handleSubmit}
             sx={{
-              border: "1px solid #f0629270",
+              border: `1px solid ${styles.modalBox.border}`,
               p: 3,
               mb: 2,
             }}
@@ -116,12 +117,7 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
                 ),
               }}
             />
-            <Button
-              fullWidth
-              type="submit"
-              variant="contained"
-              className={classes.button}
-            >
+            <Button fullWidth type="submit" variant="contained">
               {loading ? <CircularProgress /> : "Send My Password"}
             </Button>
           </Box>
@@ -131,4 +127,4 @@ const ForgotPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
   );
 };
 
-export default ForgotPasswordPage;
+export default ForgetPasswordPage;

@@ -110,12 +110,7 @@ const ResetPasswordPage = () => {
                 value={resetPasswordData.confirmPassword}
                 onChange={changeHandlerData}
               />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                className={classes.button}
-              >
+              <Button type="submit" fullWidth variant="contained">
                 Reset Password
               </Button>
             </Box>

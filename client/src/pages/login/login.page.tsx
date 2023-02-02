@@ -114,12 +114,7 @@ const LoginPage = () => {
                 control={<Checkbox value="remember" />}
                 label="Remember me"
               />
-              <Button
-                fullWidth
-                type="submit"
-                variant="contained"
-                className={classes.button}
-              >
+              <Button fullWidth type="submit" variant="contained">
                 Sign in
               </Button>
             </Box>

@@ -95,12 +95,7 @@ const Sheets = () => {
         </Button>
         <SheetModal isOpen={isModalOpen} {...modalProps} onClose={hideModal} />
       </Stack>
-      <List
-        sx={{
-          borderRadius: 3,
-          bgcolor: "#eeeeee",
-        }}
-      >
+      <List className={classes.list}>
         {DATA.currentData().map((sheet: any) => (
           <React.Fragment key={sheet.id}>
             <ListItem

@@ -16,6 +16,7 @@ import type { RootState } from "app/store";
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
 
+import { styles } from "constants/styles";
 import userImage from "assets/user.png";
 import useStyles from "pages//profile/profile.styles";
 
@@ -70,7 +71,7 @@ const ProfilePage = () => {
               sx={{
                 width: 200,
                 height: 200,
-                border: "5px solid #9e9e9e70",
+                border: `5px solid ${styles.userAvatar.border}`,
               }}
             />
           </Stack>
