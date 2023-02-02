@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { CloseOutlined, Mail } from "@mui/icons-material";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import Toast from "components/tostify/Toast";
@@ -24,7 +24,7 @@ interface Props {
   onClose: () => void;
 }
 
-const ForgetPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
+const ForgetPasswordPage: FC<Props> = ({ isOpen, onClose }) => {
   const classes = useStyles();
   const [forgotPasswordData, setForgotPasswordData] = useState({ email: "" });
   const { loading, request, error, clearError } = useHttp();
@@ -34,12 +34,12 @@ const ForgetPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
     setForgotPasswordData({ ...forgotPasswordData, [name]: value });
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     await request("/auth/forgot-password", "POST", forgotPasswordData);
 
     if (!error) {
-      setForgotPasswordData({ ...forgotPasswordData, email: "" });
+      setForgotPasswordData({ email: "" });
       Toast("success", "Email sent successfully.");
     }
   };

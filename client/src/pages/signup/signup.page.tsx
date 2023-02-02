@@ -9,7 +9,7 @@ import {
   Link,
   TextField,
 } from "@mui/material";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -37,7 +37,7 @@ const SignupPage = () => {
     setSignupData({ ...signupData, [name]: value });
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (signupData.password === signupData.confirmPassword) {
@@ -45,6 +45,13 @@ const SignupPage = () => {
 
       if (!error) {
         Toast("success", "Successfully signed up.");
+        setSignupData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
         navigate("/");
       }
     } else Toast("danger", "Invalid data.");

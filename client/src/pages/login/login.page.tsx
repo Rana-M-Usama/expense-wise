@@ -9,7 +9,7 @@ import {
   Link,
   TextField,
 } from "@mui/material";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useDispatch } from "react-redux";
@@ -38,7 +38,7 @@ const LoginPage = () => {
     setLoginCredentials({ ...loginCredentials, [name]: value });
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const response = await request("/auth/login", "POST", loginCredentials);
 
@@ -46,7 +46,7 @@ const LoginPage = () => {
       dispatch(setCurrentUser(response.data.user));
       Toast("success", "Successfully logged in.");
       localStorage.setItem("token", response.data.token);
-      setLoginCredentials({ ...loginCredentials, email: "", password: "" });
+      setLoginCredentials({ email: "", password: "" });
       navigate("/profile");
     }
   };

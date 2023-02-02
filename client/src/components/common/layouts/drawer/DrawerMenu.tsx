@@ -15,8 +15,8 @@ import {
   Info,
   Payment,
 } from "@mui/icons-material";
+import React, { FC } from "react";
 import { Link } from "react-router-dom";
-import React from "react";
 
 import logo from "assets/logo.png";
 import useStyles from "./DrawerMenu.styles";
@@ -54,7 +54,7 @@ const listItems = [
   },
 ];
 
-const DrawerMenu: React.FC<Props> = ({ open, toggle }) => {
+const DrawerMenu: FC<Props> = ({ open, toggle }) => {
   const classes = useStyles();
 
   const sideList = () => (

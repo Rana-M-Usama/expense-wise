@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Lock } from "@mui/icons-material";
@@ -32,7 +32,7 @@ const ResetPasswordPage = () => {
     setResetPasswordData({ ...resetPasswordData, [name]: value });
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { resetToken } = useParams<{ resetToken: string | undefined }>();
 
@@ -42,11 +42,7 @@ const ResetPasswordPage = () => {
 
       if (!error) {
         Toast("success", "Successfully reset password.");
-        setResetPasswordData({
-          ...resetPasswordData,
-          password: "",
-          confirmPassword: "",
-        });
+        setResetPasswordData({ password: "", confirmPassword: "" });
         navigate("/");
       }
     } else Toast("danger", "Invalid data.");

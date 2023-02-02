@@ -7,7 +7,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { MouseEvent, useEffect, useState } from "react";
 import DrawerMenu from "components/common/layouts/drawer/DrawerMenu";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +24,7 @@ const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState<null | HTMLElement>(null);
 
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const handleMenu = (event: MouseEvent<HTMLElement>) => {
     setMenuOpen(event.currentTarget);
   };
 
@@ -36,7 +36,7 @@ const Navbar = () => {
     setDrawerOpen(!drawerOpen);
   };
 
-  const logout = async (event: React.MouseEvent<HTMLElement>) => {
+  const logout = async (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
     await request("/auth/logout", "GET");
 
@@ -44,7 +44,6 @@ const Navbar = () => {
       dispatch(setCurrentUserEmpty());
       Toast("success", "Successfully logged out.");
       localStorage.setItem("token", "");
-      localStorage.removeItem("token");
       navigate("/");
     }
   };

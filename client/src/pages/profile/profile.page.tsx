@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Stack } from "@mui/system";
 import { useSelector } from "react-redux";
@@ -37,7 +37,7 @@ const ProfilePage = () => {
     setProfileData({ ...profileData, [name]: value });
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     await request("/auth/me", "PUT", profileData);
 

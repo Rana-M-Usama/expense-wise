@@ -2,26 +2,20 @@ import { Route, Routes } from "react-router-dom";
 import React from "react";
 import { ThemeProvider } from "@mui/material";
 import { ToastContainer } from "react-toastify";
-import { useSelector } from "react-redux";
 
 import About from "components/about/About";
+import { isLoggedIn } from "utils/helpers";
 import LoginPage from "pages/login/login.page";
 import Navbar from "components/common/layouts/navbar/Navbar";
 import Permissions from "components/permissions/Permissions";
 import ProfilePage from "pages/profile/profile.page";
 import ResetPassword from "pages/resetpassword/resetpassword.page";
-import type { RootState } from "app/store";
 import Sheets from "components/sheet/Sheets";
 import SignupPage from "pages/signup/signup.page";
 import SingleSheet from "components/sheet/ExpenseSheet";
 
 import "App.css";
 import { theme } from "theme";
-
-const isLoggedIn = () => {
-  const currentUser = useSelector((state: RootState) => state.user.currentUser);
-  return currentUser.id === "" ? false : true;
-};
 
 const App = () => {
   return (
