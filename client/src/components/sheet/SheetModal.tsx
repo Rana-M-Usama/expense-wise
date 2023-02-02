@@ -1,29 +1,70 @@
 import { Avatar, Button, TextField, Typography } from "@mui/material";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Box } from "@mui/system";
 import Modal from "@mui/material/Modal";
-import React from "react";
 
 import logo from "assets/logo.png";
+import useHttp from "utils/useHttp";
 import useStyles from "components/sheet/SheetModal.styles";
 
 type Props = {
   isOpen: boolean;
-  title: string;
+  modalTitle: string;
   button: string;
-  name: string;
+  id: string;
+  title: string;
   description: string;
   onClose: () => void;
+  fetchData: () => void;
 };
 
 const SheetModal = ({
   isOpen,
-  title,
+  modalTitle,
   button,
-  name,
+  id,
+  title,
   description,
   onClose,
+  fetchData,
 }: Props) => {
   const classes = useStyles();
+  const { request, error, clearError } = useHttp();
+  const [sheetData, setSheetData] = useState({ title: "", description: "" });
+
+  useEffect(() => {
+    setSheetData({
+      title,
+      description,
+    });
+  }, [title, description]);
+
+  const changeHandlerData = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setSheetData({ ...sheetData, [name]: value });
+  };
+
+  const handleSubmit = async () => {
+    if (button === "Create") {
+      await request("/sheets", "POST", sheetData);
+
+      if (!error) {
+        alert("Successfully created sheet.");
+        clearError();
+        fetchData();
+        onClose();
+      }
+    } else {
+      await request(`/sheets/${id}`, "PUT", sheetData);
+
+      if (!error) {
+        alert("Successfully updated sheet.");
+        clearError();
+        fetchData();
+        onClose();
+      }
+    }
+  };
 
   return (
     <Modal
@@ -46,7 +87,7 @@ const SheetModal = ({
         <Box className={classes.box}>
           <Avatar className={classes.avatar} src={logo} alt="expenseWise" />
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            {title}
+            {modalTitle}
           </Typography>
         </Box>
 
@@ -56,10 +97,11 @@ const SheetModal = ({
             margin="normal"
             required
             fullWidth
-            id="name"
-            label={name ? null : "Name"}
-            value={name}
-            name="name"
+            id="title"
+            label={title ? null : "Title"}
+            value={sheetData.title}
+            onChange={changeHandlerData}
+            name="title"
           />
           <TextField
             className={classes.textfield}
@@ -67,13 +109,14 @@ const SheetModal = ({
             margin="normal"
             required
             fullWidth
-            name="descrption"
+            name="description"
             label={description ? null : "Description"}
-            value={description}
+            value={sheetData.description}
+            onChange={changeHandlerData}
             id="description"
           />
           <Box textAlign="center">
-            <Button variant="contained" sx={{ mt: 5 }}>
+            <Button onClick={handleSubmit} variant="contained" sx={{ mt: 5 }}>
               {button}
             </Button>
           </Box>
