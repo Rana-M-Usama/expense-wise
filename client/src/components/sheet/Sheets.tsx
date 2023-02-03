@@ -9,7 +9,7 @@ import {
   Pagination,
   Stack,
 } from "@mui/material";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import { Box } from "@mui/system";
@@ -34,6 +34,7 @@ const Sheets = () => {
   const dispatch = useDispatch();
   const { loading, request, error, clearError } = useHttp();
   const sheets = useSelector((state: RootState) => state.sheet.sheets);
+  const currentUser = useSelector((state: RootState) => state.user.currentUser);
   let [page, setPage] = useState(1);
   const [paginate] = useState(10);
   const classes = useStyles();
@@ -117,11 +118,11 @@ const Sheets = () => {
           </Stack>
           <List className={classes.list}>
             {DATA.currentData().map((sheet: any) => (
-              <React.Fragment key={sheet._id}>
+              <Fragment key={sheet._id}>
                 <ListItem
                   secondaryAction={
                     <Box sx={{ "& button": { m: 1 } }}>
-                      {sheet.owner._id === "" ? ( // use current user id
+                      {sheet.owner._id === currentUser.id ? (
                         <>
                           <Button
                             className={classes.openButton}
@@ -170,7 +171,7 @@ const Sheets = () => {
                   <ListItemText primary={sheet.title} />
                 </ListItem>
                 <Divider variant="inset" component="li" />
-              </React.Fragment>
+              </Fragment>
             ))}
           </List>
           <Box

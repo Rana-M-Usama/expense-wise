@@ -2,11 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 type currentUser = {
-  id: number | null;
-  firstName: string | null;
-  lastName: string | null;
-  email: string | null;
-  imageUrl: string | null;
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  imageUrl: string;
 };
 
 type UserState = {
@@ -15,10 +15,10 @@ type UserState = {
 
 const initialState: UserState = {
   currentUser: {
-    id: 1,
-    firstName: "test",
-    lastName: "user",
-    email: "test@gmail.com",
+    id: "",
+    firstName: "",
+    lastName: "",
+    email: "",
     imageUrl: "",
   },
 };
@@ -31,13 +31,7 @@ const userSlice = createSlice({
       state.currentUser = action.payload;
     },
     setCurrentUserEmpty: state => {
-      state.currentUser = {
-        id: null,
-        firstName: null,
-        lastName: null,
-        imageUrl: null,
-        email: null,
-      };
+      state.currentUser = { ...initialState.currentUser };
     },
   },
 });

@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import { sheetReducer } from "slices/sheetSlice";
-import { userReducer } from "components/user/userSlice";
+import { userReducer } from "slices/userSlice";
 
 export const store = configureStore({
   reducer: {
