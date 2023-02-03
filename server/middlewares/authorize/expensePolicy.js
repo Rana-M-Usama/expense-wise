@@ -9,7 +9,7 @@ const expensePolicy = async (req, res, next) => {
 
   next(
     new ErrorResponse(
-      "You can't access this expenseascacacs.",
+      "You can't access this expense.",
       httpStatus.UNAUTHORIZED,
     ),
   );
