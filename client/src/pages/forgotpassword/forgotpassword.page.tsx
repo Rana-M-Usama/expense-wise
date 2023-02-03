@@ -10,18 +10,46 @@ import {
   Typography,
 } from "@mui/material";
 import { CloseOutlined, Mail } from "@mui/icons-material";
-import React from "react";
+import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
+
+import Toast from "components/tostify/Toast";
+import useHttp from "utils/useHttp";
 
 import { styles } from "constants/styles";
-import useStyles from "pages/forgetpassword/forgetpassword.styles";
+import useStyles from "pages/forgotpassword/forgotpassword.styles";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const ForgetPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
+const ForgetPasswordPage: FC<Props> = ({ isOpen, onClose }) => {
   const classes = useStyles();
+  const [forgotPasswordData, setForgotPasswordData] = useState({ email: "" });
+  const { loading, request, error, clearError } = useHttp();
+
+  const changeHandlerData = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setForgotPasswordData({ ...forgotPasswordData, [name]: value });
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    await request("/auth/forgot-password", "POST", forgotPasswordData);
+
+    if (!error) {
+      setForgotPasswordData({ email: "" });
+      Toast("success", "Email sent successfully.");
+    }
+  };
+
+  useEffect(() => {
+    if (error) {
+      Toast("danger", error);
+      clearError();
+    }
+  }, [error]);
 
   return (
     <Modal
@@ -55,11 +83,12 @@ const ForgetPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
             <CloseOutlined />
           </IconButton>
         </Box>
-        <Typography variant="h4">Forget Password?</Typography>
+        <Typography variant="h4">Forgot Password?</Typography>
         <Typography sx={{ m: 1 }}>You can reset your password here</Typography>
         <Container>
           <Box
             component="form"
+            onSubmit={handleSubmit}
             sx={{
               border: `1px solid ${styles.modalBox.border}`,
               p: 3,
@@ -68,7 +97,6 @@ const ForgetPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
           >
             <TextField
               margin="normal"
-              name="email"
               id="email"
               autoComplete="email"
               label="Email Address"
@@ -76,6 +104,11 @@ const ForgetPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
               fullWidth
               autoFocus
               className={classes.textField}
+              type="email"
+              placeholder="Email"
+              name="email"
+              value={forgotPasswordData.email}
+              onChange={changeHandlerData}
               InputProps={{
                 startAdornment: (
                   <InputAdornment disableTypography position="start">
@@ -85,7 +118,7 @@ const ForgetPasswordPage: React.FC<Props> = ({ isOpen, onClose }) => {
               }}
             />
             <Button fullWidth type="submit" variant="contained">
-              Send My Password
+              {loading ? <CircularProgress /> : "Send My Password"}
             </Button>
           </Box>
         </Container>

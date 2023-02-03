@@ -1,24 +1,26 @@
 import { Route, Routes } from "react-router-dom";
 import React from "react";
 import { ThemeProvider } from "@mui/material";
+import { ToastContainer } from "react-toastify";
 
 import About from "components/about/About";
+import { isLoggedIn } from "utils/helpers";
 import LoginPage from "pages/login/login.page";
+import Navbar from "components/common/layouts/navbar/Navbar";
 import Permissions from "components/permissions/Permissions";
+import ProfilePage from "pages/profile/profile.page";
+import ResetPassword from "pages/resetpassword/resetpassword.page";
 import Sheets from "components/sheet/Sheets";
 import SignupPage from "pages/signup/signup.page";
 import SingleSheet from "components/sheet/ExpenseSheet";
 
 import "App.css";
-import Navbar from "components/common/layouts/navbar/Navbar";
 import { theme } from "theme";
 
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
-      <header className="App-header">
-        <Navbar />
-      </header>
+      <header className="App-header">{isLoggedIn() ? <Navbar /> : ""}</header>
       <div className="App-body">
         <Routes>
           <Route path="/" element={<LoginPage />} />
@@ -27,8 +29,11 @@ const App = () => {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/permissions" element={<Permissions />} />
           <Route path="/about" element={<About />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </div>
+      <ToastContainer />
     </ThemeProvider>
   );
 };

@@ -8,7 +8,7 @@ import {
   Pagination,
   Stack,
 } from "@mui/material";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, Fragment, useState } from "react";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import { Box } from "@mui/system";
 
@@ -97,7 +97,7 @@ const Sheets = () => {
       </Stack>
       <List className={classes.list}>
         {DATA.currentData().map((sheet: any) => (
-          <React.Fragment key={sheet.id}>
+          <Fragment key={sheet.id}>
             <ListItem
               secondaryAction={
                 <Box sx={{ "& button": { m: 1 } }}>
@@ -148,7 +148,7 @@ const Sheets = () => {
               <ListItemText primary={sheet.name} />
             </ListItem>
             <Divider variant="inset" component="li" />
-          </React.Fragment>
+          </Fragment>
         ))}
       </List>
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
