@@ -1,9 +1,17 @@
 const advancedResults =
-  (model, populate, filterByOwner) => async (req, res, next) => {
+  (model, populate, filterBy, select) => async (req, res, next) => {
     let query;
 
-    if (filterByOwner) {
-      req.query.owner = req.user.id;
+    if (filterBy?.user) {
+      req.query.user = req.user;
+    }
+
+    if (filterBy?.sheet) {
+      req.query.sheet = req.sheet;
+    }
+
+    if (select) {
+      req.query.select = select;
     }
 
     // Copy req.query

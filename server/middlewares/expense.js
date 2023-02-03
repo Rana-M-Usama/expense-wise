@@ -13,7 +13,7 @@ const findExpense = async (req, res, next) => {
     );
   }
 
-  req.expense = await Expense.findById(id)
+  req.expense = await Expense.findOne({ _id: id, sheet: req.sheet })
     .populate("owner", ["firstName", "lastName"])
     .populate("sheet", ["title", "owner"])
     .populate({

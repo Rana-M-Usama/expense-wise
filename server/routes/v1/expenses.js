@@ -24,10 +24,14 @@ router.use(findSheet, sheetPolicy);
 router
   .route("/")
   .get(
-    advancedResults(Expense, {
-      path: "sheet",
-      select: "title owner",
-    }),
+    advancedResults(
+      Expense,
+      {
+        path: "sheet",
+        select: "title owner",
+      },
+      { sheet: true },
+    ),
     viewSheetPolicy,
     getExpenses,
   )
