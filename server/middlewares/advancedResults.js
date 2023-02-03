@@ -1,9 +1,13 @@
 const advancedResults =
-  (model, populate, filterByUser, select) => async (req, res, next) => {
+  (model, populate, filterBy, select) => async (req, res, next) => {
     let query;
 
-    if (filterByUser) {
+    if (filterBy?.user) {
       req.query.user = req.user;
+    }
+
+    if (filterBy?.sheet) {
+      req.query.sheet = req.sheet;
     }
 
     if (select) {

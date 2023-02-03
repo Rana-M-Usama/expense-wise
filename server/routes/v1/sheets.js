@@ -38,7 +38,7 @@ router
           select: "firstName lastName imageUrl",
         },
       },
-      true,
+      { user: true },
       "sheet,-_id",
     ),
     getSheets,
