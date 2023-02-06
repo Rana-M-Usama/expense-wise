@@ -28,7 +28,7 @@ const sheetSlice = createSlice({
       state.sheets = { ...initialState.sheets };
     },
     addSheet: (state, action: PayloadAction<{ data: Sheet }>) => {
-      state.sheets.push({
+      state.sheets.unshift({
         ...action.payload.data,
         permissionType: "admin",
       });
