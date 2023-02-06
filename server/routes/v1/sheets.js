@@ -39,7 +39,7 @@ router
         },
       },
       { user: true },
-      "sheet,-_id",
+      "sheet,-_id,type",
     ),
     getSheets,
   )

@@ -8,7 +8,10 @@ import Sheet from "../models/Sheet";
 // @route     GET /api/v1/sheets
 // @access    Private
 const getSheets = asyncHandler(async (req, res) => {
-  const sheets = res.advancedResults.data.map((result) => result.sheet);
+  const sheets = res.advancedResults.data.map((result) => ({
+    ...result.sheet._doc,
+    permissionType: result.type,
+  }));
 
   res.status(httpStatus.OK).json({ ...res.advancedResults, data: sheets });
 });
