@@ -11,7 +11,9 @@ const advancedResults =
     }
 
     if (select) {
-      req.query.select = select;
+      req.query.select = req.query.select
+        ? `${req.query.select},${select}`
+        : select;
     }
 
     // Copy req.query
