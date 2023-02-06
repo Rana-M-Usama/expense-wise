@@ -26,11 +26,20 @@ const ProfilePage = () => {
   const { loading, request, error, clearError } = useHttp();
 
   const [profileData, setProfileData] = useState({
-    firstName: currentUser.firstName,
-    lastName: currentUser.lastName,
-    email: currentUser.email,
-    imageUrl: currentUser.imageUrl,
+    firstName: "",
+    lastName: "",
+    email: "",
+    imageUrl: "",
   });
+
+  useEffect(() => {
+    setProfileData({
+      firstName: currentUser.firstName,
+      lastName: currentUser.lastName,
+      email: currentUser.email,
+      imageUrl: currentUser.imageUrl,
+    });
+  }, [currentUser]);
 
   const changeHandlerData = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
