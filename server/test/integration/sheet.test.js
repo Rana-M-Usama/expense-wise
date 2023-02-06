@@ -50,6 +50,7 @@ describe("Sheet endpoints", () => {
           _id: sheets[0]._id,
           description: sheets[0].description,
           title: sheets[0].title,
+          permissionType: "admin",
           owner: {
             _id: user._id,
             firstName: user.firstName,
