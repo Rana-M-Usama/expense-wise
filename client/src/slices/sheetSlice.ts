@@ -2,9 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 type Sheet = {
-  id: string;
+  _id: string;
   title: string;
   description: string;
+  permissionType: string;
   owner: object;
 };
 
@@ -20,16 +21,52 @@ const sheetSlice = createSlice({
   name: "sheet",
   initialState,
   reducers: {
-    setSheet: (state, action: PayloadAction<Sheet[]>) => {
+    setSheets: (state, action: PayloadAction<Sheet[]>) => {
       state.sheets = action.payload;
     },
-    setSheetEmpty: state => {
+    setSheetsEmpty: state => {
       state.sheets = { ...initialState.sheets };
+    },
+    addSheet: (state, action: PayloadAction<{ data: Sheet }>) => {
+      state.sheets.push({
+        ...action.payload.data,
+        permissionType: "admin",
+      });
+    },
+    removeSheet: (
+      state,
+      action: PayloadAction<{ data: Sheet; id: string }>,
+    ) => {
+      const sheetIndex = state.sheets.findIndex(
+        sheet => sheet._id === action.payload.id,
+      );
+      state.sheets.splice(sheetIndex, 1);
+    },
+    modifySheet: (
+      state,
+      action: PayloadAction<{ data: Sheet; id: string }>,
+    ) => {
+      const sheetIndex = state.sheets.findIndex(
+        sheet => sheet._id === action.payload.id,
+      );
+      const updateableSheet = state.sheets[sheetIndex];
+      const updatedItem = { ...updateableSheet, ...action.payload.data };
+      const updatedSheets = [...state.sheets];
+      updatedSheets[sheetIndex] = updatedItem;
+      state.sheets = updatedSheets;
     },
   },
 });
 
 const sheetReducer = sheetSlice.reducer;
-const { setSheet, setSheetEmpty } = sheetSlice.actions;
+const { setSheets, setSheetsEmpty, addSheet, removeSheet, modifySheet } =
+  sheetSlice.actions;
 
-export { sheetReducer, setSheet, setSheetEmpty };
+export {
+  sheetReducer,
+  setSheets,
+  setSheetsEmpty,
+  addSheet,
+  removeSheet,
+  modifySheet,
+};

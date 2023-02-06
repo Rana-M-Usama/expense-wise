@@ -1,68 +1,79 @@
-import { Avatar, Button, TextField, Typography } from "@mui/material";
+import { Avatar, Button, Modal, TextField, Typography } from "@mui/material";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Box } from "@mui/system";
-import Modal from "@mui/material/Modal";
+
+import { validateDescription, validateTitle } from "validators/sheet/sheet";
 
 import logo from "assets/logo.png";
-import useHttp from "utils/useHttp";
-import useStyles from "components/sheet/SheetModal.styles";
+import useStyles from "components/expense/ExpenseModal.styles";
 
-type Props = {
+type Response = {
+  idValue: string;
+  titleValue: string;
+  descriptionValue: string;
+};
+
+type Props = Response & {
   isOpen: boolean;
-  modalTitle: string;
-  button: string;
-  id: string;
-  title: string;
-  description: string;
+  isUpdate: boolean;
   onClose: () => void;
-  fetchData: () => void;
+  // eslint-disable-next-line no-unused-vars
+  onSubmit: (data: Response) => void;
 };
 
 const SheetModal = ({
   isOpen,
-  modalTitle,
-  button,
-  id,
-  title,
-  description,
+  idValue,
+  titleValue,
+  descriptionValue,
+  isUpdate,
   onClose,
-  fetchData,
+  onSubmit,
 }: Props) => {
   const classes = useStyles();
-  const { request, error, clearError } = useHttp();
-  const [sheetData, setSheetData] = useState({ title: "", description: "" });
+
+  const [data, setData] = useState({
+    title: { value: "", error: false, errorMessage: "" },
+    description: { value: "", error: false, errorMessage: "" },
+  });
 
   useEffect(() => {
-    setSheetData({
-      title,
-      description,
+    setData({
+      title: { value: titleValue, error: false, errorMessage: "" },
+      description: {
+        value: descriptionValue,
+        error: false,
+        errorMessage: "",
+      },
     });
-  }, [title, description]);
+  }, [titleValue, descriptionValue, onSubmit]);
 
-  const changeHandlerData = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setSheetData({ ...sheetData, [name]: value });
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setData({
+      ...data,
+      [e.target.name]: {
+        value: e.target.value,
+        error: false,
+        errorMessage: "",
+      },
+    });
   };
 
-  const handleSubmit = async () => {
-    if (button === "Create") {
-      await request("/sheets", "POST", sheetData);
+  const handleSubmit = () => {
+    let { title, description } = data;
+    title = { ...title, ...validateTitle(title.value) };
+    description = { ...description, ...validateDescription(description.value) };
 
-      if (!error) {
-        alert("Successfully created sheet.");
-        clearError();
-        fetchData();
-        onClose();
-      }
-    } else {
-      await request(`/sheets/${id}`, "PUT", sheetData);
+    setData({ title, description });
 
-      if (!error) {
-        alert("Successfully updated sheet.");
-        clearError();
-        fetchData();
-        onClose();
-      }
+    if (!title.error && !description.error) {
+      const responseData: Response = {
+        idValue: idValue,
+        titleValue: title.value,
+        descriptionValue: description.value,
+      };
+
+      onSubmit(responseData);
     }
   };
 
@@ -87,39 +98,54 @@ const SheetModal = ({
         <Box className={classes.box}>
           <Avatar className={classes.avatar} src={logo} alt="expenseWise" />
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            {modalTitle}
+            Sheet
           </Typography>
         </Box>
 
-        <Box component="form" noValidate sx={{ mt: 2 }}>
+        <Box>
           <TextField
             className={classes.textfield}
-            margin="normal"
-            required
+            sx={{ mt: 2 }}
             fullWidth
             id="title"
-            label={title ? null : "Title"}
-            value={sheetData.title}
-            onChange={changeHandlerData}
+            label="Title"
+            value={data.title.value}
+            onChange={handleChange}
             name="title"
+            error={data.title.error}
           />
+          {data.title.error && (
+            <Box className={classes.errorMessage}>
+              {data.title.errorMessage}
+            </Box>
+          )}
+
           <TextField
             className={classes.textfield}
-            multiline
-            margin="normal"
-            required
+            sx={{ mt: 2 }}
             fullWidth
-            name="description"
-            label={description ? null : "Description"}
-            value={sheetData.description}
-            onChange={changeHandlerData}
             id="description"
+            label="description"
+            value={data.description.value}
+            onChange={handleChange}
+            name="description"
+            error={data.description.error}
           />
-          <Box textAlign="center">
-            <Button onClick={handleSubmit} variant="contained" sx={{ mt: 5 }}>
-              {button}
-            </Button>
-          </Box>
+          {data.description.error && (
+            <Box className={classes.errorMessage}>
+              {data.description.errorMessage}
+            </Box>
+          )}
+
+          <Button
+            onClick={handleSubmit}
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ mt: 2 }}
+          >
+            {isUpdate ? "Update Sheet" : "Add Sheet"}
+          </Button>
         </Box>
       </Box>
     </Modal>
