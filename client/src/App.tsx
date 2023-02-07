@@ -19,10 +19,10 @@ import "App.css";
 import { theme } from "theme";
 
 const App = () => {
-  const userLogin = fetchUserData();
+  const getUserLoginInfo = fetchUserData();
 
   useEffect(() => {
-    userLogin();
+    getUserLoginInfo();
   }, []);
 
   return (
