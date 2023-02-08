@@ -24,11 +24,12 @@ const validateType = (type: string) => {
   }
 };
 
-const validateAmount = (amount: string) => {
+const validateAmount = (amount: number) => {
+  let amountValue = amount.toString();
   const regex = /^[0-9]*\.?[0-9]+$/;
-  if (amount === "") {
+  if (amountValue === "0") {
     return { error: true, errorMessage: "Amount is required" };
-  } else if (!regex.test(amount)) {
+  } else if (!regex.test(amountValue)) {
     return {
       error: true,
       errorMessage: "Amount must be valid positive number.",

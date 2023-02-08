@@ -19,6 +19,7 @@ import React, { ChangeEvent, Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import { Box } from "@mui/system";
+import { Link } from "react-router-dom";
 
 import ConfirmationModal from "components/common/confirmation/modal";
 import type { RootState } from "app/store";
@@ -185,13 +186,18 @@ const Sheets = () => {
                         if (sheet.permissionType === "admin") {
                           return (
                             <>
-                              <Button
-                                className={classes.openButton}
-                                variant="outlined"
-                                size="small"
+                              <Link
+                                to={`/${sheet._id}/expenses`}
+                                style={{ textDecoration: "none" }}
                               >
-                                Open
-                              </Button>
+                                <Button
+                                  className={classes.openButton}
+                                  variant="outlined"
+                                  size="small"
+                                >
+                                  Open
+                                </Button>
+                              </Link>
                               <Button
                                 className={classes.editButton}
                                 variant="outlined"

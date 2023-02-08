@@ -1,7 +1,6 @@
 import {
   Avatar,
   Button,
-  FormControl,
   InputLabel,
   MenuItem,
   Modal,
@@ -10,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Box } from "@mui/system";
 
 import {
@@ -27,7 +26,7 @@ type Response = {
   idValue: string;
   titleValue: string;
   typeValue: string;
-  amountValue: string;
+  amountValue: number;
   statusValue: string;
   amountTypeValue: string;
 };
@@ -53,10 +52,11 @@ const ExpenseModal = ({
   onSubmit,
 }: Props) => {
   const classes = useStyles();
+
   const [data, setData] = useState({
     title: { value: "", error: false, errorMessage: "" },
     type: { value: "", error: false, errorMessage: "" },
-    amount: { value: "", error: false, errorMessage: "" },
+    amount: { value: 0, error: false, errorMessage: "" },
     status: { value: "", error: false, errorMessage: "" },
     amountType: { value: "", error: false, errorMessage: "" },
   });
@@ -100,8 +100,7 @@ const ExpenseModal = ({
     });
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = () => {
     let { title, type, amount, status, amountType } = data;
 
     title = { ...title, ...validateTitle(title.value) };
@@ -157,7 +156,7 @@ const ExpenseModal = ({
           </Typography>
         </Box>
 
-        <form onSubmit={handleSubmit}>
+        <Box>
           <TextField
             className={classes.textfield}
             sx={{ mt: 2 }}
@@ -170,9 +169,9 @@ const ExpenseModal = ({
             error={data.title.error}
           />
           {data.title.error && (
-            <div className={classes.errorMessage}>
+            <Box className={classes.errorMessage}>
               {data.title.errorMessage}
-            </div>
+            </Box>
           )}
 
           <TextField
@@ -187,7 +186,7 @@ const ExpenseModal = ({
             error={data.type.error}
           />
           {data.type.error && (
-            <div className={classes.errorMessage}>{data.type.errorMessage}</div>
+            <Box className={classes.errorMessage}>{data.type.errorMessage}</Box>
           )}
 
           <TextField
@@ -202,18 +201,15 @@ const ExpenseModal = ({
             error={data.amount.error}
           />
           {data.amount.error && (
-            <div className={classes.errorMessage}>
+            <Box className={classes.errorMessage}>
               {data.amount.errorMessage}
-            </div>
+            </Box>
           )}
 
-          <FormControl
-            component="form"
-            noValidate
-            sx={{ mt: 2, width: "100%" }}
-          >
+          <Box component="form" sx={{ mt: 2 }}>
             <InputLabel id="status-label">Status*</InputLabel>
             <Select
+              sx={{ width: "100%" }}
               className={classes.textfield}
               labelId="status-label"
               label="Status*"
@@ -227,19 +223,16 @@ const ExpenseModal = ({
               <MenuItem value="unpaid">Unpaid</MenuItem>
             </Select>
             {data.status.error && (
-              <div className={classes.errorMessage}>
+              <Box className={classes.errorMessage}>
                 {data.status.errorMessage}
-              </div>
+              </Box>
             )}
-          </FormControl>
+          </Box>
 
-          <FormControl
-            component="form"
-            noValidate
-            sx={{ mt: 2, width: "100%" }}
-          >
+          <Box component="form" sx={{ mt: 2 }}>
             <InputLabel id="amountType-label">Amount Type*</InputLabel>
             <Select
+              sx={{ width: "100%" }}
               className={classes.textfield}
               labelId="amountType-label"
               label="Amount Type*"
@@ -253,14 +246,14 @@ const ExpenseModal = ({
               <MenuItem value="outgoing">Outgoing</MenuItem>
             </Select>
             {data.amountType.error && (
-              <div className={classes.errorMessage}>
+              <Box className={classes.errorMessage}>
                 {data.amountType.errorMessage}
-              </div>
+              </Box>
             )}
-          </FormControl>
+          </Box>
 
           <Button
-            type="submit"
+            onClick={handleSubmit}
             fullWidth
             variant="contained"
             color="primary"
@@ -268,7 +261,7 @@ const ExpenseModal = ({
           >
             {isUpdate ? "Update Expense" : "Add Expense"}
           </Button>
-        </form>
+        </Box>
       </Box>
     </Modal>
   );

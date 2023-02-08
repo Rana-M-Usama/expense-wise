@@ -4,6 +4,7 @@ import { ThemeProvider } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 
 import About from "components/about/About";
+import ExpenseSheet from "components/sheet/ExpenseSheet";
 import { isLoggedIn } from "utils/helpers";
 import LoginPage from "pages/login/login.page";
 import Navbar from "components/common/layouts/navbar/Navbar";
@@ -12,7 +13,6 @@ import ProfilePage from "pages/profile/profile.page";
 import ResetPassword from "pages/resetpassword/resetpassword.page";
 import Sheets from "components/sheet/Sheets";
 import SignupPage from "pages/signup/signup.page";
-import SingleSheet from "components/sheet/ExpenseSheet";
 
 import "App.css";
 import { theme } from "theme";
@@ -25,7 +25,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/sheets" element={<Sheets />} />
-          <Route path="/expenses" element={<SingleSheet />} />
+          <Route path="/:id/expenses" element={<ExpenseSheet />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/permissions" element={<Permissions />} />
           <Route path="/about" element={<About />} />
