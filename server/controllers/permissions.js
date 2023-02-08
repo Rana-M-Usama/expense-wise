@@ -1,6 +1,8 @@
 import httpStatus from "http-status";
 
+import { EDIT, VIEW } from "../constants/permission";
 import asyncHandler from "../middlewares/async";
+import ErrorResponse from "../utils/errorResponse";
 import Permission from "../models/Permission";
 
 // @desc      get permissions
@@ -14,15 +16,33 @@ const getPermissions = asyncHandler(async (req, res) => {
 // @desc      Add permissions
 // @route     POST /api/v1/sheets/:sheetId/permissions
 // @access    Private
-const grantPermission = asyncHandler(async (req, res) => {
+const grantPermission = asyncHandler(async (req, res, next) => {
   req.body.sheet = req.sheet._id;
-
   let permission = await Permission.findOne({
     user: req.body.user,
     sheet: req.body.sheet,
   });
+  const assigneePermission = await Permission.findOne({
+    user: req.user,
+    sheet: req.body.sheet,
+  });
 
   if (permission) {
+    if (
+      (assigneePermission.type === VIEW && permission.type !== VIEW) ||
+      (assigneePermission.type === EDIT && permission.type !== EDIT) ||
+      (assigneePermission.type === EDIT &&
+        permission.type === EDIT &&
+        req.body.type === VIEW)
+    ) {
+      return next(
+        new ErrorResponse(
+          "You do not have rights to assign this permission.",
+          httpStatus.UNAUTHORIZED,
+        ),
+      );
+    }
+
     permission = await Permission.findOneAndUpdate(
       { user: req.body.user, sheet: req.body.sheet },
       req.body,
