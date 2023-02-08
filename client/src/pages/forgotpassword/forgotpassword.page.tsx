@@ -15,6 +15,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
+import { validateEmail } from "validators/auth";
 
 import { styles } from "constants/styles";
 import useStyles from "pages/forgotpassword/forgotpassword.styles";
@@ -26,23 +27,58 @@ interface Props {
 
 const ForgetPasswordPage: FC<Props> = ({ isOpen, onClose }) => {
   const classes = useStyles();
-  const [forgotPasswordData, setForgotPasswordData] = useState({ email: "" });
+  const [forgotPasswordData, setForgotPasswordData] = useState({
+    email: { value: "", error: false, errorMessage: "" },
+  });
   const { loading, request, error, clearError } = useHttp();
 
   const changeHandlerData = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setForgotPasswordData({ ...forgotPasswordData, [name]: value });
+    setForgotPasswordData({
+      ...forgotPasswordData,
+      [name]: {
+        value: value,
+        error: false,
+        errorMessage: "",
+      },
+    });
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await request("/auth/forgot-password", "POST", forgotPasswordData);
 
-    if (!error) {
-      setForgotPasswordData({ email: "" });
-      Toast("success", "Email sent successfully.");
+    const email = {
+      value: forgotPasswordData.email.value,
+      ...validateEmail(forgotPasswordData.email.value),
+    };
+
+    setForgotPasswordData({ email });
+
+    if (!email.error) {
+      onClose();
+      setForgotPasswordData({
+        email: { value: "", error: false, errorMessage: "" },
+      });
+
+      await request("/auth/forgot-password", "POST", {
+        email: email.value,
+      });
+
+      if (!error) {
+        Toast("success", "Email sent successfully.");
+      }
     }
   };
+
+  useEffect(() => {
+    setForgotPasswordData({
+      email: {
+        value: forgotPasswordData.email.value,
+        error: forgotPasswordData.email.error,
+        errorMessage: forgotPasswordData.email.errorMessage,
+      },
+    });
+  }, [forgotPasswordData.email.value]);
 
   useEffect(() => {
     if (error) {
@@ -59,7 +95,6 @@ const ForgetPasswordPage: FC<Props> = ({ isOpen, onClose }) => {
       aria-describedby="modal-modal-description"
     >
       <Box
-        component="main"
         className={classes.modal}
         sx={{
           width: {
@@ -100,15 +135,14 @@ const ForgetPasswordPage: FC<Props> = ({ isOpen, onClose }) => {
               id="email"
               autoComplete="email"
               label="Email Address"
-              required
               fullWidth
               autoFocus
               className={classes.textField}
-              type="email"
               placeholder="Email"
               name="email"
-              value={forgotPasswordData.email}
+              value={forgotPasswordData.email.value}
               onChange={changeHandlerData}
+              error={forgotPasswordData.email.error}
               InputProps={{
                 startAdornment: (
                   <InputAdornment disableTypography position="start">
@@ -117,6 +151,11 @@ const ForgetPasswordPage: FC<Props> = ({ isOpen, onClose }) => {
                 ),
               }}
             />
+            {forgotPasswordData.email.error && (
+              <div className={classes.errorMessage}>
+                {forgotPasswordData.email.errorMessage}
+              </div>
+            )}
             <Button fullWidth type="submit" variant="contained">
               {loading ? <CircularProgress /> : "Send My Password"}
             </Button>

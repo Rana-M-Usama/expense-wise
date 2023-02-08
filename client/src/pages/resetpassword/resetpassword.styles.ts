@@ -39,4 +39,9 @@ export default makeStyles(() => ({
       },
     },
   },
+
+  errorMessage: {
+    color: "red",
+    fontSize: "0.8rem",
+  },
 }));
