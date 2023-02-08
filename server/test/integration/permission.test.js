@@ -149,13 +149,13 @@ describe("Permission endpoints", () => {
         sheet,
       };
 
-      const res2 = await request(app)
+      const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
         .set("Authorization", `Bearer ${authToken2}`)
         .send(permissionParams2)
         .expect(httpStatus.UNAUTHORIZED);
 
-      expect(res2.body.errors).toMatchObject([
+      expect(res.body.errors).toMatchObject([
         "You do not have rights to assign this permission.",
       ]);
     });
@@ -177,13 +177,13 @@ describe("Permission endpoints", () => {
         sheet,
       };
 
-      const res2 = await request(app)
+      const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
         .set("Authorization", `Bearer ${authToken2}`)
         .send(permissionParams2)
         .expect(httpStatus.UNAUTHORIZED);
 
-      expect(res2.body.errors).toMatchObject([
+      expect(res.body.errors).toMatchObject([
         "You do not have rights to assign this permission.",
       ]);
     });
@@ -205,13 +205,13 @@ describe("Permission endpoints", () => {
         sheet,
       };
 
-      const res2 = await request(app)
+      const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
         .set("Authorization", `Bearer ${authToken2}`)
         .send(permissionParams2)
         .expect(httpStatus.UNAUTHORIZED);
 
-      expect(res2.body.errors).toMatchObject([
+      expect(res.body.errors).toMatchObject([
         "You do not have rights to assign this permission.",
       ]);
     });
@@ -233,13 +233,13 @@ describe("Permission endpoints", () => {
         sheet,
       };
 
-      const res2 = await request(app)
+      const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
         .set("Authorization", `Bearer ${authToken2}`)
         .send(permissionParams2)
         .expect(httpStatus.UNAUTHORIZED);
 
-      expect(res2.body.errors).toMatchObject([
+      expect(res.body.errors).toMatchObject([
         "You do not have rights to assign this permission.",
       ]);
     });
@@ -261,13 +261,13 @@ describe("Permission endpoints", () => {
         sheet,
       };
 
-      const res2 = await request(app)
+      const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
         .set("Authorization", `Bearer ${authToken2}`)
         .send(permissionParams2)
         .expect(httpStatus.UNAUTHORIZED);
 
-      expect(res2.body.errors).toMatchObject([
+      expect(res.body.errors).toMatchObject([
         "You do not have rights to assign this permission.",
       ]);
     });
