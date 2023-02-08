@@ -46,7 +46,6 @@ const Sheets = () => {
     descriptionValue: "",
     isUpdate: false,
   };
-
   const dispatch = useDispatch();
   const { loading, request, error, clearError } = useHttp();
   const sheets = useSelector((state: RootState) => state.sheet.sheets);
@@ -57,7 +56,6 @@ const Sheets = () => {
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [sheetId, setSheetId] = useState("");
   const [modalProps, setModalProps] = useState<Props>(initialProps);
-
   const count = Math.ceil(sheets.length / paginate);
   const DATA = usePagination(sheets, paginate);
 

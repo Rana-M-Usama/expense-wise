@@ -31,7 +31,6 @@ const SheetModal = ({
   onSubmit,
 }: Props) => {
   const classes = useStyles();
-
   const [data, setData] = useState({
     title: { value: "", error: false, errorMessage: "" },
     description: { value: "", error: false, errorMessage: "" },
