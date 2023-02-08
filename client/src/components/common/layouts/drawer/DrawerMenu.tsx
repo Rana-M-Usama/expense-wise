@@ -9,13 +9,8 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import {
-  BorderHorizontal,
-  Home as Dashboard,
-  Info,
-  Payment,
-} from "@mui/icons-material";
 import React, { FC } from "react";
+import { Home as Dashboard } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
 import logo from "assets/logo.png";
@@ -31,26 +26,6 @@ const listItems = [
     listIcon: <Dashboard />,
     listText: "Home",
     to: "/",
-  },
-  {
-    listIcon: <Payment />,
-    listText: "Expenses",
-    to: "/expenses",
-  },
-  {
-    listIcon: <BorderHorizontal />,
-    listText: "Sheets",
-    to: "/sheets",
-  },
-  {
-    listIcon: <Info />,
-    listText: "Permissions",
-    to: "/permissions",
-  },
-  {
-    listIcon: <Info />,
-    listText: "About",
-    to: "about",
   },
 ];
 

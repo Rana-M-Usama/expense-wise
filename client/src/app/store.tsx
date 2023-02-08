@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import { expenseReducer } from "slices/expenseSlice";
+import { permissionReducer } from "slices/permissionSlice";
 import { sheetReducer } from "slices/sheetSlice";
 import { userReducer } from "slices/userSlice";
 
@@ -9,6 +10,7 @@ export const store = configureStore({
     user: userReducer,
     sheet: sheetReducer,
     expense: expenseReducer,
+    permission: permissionReducer,
   },
 });
 
