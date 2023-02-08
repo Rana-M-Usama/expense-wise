@@ -47,7 +47,7 @@ const LoginPage = () => {
       Toast("success", "Successfully logged in.");
       localStorage.setItem("token", response.data.token);
       setLoginCredentials({ email: "", password: "" });
-      navigate("/");
+      navigate("/sheets");
     }
   };
 

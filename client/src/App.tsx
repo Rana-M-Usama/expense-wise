@@ -11,10 +11,10 @@ import "App.css";
 import { theme } from "theme";
 
 const App = () => {
-  const getUserLoginInfo = fetchUserData();
+  const getLoggedInUserDetails = fetchUserData();
 
   useEffect(() => {
-    getUserLoginInfo();
+    getLoggedInUserDetails();
   }, []);
 
   return (
