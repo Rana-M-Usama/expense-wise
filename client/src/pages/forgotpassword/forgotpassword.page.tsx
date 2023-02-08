@@ -15,10 +15,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
+import { validateEmail } from "validators/auth";
 
 import { styles } from "constants/styles";
 import useStyles from "pages/forgotpassword/forgotpassword.styles";
-import { validateEmail } from "validators/auth/auth";
 
 interface Props {
   isOpen: boolean;

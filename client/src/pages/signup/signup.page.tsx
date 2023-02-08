@@ -11,15 +11,15 @@ import {
 } from "@mui/material";
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
+
 import {
   validateConfirmPassword,
   validateEmail,
   validateFirstName,
   validateLastName,
   validatePassword,
-} from "validators/auth/auth";
-import CircularProgress from "@mui/material/CircularProgress";
-
+} from "validators/auth";
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
 
@@ -53,32 +53,23 @@ const SignupPage = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    let { confirmPassword, email, firstName, lastName, password } = signupData;
 
-    const email = {
-      value: signupData.email.value,
-      ...validateEmail(signupData.email.value),
-    };
-
-    const password = {
-      value: signupData.password.value,
-      ...validatePassword(signupData.password.value),
-    };
-
-    const confirmPassword = {
-      value: signupData.confirmPassword.value,
+    email = { ...email, ...validateEmail(signupData.email.value) };
+    password = { ...password, ...validatePassword(signupData.password.value) };
+    confirmPassword = {
+      ...confirmPassword,
       ...validateConfirmPassword(
         signupData.password.value,
         signupData.confirmPassword.value,
       ),
     };
-
-    const firstName = {
-      value: signupData.firstName.value,
+    firstName = {
+      ...firstName,
       ...validateFirstName(signupData.firstName.value),
     };
-
-    const lastName = {
-      value: signupData.lastName.value,
+    lastName = {
+      ...lastName,
       ...validateLastName(signupData.lastName.value),
     };
 

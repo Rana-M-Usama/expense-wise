@@ -8,14 +8,12 @@ import {
   Typography,
 } from "@mui/material";
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import {
-  validateConfirmPassword,
-  validatePassword,
-} from "validators/auth/auth";
+
 import CircularProgress from "@mui/material/CircularProgress";
 import { Lock } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
+import { validateConfirmPassword, validatePassword } from "validators/auth";
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
 
@@ -46,14 +44,14 @@ const ResetPasswordPage = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    let { password, confirmPassword } = resetPasswordData;
 
-    const password = {
-      value: resetPasswordData.password.value,
+    password = {
+      ...password,
       ...validatePassword(resetPasswordData.password.value),
     };
-
-    const confirmPassword = {
-      value: resetPasswordData.confirmPassword.value,
+    confirmPassword = {
+      ...confirmPassword,
       ...validateConfirmPassword(
         resetPasswordData.password.value,
         resetPasswordData.confirmPassword.value,
@@ -124,7 +122,6 @@ const ResetPasswordPage = () => {
                 color="primary"
                 margin="normal"
                 id="password"
-                // required
                 fullWidth
                 label="New Password"
                 autoComplete="current-password"
@@ -145,7 +142,6 @@ const ResetPasswordPage = () => {
                 color="primary"
                 margin="normal"
                 id="password"
-                // required
                 fullWidth
                 label="Confirm Password"
                 autoComplete="current-password"

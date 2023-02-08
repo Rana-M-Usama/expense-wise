@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { validateEmail, validatePassword } from "validators/auth/auth";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useDispatch } from "react-redux";
 
@@ -20,6 +19,7 @@ import { setCurrentUser } from "slices/userSlice";
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
 
+import { validateEmail, validatePassword } from "validators/auth";
 import logo from "assets/logo.png";
 import useStyles from "pages/login/login.styles";
 
@@ -48,13 +48,11 @@ const LoginPage = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    let { email, password } = loginCredentials;
 
-    const email = {
-      value: loginCredentials.email.value,
-      ...validateEmail(loginCredentials.email.value),
-    };
-    const password = {
-      value: loginCredentials.password.value,
+    email = { ...email, ...validateEmail(loginCredentials.email.value) };
+    password = {
+      ...password,
       ...validatePassword(loginCredentials.password.value),
     };
 

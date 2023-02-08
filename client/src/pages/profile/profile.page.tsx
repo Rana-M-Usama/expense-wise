@@ -12,11 +12,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { Stack } from "@mui/system";
 import { useSelector } from "react-redux";
 
+import { validateFirstName, validateLastName } from "validators/auth";
 import type { RootState } from "app/store";
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
 
-import { validateFirstName, validateLastName } from "validators/auth/auth";
 import { styles } from "constants/styles";
 import userImage from "assets/user.png";
 import useStyles from "pages//profile/profile.styles";
@@ -47,21 +47,22 @@ const ProfilePage = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const firstName = {
-      value: profileData.firstName.value,
+    let { firstName, lastName, imageUrl, email } = profileData;
+
+    firstName = {
+      ...firstName,
       ...validateFirstName(profileData.firstName.value),
     };
-
-    const lastName = {
-      value: profileData.lastName.value,
+    lastName = {
+      ...lastName,
       ...validateLastName(profileData.lastName.value),
     };
 
     setProfileData({
       firstName,
       lastName,
-      imageUrl: profileData.imageUrl,
-      email: profileData.email,
+      imageUrl: imageUrl,
+      email: email,
     });
 
     if (!(firstName.error || lastName.error)) {
