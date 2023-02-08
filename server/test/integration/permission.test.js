@@ -132,6 +132,146 @@ describe("Permission endpoints", () => {
       });
     });
 
+    it("should raise an error if a user having view permission attempts to assign view permission to admin", async () => {
+      await Permission.findOneAndUpdate(permission.id, { type: ADMIN });
+      permissionParams.type = VIEW;
+
+      await request(app)
+        .post(`/api/v1/sheets/${sheet._id}/permissions`)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(permissionParams)
+        .expect(httpStatus.OK);
+
+      const authToken2 = await duplicateUser.getSignedJwtToken();
+      const permissionParams2 = {
+        type: VIEW,
+        userEmail: user.email,
+        sheet,
+      };
+
+      const res2 = await request(app)
+        .post(`/api/v1/sheets/${sheet._id}/permissions`)
+        .set("Authorization", `Bearer ${authToken2}`)
+        .send(permissionParams2)
+        .expect(httpStatus.UNAUTHORIZED);
+
+      expect(res2.body.errors).toMatchObject([
+        "You do not have rights to assign this permission.",
+      ]);
+    });
+
+    it("should raise an error if a user having view permission attempts to assign view permission to editor", async () => {
+      await Permission.findOneAndUpdate(permission.id, { type: EDIT });
+      permissionParams.type = VIEW;
+
+      await request(app)
+        .post(`/api/v1/sheets/${sheet._id}/permissions`)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(permissionParams)
+        .expect(httpStatus.OK);
+
+      const authToken2 = await duplicateUser.getSignedJwtToken();
+      const permissionParams2 = {
+        type: VIEW,
+        userEmail: user.email,
+        sheet,
+      };
+
+      const res2 = await request(app)
+        .post(`/api/v1/sheets/${sheet._id}/permissions`)
+        .set("Authorization", `Bearer ${authToken2}`)
+        .send(permissionParams2)
+        .expect(httpStatus.UNAUTHORIZED);
+
+      expect(res2.body.errors).toMatchObject([
+        "You do not have rights to assign this permission.",
+      ]);
+    });
+
+    it("should raise an error if a user having edit permission attempts to assign view permission to admin", async () => {
+      await Permission.findOneAndUpdate(permission.id, { type: ADMIN });
+      permissionParams.type = EDIT;
+
+      await request(app)
+        .post(`/api/v1/sheets/${sheet._id}/permissions`)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(permissionParams)
+        .expect(httpStatus.OK);
+
+      const authToken2 = await duplicateUser.getSignedJwtToken();
+      const permissionParams2 = {
+        type: VIEW,
+        userEmail: user.email,
+        sheet,
+      };
+
+      const res2 = await request(app)
+        .post(`/api/v1/sheets/${sheet._id}/permissions`)
+        .set("Authorization", `Bearer ${authToken2}`)
+        .send(permissionParams2)
+        .expect(httpStatus.UNAUTHORIZED);
+
+      expect(res2.body.errors).toMatchObject([
+        "You do not have rights to assign this permission.",
+      ]);
+    });
+
+    it("should raise an error if a user having edit permission attempts to assign edit permission to admin", async () => {
+      await Permission.findOneAndUpdate(permission.id, { type: ADMIN });
+      permissionParams.type = EDIT;
+
+      await request(app)
+        .post(`/api/v1/sheets/${sheet._id}/permissions`)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(permissionParams)
+        .expect(httpStatus.OK);
+
+      const authToken2 = await duplicateUser.getSignedJwtToken();
+      const permissionParams2 = {
+        type: EDIT,
+        userEmail: user.email,
+        sheet,
+      };
+
+      const res2 = await request(app)
+        .post(`/api/v1/sheets/${sheet._id}/permissions`)
+        .set("Authorization", `Bearer ${authToken2}`)
+        .send(permissionParams2)
+        .expect(httpStatus.UNAUTHORIZED);
+
+      expect(res2.body.errors).toMatchObject([
+        "You do not have rights to assign this permission.",
+      ]);
+    });
+
+    it("should raise an error if a user having edit permission attempts to assign view permission to editor", async () => {
+      await Permission.findOneAndUpdate(permission.id, { type: EDIT });
+      permissionParams.type = EDIT;
+
+      await request(app)
+        .post(`/api/v1/sheets/${sheet._id}/permissions`)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(permissionParams)
+        .expect(httpStatus.OK);
+
+      const authToken2 = await duplicateUser.getSignedJwtToken();
+      const permissionParams2 = {
+        type: VIEW,
+        userEmail: user.email,
+        sheet,
+      };
+
+      const res2 = await request(app)
+        .post(`/api/v1/sheets/${sheet._id}/permissions`)
+        .set("Authorization", `Bearer ${authToken2}`)
+        .send(permissionParams2)
+        .expect(httpStatus.UNAUTHORIZED);
+
+      expect(res2.body.errors).toMatchObject([
+        "You do not have rights to assign this permission.",
+      ]);
+    });
+
     it("should be fine if a user having view permission attempts to assign view permission", async () => {
       const res = await request(app)
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
