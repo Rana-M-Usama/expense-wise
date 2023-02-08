@@ -8,9 +8,13 @@ import {
   Typography,
 } from "@mui/material";
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  validateConfirmPassword,
+  validatePassword,
+} from "validators/auth/auth";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Lock } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
@@ -23,30 +27,70 @@ const ResetPasswordPage = () => {
   const { loading, request, error, clearError } = useHttp();
 
   const [resetPasswordData, setResetPasswordData] = useState({
-    password: "",
-    confirmPassword: "",
+    password: { value: "", error: false, errorMessage: "" },
+    confirmPassword: { value: "", error: false, errorMessage: "" },
   });
 
   const changeHandlerData = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setResetPasswordData({ ...resetPasswordData, [name]: value });
+
+    setResetPasswordData({
+      ...resetPasswordData,
+      [name]: {
+        value: value,
+        error: false,
+        errorMessage: "",
+      },
+    });
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const { resetToken } = useParams<{ resetToken: string | undefined }>();
 
-    if (resetPasswordData.password === resetPasswordData.confirmPassword) {
-      const payload = { password: resetPasswordData.password };
-      await request(`auth/reset-password/${resetToken}`, "PUT", payload);
+    const password = {
+      value: resetPasswordData.password.value,
+      ...validatePassword(resetPasswordData.password.value),
+    };
+
+    const confirmPassword = {
+      value: resetPasswordData.confirmPassword.value,
+      ...validateConfirmPassword(
+        resetPasswordData.password.value,
+        resetPasswordData.confirmPassword.value,
+      ),
+    };
+
+    setResetPasswordData({ password, confirmPassword });
+
+    if (!(password.error || confirmPassword.error)) {
+      const payload = { password: resetPasswordData.password.value };
+      await request("auth/reset-password/:reset_token}", "PUT", payload);
 
       if (!error) {
         Toast("success", "Successfully reset password.");
-        setResetPasswordData({ password: "", confirmPassword: "" });
+        setResetPasswordData({ password, confirmPassword });
         navigate("/");
       }
-    } else Toast("danger", "Invalid data.");
+    }
   };
+
+  useEffect(() => {
+    setResetPasswordData({
+      password: {
+        value: resetPasswordData.password.value,
+        error: resetPasswordData.password.error,
+        errorMessage: resetPasswordData.password.errorMessage,
+      },
+      confirmPassword: {
+        value: resetPasswordData.confirmPassword.value,
+        error: resetPasswordData.confirmPassword.error,
+        errorMessage: resetPasswordData.confirmPassword.errorMessage,
+      },
+    });
+  }, [
+    resetPasswordData.password.value,
+    resetPasswordData.confirmPassword.value,
+  ]);
 
   useEffect(() => {
     if (error) {
@@ -80,7 +124,7 @@ const ResetPasswordPage = () => {
                 color="primary"
                 margin="normal"
                 id="password"
-                required
+                // required
                 fullWidth
                 label="New Password"
                 autoComplete="current-password"
@@ -88,14 +132,20 @@ const ResetPasswordPage = () => {
                 type="password"
                 placeholder="Password"
                 name="password"
-                value={resetPasswordData.password}
+                value={resetPasswordData.password.value}
                 onChange={changeHandlerData}
+                error={resetPasswordData.password.error}
               />
+              {resetPasswordData.password.error && (
+                <div className={classes.errorMessage}>
+                  {resetPasswordData.password.errorMessage}
+                </div>
+              )}
               <TextField
                 color="primary"
                 margin="normal"
                 id="password"
-                required
+                // required
                 fullWidth
                 label="Confirm Password"
                 autoComplete="current-password"
@@ -103,9 +153,15 @@ const ResetPasswordPage = () => {
                 type="password"
                 placeholder="Confirm Password"
                 name="confirmPassword"
-                value={resetPasswordData.confirmPassword}
+                value={resetPasswordData.confirmPassword.value}
                 onChange={changeHandlerData}
+                error={resetPasswordData.confirmPassword.error}
               />
+              {resetPasswordData.confirmPassword.error && (
+                <div className={classes.errorMessage}>
+                  {resetPasswordData.confirmPassword.errorMessage}
+                </div>
+              )}
               <Button type="submit" fullWidth variant="contained">
                 Reset Password
               </Button>
