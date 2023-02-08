@@ -9,52 +9,69 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { useParams } from "react-router-dom";
 
+import {
+  addPermission,
+  modifyPermission,
+  removePermission,
+  setPermissions,
+} from "slices/permissionSlice";
 import {
   StyledTableCell,
   StyledTableRow,
   useStyles,
 } from "components/permissions/Permissions.styles";
+import { useDispatch, useSelector } from "react-redux";
+import ConfirmationModal from "components/common/confirmation/modal";
 import PermissionModal from "components/permissions/PermissionModal";
-
-const createData = (permissionType: string, email: string) => {
-  return { permissionType, email };
-};
-
-const rows = [
-  createData("edit", "usmanjaved@gmail.com"),
-  createData("admin", "aliusman@gmail.com"),
-  createData("view", "Shaheer@gmail.com"),
-  createData("view", "irfan@gmail.com"),
-  createData("edit", "usama@gmail.com"),
-  createData("admin", "hamzaazeem@gmail.com"),
-  createData("view", "ahmedjaved@gmail.com"),
-];
+import type { RootState } from "app/store";
+import Toast from "components/tostify/Toast";
+import useHttp from "utils/useHttp";
 
 const headerRow = {
   "heading 1": "Permission Type",
   "heading 2": "User",
-  "heading 3": "Action",
 };
 
 type Response = {
+  idValue: string;
   permissionTypeValue: string;
   emailValue: string;
 };
 
 type Props = Response & {
+  sheetPermissionOptions: string[];
   isUpdate: boolean;
 };
 
 const Permissions = () => {
+  const dispatch = useDispatch();
+  const sheets = useSelector((state: RootState) => state.sheet.sheets);
+  const { request, error, clearError } = useHttp();
+  const { sheetId } = useParams<{ sheetId: string | undefined }>();
+  const [permissionId, setPermissionId] = useState("");
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+
   const initialProps = {
+    idValue: "",
     permissionTypeValue: "",
     emailValue: "",
+    sheetPermissionOptions: [],
     isUpdate: false,
   };
+
+  const findSheetById = (sheetId: string | undefined) => {
+    return sheets.filter(sheet => sheet._id == sheetId)[0];
+  };
+
+  const sheetPermissionIsAdmin = (sheetId: string | undefined) => {
+    return findSheetById(sheetId)?.permissionType === "admin" ? true : false;
+  };
+
   const classes = useStyles();
   const [IsModalOpen, setIsModalOpen] = useState(false);
   const [modalProps, setModalProps] = useState<Props>(initialProps);
@@ -69,6 +86,72 @@ const Permissions = () => {
     setIsModalOpen(false);
   };
 
+  const fetchData = async () => {
+    const response = await request(`/sheets/${sheetId}/permissions`, "GET");
+
+    if (!error) {
+      dispatch(setPermissions(response.permissions));
+    }
+  };
+
+  const updatePermission = async (body: object, permissionId: string) => {
+    const response = await request(
+      `/sheets/${sheetId}/permissions`,
+      "POST",
+      body,
+    );
+
+    if (!error) {
+      if (permissionId === "") {
+        Toast("success", "Successfully sheet created.");
+        dispatch(addPermission({ data: response.data }));
+      } else {
+        Toast("success", "Successfully sheet updated.");
+        dispatch(modifyPermission({ data: response.data, id: permissionId }));
+      }
+    }
+  };
+
+  const deletePermission = async (permissionId: string) => {
+    const response = await request(
+      `/sheets/${sheetId}/permissions/${permissionId}`,
+      "DELETE",
+    );
+
+    if (!error) {
+      Toast("success", "Successfully permission deleted.");
+      dispatch(removePermission({ data: response.data, id: permissionId }));
+    }
+  };
+
+  const showConfirmationModal = ({
+    permissionId,
+  }: {
+    permissionId: string;
+  }) => {
+    setPermissionId(permissionId);
+    setIsConfirmationModalOpen(true);
+  };
+
+  const hideConfirmationModal = () => {
+    setIsConfirmationModalOpen(false);
+  };
+
+  const permissions = useSelector(
+    (state: RootState) => state.permission.permissions,
+  );
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (error) {
+      Toast("danger", error);
+      clearError();
+    }
+  }, [error]);
+
   return (
     <Container maxWidth="md">
       <PermissionModal
@@ -76,7 +159,27 @@ const Permissions = () => {
         {...modalProps}
         onClose={hideModal}
         onSubmit={(data: Response) => {
-          console.log("Data", data);
+          const body = {
+            userEmail: data.emailValue,
+            type: data.permissionTypeValue,
+          };
+          if (data.idValue === "") {
+            updatePermission(body, "");
+            hideModal();
+          } else {
+            updatePermission(body, data.idValue);
+            hideModal();
+          }
+        }}
+      />
+      <ConfirmationModal
+        isOpen={isConfirmationModalOpen}
+        {...modalProps}
+        onClose={hideConfirmationModal}
+        onSubmit={(data: boolean) => {
+          if (data === true) {
+            deletePermission(permissionId);
+          }
         }}
       />
       <Typography
@@ -90,7 +193,20 @@ const Permissions = () => {
         sx={{ mb: 2 }}
         variant="outlined"
         size="small"
-        onClick={() => showModal({ ...modalProps })}
+        onClick={() => {
+          let options = ["view"];
+          const type = findSheetById(sheetId)?.permissionType;
+          if (type === "edit") {
+            options.push("edit");
+          } else if (type === "admin") {
+            options.push("edit");
+            options.push("admin");
+          }
+          showModal({
+            ...modalProps,
+            sheetPermissionOptions: options,
+          });
+        }}
       >
         Add Permission
       </Button>
@@ -102,7 +218,11 @@ const Permissions = () => {
       >
         <TableHead>
           <TableRow>
-            {Object.values(headerRow).map(heading => (
+            {Object.values(
+              sheetPermissionIsAdmin(sheetId)
+                ? { ...headerRow, ...{ "heading 3": "Action" } }
+                : headerRow,
+            ).map(heading => (
               <StyledTableCell key={heading} align="center">
                 {heading}
               </StyledTableCell>
@@ -110,31 +230,47 @@ const Permissions = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
-            <StyledTableRow key={row.email}>
+          {permissions.map((permission: any) => (
+            <StyledTableRow key={permission._id}>
               <StyledTableCell component="th" scope="row">
-                {row.email}
+                {permission.type}
               </StyledTableCell>
               <StyledTableCell align="center">
-                {row.permissionType}
+                {permission.user.email}
               </StyledTableCell>
-              <StyledTableCell align="center">
-                <IconButton
-                  aria-label="edit"
-                  onClick={() =>
-                    showModal({
-                      permissionTypeValue: row.permissionType,
-                      emailValue: row.email,
-                      isUpdate: true,
-                    })
-                  }
-                >
-                  <EditIcon />
-                </IconButton>
-                <IconButton aria-label="delete" onClick={() => {}}>
-                  <DeleteIcon />
-                </IconButton>
-              </StyledTableCell>
+
+              {(() => {
+                if (sheetPermissionIsAdmin(sheetId)) {
+                  return (
+                    <StyledTableCell align="center">
+                      <IconButton
+                        aria-label="edit"
+                        onClick={() =>
+                          showModal({
+                            idValue: permission._id,
+                            permissionTypeValue: permission.type,
+                            emailValue: permission.user.email,
+                            sheetPermissionOptions: ["view", "edit", "admin"],
+                            isUpdate: true,
+                          })
+                        }
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() =>
+                          showConfirmationModal({
+                            permissionId: permission._id,
+                          })
+                        }
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </StyledTableCell>
+                  );
+                }
+              })()}
             </StyledTableRow>
           ))}
         </TableBody>
