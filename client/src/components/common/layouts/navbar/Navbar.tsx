@@ -44,7 +44,7 @@ const Navbar = () => {
       dispatch(setCurrentUserEmpty());
       Toast("success", "Successfully logged out.");
       localStorage.setItem("token", "");
-      navigate("/");
+      navigate("/login");
     }
   };
 

@@ -1,10 +1,13 @@
 import axios, { AxiosRequestConfig, AxiosRequestHeaders } from "axios";
 import { useCallback, useState } from "react";
+import Toast from "components/tostify/Toast";
+import { useNavigate } from "react-router-dom";
 
 const baseURL = process.env.REACT_APP_API_URI;
 
 const useHttp = () => {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
 
   const request = useCallback(
@@ -30,6 +33,11 @@ const useHttp = () => {
         setLoading(false);
         return response.data;
       } catch (error: any) {
+        if (error.response.status === 401) {
+          localStorage.setToken("token", "");
+          navigate("/login");
+          Toast("danger", "Not Authenticated");
+        }
         setLoading(false);
         setError(error.response.data.errors.join(" "));
         throw error;
