@@ -30,5 +30,12 @@ export default makeStyles(() => ({
   list: {
     borderRadius: 10,
     backgroundColor: styles.list.backgroundColor,
+    minHeight: "512px",
+  },
+  sheetNotFound: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: "512px",
   },
 }));
