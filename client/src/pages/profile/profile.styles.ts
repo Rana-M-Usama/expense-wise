@@ -17,4 +17,9 @@ export default makeStyles(() => ({
     borderRadius: 7,
     backgroundColor: styles.list.backgroundColor,
   },
+
+  errorMessage: {
+    color: "red",
+    fontSize: "0.8rem",
+  },
 }));

@@ -44,7 +44,7 @@ const Navbar = () => {
       dispatch(setCurrentUserEmpty());
       Toast("success", "Successfully logged out.");
       localStorage.setItem("token", "");
-      navigate("/");
+      navigate("/login");
     }
   };
 
@@ -99,7 +99,7 @@ const Navbar = () => {
               open={Boolean(menuOpen)}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={() => navigate("/profile")}>Profile</MenuItem>
               <MenuItem onClick={logout}>Logout</MenuItem>
             </Menu>
           </div>
