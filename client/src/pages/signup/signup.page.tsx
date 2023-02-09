@@ -13,6 +13,13 @@ import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 
+import {
+  validateConfirmPassword,
+  validateEmail,
+  validateFirstName,
+  validateLastName,
+  validatePassword,
+} from "validators/auth";
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
 
@@ -25,36 +32,77 @@ const SignupPage = () => {
   const { loading, request, error, clearError } = useHttp();
 
   const [signupData, setSignupData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    firstName: { value: "", error: false, errorMessage: "" },
+    lastName: { value: "", error: false, errorMessage: "" },
+    email: { value: "", error: false, errorMessage: "" },
+    password: { value: "", error: false, errorMessage: "" },
+    confirmPassword: { value: "", error: false, errorMessage: "" },
   });
 
   const changeHandlerData = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setSignupData({ ...signupData, [name]: value });
+    setSignupData({
+      ...signupData,
+      [name]: {
+        value: value,
+        error: false,
+        errorMessage: "",
+      },
+    });
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    let { confirmPassword, email, firstName, lastName, password } = signupData;
 
-    if (signupData.password === signupData.confirmPassword) {
-      await request("/auth/register", "POST", signupData);
+    email = { ...email, ...validateEmail(signupData.email.value) };
+    password = { ...password, ...validatePassword(signupData.password.value) };
+    confirmPassword = {
+      ...confirmPassword,
+      ...validateConfirmPassword(
+        signupData.password.value,
+        signupData.confirmPassword.value,
+      ),
+    };
+    firstName = {
+      ...firstName,
+      ...validateFirstName(signupData.firstName.value),
+    };
+    lastName = {
+      ...lastName,
+      ...validateLastName(signupData.lastName.value),
+    };
+
+    setSignupData({ firstName, lastName, password, confirmPassword, email });
+
+    if (
+      !(
+        firstName.error ||
+        lastName.error ||
+        email.error ||
+        confirmPassword.error ||
+        password.error
+      )
+    ) {
+      await request("/auth/register", "POST", {
+        firstName: signupData.firstName.value,
+        lastName: signupData.lastName.value,
+        email: signupData.email.value,
+        password: signupData.password.value,
+      });
 
       if (!error) {
         Toast("success", "Successfully signed up.");
         setSignupData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
+          firstName: { value: "", error: false, errorMessage: "" },
+          lastName: { value: "", error: false, errorMessage: "" },
+          email: { value: "", error: false, errorMessage: "" },
+          password: { value: "", error: false, errorMessage: "" },
+          confirmPassword: { value: "", error: false, errorMessage: "" },
         });
         navigate("/");
       }
-    } else Toast("danger", "Invalid data.");
+    }
   };
 
   useEffect(() => {
@@ -101,9 +149,15 @@ const SignupPage = () => {
                     type="text"
                     placeholder="First Name"
                     name="firstName"
-                    value={signupData.firstName}
+                    value={signupData.firstName.value}
                     onChange={changeHandlerData}
+                    error={signupData.firstName.error}
                   />
+                  {signupData.firstName.error && (
+                    <div className={classes.errorMessage}>
+                      {signupData.firstName.errorMessage}
+                    </div>
+                  )}
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
@@ -116,9 +170,15 @@ const SignupPage = () => {
                     type="text"
                     placeholder="Last Name"
                     name="lastName"
-                    value={signupData.lastName}
+                    value={signupData.lastName.value}
                     onChange={changeHandlerData}
+                    error={signupData.lastName.error}
                   />
+                  {signupData.lastName.error && (
+                    <div className={classes.errorMessage}>
+                      {signupData.lastName.errorMessage}
+                    </div>
+                  )}
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
@@ -131,9 +191,15 @@ const SignupPage = () => {
                     type="email"
                     placeholder="Email"
                     name="email"
-                    value={signupData.email}
+                    value={signupData.email.value}
                     onChange={changeHandlerData}
+                    error={signupData.email.error}
                   />
+                  {signupData.email.error && (
+                    <div className={classes.errorMessage}>
+                      {signupData.email.errorMessage}
+                    </div>
+                  )}
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
@@ -146,9 +212,15 @@ const SignupPage = () => {
                     type="password"
                     placeholder="Password"
                     name="password"
-                    value={signupData.password}
+                    value={signupData.password.value}
                     onChange={changeHandlerData}
+                    error={signupData.password.error}
                   />
+                  {signupData.password.error && (
+                    <div className={classes.errorMessage}>
+                      {signupData.password.errorMessage}
+                    </div>
+                  )}
                   <TextField
                     className={classes.textField}
                     margin="normal"
@@ -159,9 +231,15 @@ const SignupPage = () => {
                     type="password"
                     placeholder="Confirm password"
                     name="confirmPassword"
-                    value={signupData.confirmPassword}
+                    value={signupData.confirmPassword.value}
                     onChange={changeHandlerData}
+                    error={signupData.confirmPassword.error}
                   />
+                  {signupData.confirmPassword.error && (
+                    <div className={classes.errorMessage}>
+                      {signupData.confirmPassword.errorMessage}
+                    </div>
+                  )}
                 </Grid>
                 <Grid item xs={12}>
                   <FormControlLabel

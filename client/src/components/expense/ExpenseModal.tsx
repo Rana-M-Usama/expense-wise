@@ -19,7 +19,8 @@ import {
   validateStatus,
   validateTitle,
   validateType,
-} from "validators/expense/expense";
+} from "validators/expense";
+
 import logo from "assets/logo.png";
 import useStyles from "components/expense/ExpenseModal.styles";
 

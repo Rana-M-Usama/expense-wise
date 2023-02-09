@@ -35,6 +35,8 @@ const SheetSchema = new mongoose.Schema(
 // Cascade delete expenses when a sheet is deleted
 SheetSchema.pre("remove", async function (next) {
   await this.model("Expense").deleteMany({ sheet: this._id });
+  await this.model("Permission").deleteMany({ sheet: this._id });
+
   next();
 });
 
