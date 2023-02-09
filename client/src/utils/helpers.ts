@@ -1,21 +1,26 @@
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import { setCurrentUser, setCurrentUserEmpty } from "slices/userSlice";
 import type { RootState } from "app/store";
-import { setCurrentUser } from "slices/userSlice";
 import Toast from "components/tostify/Toast";
 import useHttp from "./useHttp";
 
-const isLoggedIn = () => {
+const useFetchUser = () => {
+  const [loading, setLoading] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
-  return currentUser.id === "" ? false : true;
-};
-
-const fetchUserData = () => {
-  const token = localStorage.getItem("token");
   const dispatch = useDispatch();
   const { request, error: requestError } = useHttp();
 
-  return async () => {
+  useEffect(() => {
+    setIsLogin(currentUser.id !== "");
+  }, [currentUser]);
+
+  const fetchUserData = useCallback(async () => {
+    setLoading(true);
+    const token = localStorage.getItem("token");
+
     if (token) {
       try {
         const { data } = await request("/auth/me", "GET", token);
@@ -28,12 +33,15 @@ const fetchUserData = () => {
         };
         dispatch(setCurrentUser(currentUser));
       } catch (error: any) {
-        Toast("danger", error);
+        dispatch(setCurrentUserEmpty());
       }
     } else if (requestError) {
       Toast("danger", requestError);
     }
-  };
+    setLoading(false);
+  }, [request, requestError, dispatch]);
+
+  return [loading, isLogin, fetchUserData];
 };
 
-export { isLoggedIn, fetchUserData };
+export default useFetchUser;

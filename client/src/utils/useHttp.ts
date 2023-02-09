@@ -34,7 +34,7 @@ const useHttp = () => {
         return response.data;
       } catch (error: any) {
         if (error.response.status === 401) {
-          localStorage.setToken("token", "");
+          localStorage.setItem("token", "");
           navigate("/login");
           Toast("danger", "Not Authenticated");
         }
