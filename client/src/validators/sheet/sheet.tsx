@@ -1,5 +1,5 @@
 const validateTitle = (title: string) => {
-  if (title === "") {
+  if (!title) {
     return { error: true, errorMessage: "Title is required." };
   } else if (title.length > 100) {
     return {
@@ -12,7 +12,7 @@ const validateTitle = (title: string) => {
 };
 
 const validateDescription = (description: string) => {
-  if (description === "") {
+  if (!description) {
     return { error: true, errorMessage: "Description is required" };
   } else if (description.length > 1000) {
     return {

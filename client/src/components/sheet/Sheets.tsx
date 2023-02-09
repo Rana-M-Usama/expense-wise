@@ -14,6 +14,7 @@ import {
   ListItemText,
   Pagination,
   Stack,
+  Typography,
 } from "@mui/material";
 import React, { ChangeEvent, Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -63,6 +64,7 @@ const Sheets = () => {
     setPage(page);
     DATA.jump(page);
   };
+
   const showModal = (props: Props) => {
     setModalProps(props);
     setIsModalOpen(true);
@@ -73,10 +75,7 @@ const Sheets = () => {
   const fetchData = async () => {
     const response = await request("/sheets", "GET");
 
-    if (error) {
-      Toast("danger", error);
-      clearError();
-    } else {
+    if (!error) {
       dispatch(setSheets(response.data));
     }
   };
@@ -84,10 +83,7 @@ const Sheets = () => {
   const createSheet = async (body: object) => {
     const response = await request("/sheets", "POST", body);
 
-    if (error) {
-      Toast("danger", error);
-      clearError();
-    } else {
+    if (!error) {
       Toast("success", "Successfully sheet created.");
       dispatch(addSheet({ data: response.data }));
     }
@@ -96,10 +92,7 @@ const Sheets = () => {
   const deleteSheet = async (sheetId: string) => {
     const response = await request(`/sheets/${sheetId}`, "DELETE");
 
-    if (error) {
-      Toast("danger", error);
-      clearError();
-    } else {
+    if (!error) {
       Toast("success", "Successfully sheet deleted.");
       dispatch(removeSheet({ data: response.data, id: sheetId }));
     }
@@ -108,10 +101,7 @@ const Sheets = () => {
   const updateSheet = async (body: object, sheetId: string) => {
     const response = await request(`/sheets/${sheetId}`, "PUT", body);
 
-    if (error) {
-      Toast("danger", error);
-      clearError();
-    } else {
+    if (!error) {
       Toast("success", "Successfully sheet updated.");
       dispatch(modifySheet({ data: response.data, id: sheetId }));
     }
@@ -125,6 +115,13 @@ const Sheets = () => {
   const hideConfirmationModal = () => {
     setIsConfirmationModalOpen(false);
   };
+
+  useEffect(() => {
+    if (error) {
+      Toast("danger", error);
+      clearError();
+    }
+  }, [error]);
 
   useEffect(() => {
     fetchData();
@@ -174,15 +171,81 @@ const Sheets = () => {
             </Button>
           </Stack>
           <List className={classes.list}>
-            {DATA.currentData().map((sheet: any) => (
-              <Fragment key={sheet._id}>
-                <ListItem
-                  secondaryAction={
-                    <Box sx={{ "& button": { m: 1 } }}>
-                      {(() => {
-                        if (sheet.permissionType === "admin") {
-                          return (
-                            <>
+            {sheets.length > 0 ? (
+              DATA.currentData().map((sheet: any) => (
+                <Fragment key={sheet._id}>
+                  <ListItem
+                    secondaryAction={
+                      <Box sx={{ "& button": { m: 1 } }}>
+                        {(() => {
+                          if (sheet.permissionType === "admin") {
+                            return (
+                              <>
+                                <Button
+                                  className={classes.openButton}
+                                  variant="outlined"
+                                  size="small"
+                                >
+                                  Open
+                                </Button>
+                                <Button
+                                  className={classes.editButton}
+                                  variant="outlined"
+                                  size="small"
+                                  onClick={() =>
+                                    showModal({
+                                      idValue: sheet._id,
+                                      titleValue: sheet.title,
+                                      descriptionValue: sheet.description,
+                                      isUpdate: true,
+                                    })
+                                  }
+                                >
+                                  Edit
+                                </Button>
+                                <Button
+                                  onClick={() => {
+                                    showConfirmationModal({
+                                      sheetId: sheet._id,
+                                    });
+                                  }}
+                                  className={classes.deleteButton}
+                                  variant="outlined"
+                                  size="small"
+                                >
+                                  Delete
+                                </Button>
+                              </>
+                            );
+                          } else if (sheet.permissionType === "edit") {
+                            return (
+                              <>
+                                <Button
+                                  className={classes.openButton}
+                                  variant="outlined"
+                                  size="small"
+                                >
+                                  Open
+                                </Button>
+                                <Button
+                                  className={classes.editButton}
+                                  variant="outlined"
+                                  size="small"
+                                  onClick={() =>
+                                    showModal({
+                                      idValue: sheet._id,
+                                      titleValue: sheet.title,
+                                      descriptionValue: sheet.description,
+                                      isUpdate: true,
+                                    })
+                                  }
+                                >
+                                  Edit
+                                </Button>
+                              </>
+                            );
+                          } else if (sheet.permissionType === "view") {
+                            return (
                               <Button
                                 className={classes.openButton}
                                 variant="outlined"
@@ -190,93 +253,37 @@ const Sheets = () => {
                               >
                                 Open
                               </Button>
-                              <Button
-                                className={classes.editButton}
-                                variant="outlined"
-                                size="small"
-                                onClick={() =>
-                                  showModal({
-                                    idValue: sheet._id,
-                                    titleValue: sheet.title,
-                                    descriptionValue: sheet.description,
-                                    isUpdate: true,
-                                  })
-                                }
-                              >
-                                Edit
-                              </Button>
-                              <Button
-                                onClick={() => {
-                                  showConfirmationModal({ sheetId: sheet._id });
-                                }}
-                                className={classes.deleteButton}
-                                variant="outlined"
-                                size="small"
-                              >
-                                Delete
-                              </Button>
-                            </>
-                          );
-                        } else if (sheet.permissionType === "edit") {
-                          return (
-                            <>
-                              <Button
-                                className={classes.openButton}
-                                variant="outlined"
-                                size="small"
-                              >
-                                Open
-                              </Button>
-                              <Button
-                                className={classes.editButton}
-                                variant="outlined"
-                                size="small"
-                                onClick={() =>
-                                  showModal({
-                                    idValue: sheet._id,
-                                    titleValue: sheet.title,
-                                    descriptionValue: sheet.description,
-                                    isUpdate: true,
-                                  })
-                                }
-                              >
-                                Edit
-                              </Button>
-                            </>
-                          );
-                        } else if (sheet.permissionType === "view") {
-                          return (
-                            <Button
-                              className={classes.openButton}
-                              variant="outlined"
-                              size="small"
-                            >
-                              Open
-                            </Button>
-                          );
-                        }
-                      })()}
-                    </Box>
-                  }
-                >
-                  <ListItemText primary={sheet.title} />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-              </Fragment>
-            ))}
+                            );
+                          }
+                        })()}
+                      </Box>
+                    }
+                  >
+                    <ListItemText primary={sheet.title} />
+                  </ListItem>
+                  <Divider variant="inset" component="li" />
+                </Fragment>
+              ))
+            ) : (
+              <Typography className={classes.sheetNotFound} variant="h5">
+                No Sheet Available
+              </Typography>
+            )}
           </List>
           <Box
             sx={{ display: "flex", justifyContent: "center", marginTop: 10 }}
           >
-            <Pagination
-              count={count}
-              size="large"
-              page={page}
-              variant="outlined"
-              shape="rounded"
-              onChange={handleChange}
-              color="primary"
-            />
+            {count > 1 && (
+              <Pagination
+                count={count}
+                size="large"
+                page={page}
+                variant="outlined"
+                shape="rounded"
+                onChange={handleChange}
+                color="primary"
+              />
+            )}
           </Box>
         </>
       )}
