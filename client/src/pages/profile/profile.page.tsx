@@ -35,8 +35,12 @@ const ProfilePage = () => {
 
   useEffect(() => {
     setProfileData({
-      firstName: currentUser.firstName,
-      lastName: currentUser.lastName,
+      firstName: {
+        value: currentUser.firstName,
+        error: false,
+        errorMessage: "",
+      },
+      lastName: { value: currentUser.lastName, error: false, errorMessage: "" },
       email: currentUser.email,
       imageUrl: currentUser.imageUrl,
     });
