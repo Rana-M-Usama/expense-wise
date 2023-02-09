@@ -2,7 +2,7 @@ import { Avatar, Button, Modal, TextField, Typography } from "@mui/material";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Box } from "@mui/system";
 
-import { validateDescription, validateTitle } from "validators/sheet/sheet";
+import { validateDescription, validateTitle } from "validators/sheet";
 
 import logo from "assets/logo.png";
 import useStyles from "components/expense/ExpenseModal.styles";
@@ -65,7 +65,7 @@ const SheetModal = ({
 
     setData({ title, description });
 
-    if (!title.error && !description.error) {
+    if (!(title.error || description.error)) {
       const responseData: Response = {
         idValue: idValue,
         titleValue: title.value,
