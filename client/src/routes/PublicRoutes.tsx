@@ -12,7 +12,7 @@ const PublicRoutes = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
-      <Route path="/*" element={<div>Page Not Found</div>} />
+      <Route path="*" element={<div>Page Not Found</div>} />
     </Routes>
   );
 };

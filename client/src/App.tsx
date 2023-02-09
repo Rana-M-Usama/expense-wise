@@ -21,7 +21,7 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <header className="App-header">{isLogin ? <Navbar /> : ""}</header>
+      <header className="App-header">{isLogin && <Navbar />}</header>
       <div className="App-body">
         {loading ? (
           <CircularProgress />
