@@ -8,10 +8,11 @@ import SignupPage from "pages/signup/signup.page";
 const PublicRoutes = () => {
   return (
     <Routes>
+      <Route path="/" element={<LoginPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
-      <Route path="/*" element={<LoginPage />} />
+      <Route path="/*" element={<div>Page Not Found</div>} />
     </Routes>
   );
 };

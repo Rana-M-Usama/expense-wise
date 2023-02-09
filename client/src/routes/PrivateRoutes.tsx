@@ -16,6 +16,7 @@ const PrivateRoutes = () => {
       <Route path="/permissions" element={<Permissions />} />
       <Route path="/about" element={<About />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/*" element={<div>Page Not Found</div>} />
     </Routes>
   );
 };

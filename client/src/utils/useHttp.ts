@@ -33,7 +33,7 @@ const useHttp = () => {
         return response.data;
       } catch (error: any) {
         if (error.response.status === 401) {
-          localStorage.setItem("token", "");
+          localStorage.removeItem("token");
           navigate("/login");
         }
         setLoading(false);
