@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosRequestHeaders } from "axios";
 import { useCallback, useState } from "react";
-import Toast from "components/tostify/Toast";
 import { useNavigate } from "react-router-dom";
 
 const baseURL = process.env.REACT_APP_API_URI;
@@ -36,7 +35,6 @@ const useHttp = () => {
         if (error.response.status === 401) {
           localStorage.setItem("token", "");
           navigate("/login");
-          Toast("danger", "Not Authenticated");
         }
         setLoading(false);
         setError(error.response.data.errors.join(" "));
