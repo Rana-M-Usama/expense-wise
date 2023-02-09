@@ -78,23 +78,6 @@ const ProfilePage = () => {
   };
 
   useEffect(() => {
-    setProfileData({
-      firstName: {
-        value: profileData.firstName.value,
-        error: profileData.firstName.error,
-        errorMessage: profileData.firstName.errorMessage,
-      },
-      lastName: {
-        value: profileData.lastName.value,
-        error: profileData.lastName.error,
-        errorMessage: profileData.lastName.errorMessage,
-      },
-      email: currentUser.email,
-      imageUrl: currentUser.imageUrl,
-    });
-  }, [profileData.firstName.value, profileData.lastName.value]);
-
-  useEffect(() => {
     if (error) {
       Toast("danger", error);
       clearError();

@@ -71,16 +71,6 @@ const ForgetPasswordPage: FC<Props> = ({ isOpen, onClose }) => {
   };
 
   useEffect(() => {
-    setForgotPasswordData({
-      email: {
-        value: forgotPasswordData.email.value,
-        error: forgotPasswordData.email.error,
-        errorMessage: forgotPasswordData.email.errorMessage,
-      },
-    });
-  }, [forgotPasswordData.email.value]);
-
-  useEffect(() => {
     if (error) {
       Toast("danger", error);
       clearError();

@@ -78,21 +78,6 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
-    setLoginCredentials({
-      email: {
-        value: loginCredentials.email.value,
-        error: loginCredentials.email.error,
-        errorMessage: loginCredentials.email.errorMessage,
-      },
-      password: {
-        value: loginCredentials.password.value,
-        error: loginCredentials.password.error,
-        errorMessage: loginCredentials.password.errorMessage,
-      },
-    });
-  }, [loginCredentials.email.value, loginCredentials.password.value]);
-
-  useEffect(() => {
     if (error) {
       Toast("danger", error);
       clearError();

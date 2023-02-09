@@ -104,41 +104,6 @@ const SignupPage = () => {
       }
     }
   };
-  useEffect(() => {
-    setSignupData({
-      firstName: {
-        value: signupData.firstName.value,
-        error: signupData.firstName.error,
-        errorMessage: signupData.firstName.errorMessage,
-      },
-      lastName: {
-        value: signupData.lastName.value,
-        error: signupData.lastName.error,
-        errorMessage: signupData.lastName.errorMessage,
-      },
-      email: {
-        value: signupData.email.value,
-        error: signupData.email.error,
-        errorMessage: signupData.email.errorMessage,
-      },
-      password: {
-        value: signupData.password.value,
-        error: signupData.password.error,
-        errorMessage: signupData.password.errorMessage,
-      },
-      confirmPassword: {
-        value: signupData.confirmPassword.value,
-        error: signupData.confirmPassword.error,
-        errorMessage: signupData.confirmPassword.errorMessage,
-      },
-    });
-  }, [
-    signupData.email.value,
-    signupData.firstName.value,
-    signupData.lastName.value,
-    signupData.password.value,
-    signupData.confirmPassword.value,
-  ]);
 
   useEffect(() => {
     if (error) {
