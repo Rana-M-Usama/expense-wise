@@ -38,6 +38,10 @@ const useStyles = makeStyles(() => ({
       background: `${styles.theme.primaryColor} !important`,
     },
   },
+  menuLink: {
+    color: "black !important",
+    textDecoration: "none !important",
+  },
 }));
 
 export { useStyles, StyledTableCell, StyledTableRow, AmountBox };

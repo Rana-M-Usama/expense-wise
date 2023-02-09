@@ -5,8 +5,8 @@ import {
   Container,
   Grid,
   IconButton,
+  Link,
   Menu,
-  MenuItem,
   Pagination,
   Table,
   TableBody,
@@ -15,12 +15,12 @@ import {
   Typography,
 } from "@mui/material";
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from "react";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { MoodBad as NoExpensesFoundIcon } from "@mui/icons-material";
-import { useParams } from "react-router-dom";
 
 import {
   addExpense,
@@ -264,8 +264,14 @@ const ExpenseSheet = () => {
                 open={Boolean(sheetOption)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Delete Sheet</MenuItem>
-                <MenuItem onClick={handleClose}>Sheet Permissions</MenuItem>
+                <Link
+                  sx={{ m: 3 }}
+                  className={classes.menuLink}
+                  component={RouterLink}
+                  to={`/sheets/${id}/permissions`}
+                >
+                  Sheet Permissions
+                </Link>
               </Menu>
             </Box>
             {expenses.length === 0 ? (

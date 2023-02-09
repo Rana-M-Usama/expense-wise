@@ -9,10 +9,9 @@ import Permission from "../models/Permission";
 // @route     GET /api/v1/sheets/:sheetId/permissions
 // @access    Private
 const getPermissions = asyncHandler(async (req, res) => {
-  const permissions = await Permission.find({ sheet: req.sheet }).populate(
-    "user",
-    ["email"],
-  );
+  const permissions = await Permission.find({ sheet: req.sheet })
+    .populate("user", ["email"])
+    .populate("sheet", ["title"]);
 
   return res.status(httpStatus.OK).json({ success: true, permissions });
 });

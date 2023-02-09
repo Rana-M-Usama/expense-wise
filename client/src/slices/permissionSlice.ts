@@ -6,6 +6,7 @@ type Permission = {
   type: string;
   sheetId: string;
   user: object;
+  sheet: any;
 };
 
 type PermissionState = {

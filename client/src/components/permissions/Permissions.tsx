@@ -49,13 +49,6 @@ type Props = Response & {
 };
 
 const Permissions = () => {
-  const dispatch = useDispatch();
-  const sheets = useSelector((state: RootState) => state.sheet.sheets);
-  const { request, error, clearError } = useHttp();
-  const { sheetId } = useParams<{ sheetId: string | undefined }>();
-  const [permissionId, setPermissionId] = useState("");
-  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-
   const initialProps = {
     idValue: "",
     permissionTypeValue: "",
@@ -63,6 +56,12 @@ const Permissions = () => {
     sheetPermissionOptions: [],
     isUpdate: false,
   };
+  const dispatch = useDispatch();
+  const sheets = useSelector((state: RootState) => state.sheet.sheets);
+  const { request, error, clearError } = useHttp();
+  const { sheetId } = useParams<{ sheetId: string | undefined }>();
+  const [permissionId, setPermissionId] = useState("");
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
   const findSheetById = (sheetId: string | undefined) => {
     return sheets.filter(sheet => sheet._id == sheetId)[0];
@@ -186,7 +185,7 @@ const Permissions = () => {
         sx={{ mb: 5, display: "flex", justifyContent: "center" }}
         variant="h4"
       >
-        Sheet 1 Permissions
+        Permission {permissions[0]?.sheet?.title}
       </Typography>
       <Button
         className={classes.addExpense}
