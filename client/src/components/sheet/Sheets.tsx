@@ -58,11 +58,11 @@ const Sheets = () => {
   const [sheetId, setSheetId] = useState("");
   const [modalProps, setModalProps] = useState<Props>(initialProps);
   const count = Math.ceil(sheets.length / paginate);
-  const DATA = usePagination(sheets, paginate);
+  const paginatedSheets = usePagination(sheets, paginate);
 
   const handleChange = (event: ChangeEvent<unknown>, page: number) => {
     setPage(page);
-    DATA.jump(page);
+    paginatedSheets.jump(page);
   };
 
   const showModal = (props: Props) => {
@@ -90,11 +90,11 @@ const Sheets = () => {
   };
 
   const deleteSheet = async (sheetId: string) => {
-    const response = await request(`/sheets/${sheetId}`, "DELETE");
+    await request(`/sheets/${sheetId}`, "DELETE");
 
     if (!error) {
       Toast("success", "Successfully sheet deleted.");
-      dispatch(removeSheet({ data: response.data, id: sheetId }));
+      dispatch(removeSheet({ id: sheetId }));
     }
   };
 
@@ -114,6 +114,21 @@ const Sheets = () => {
 
   const hideConfirmationModal = () => {
     setIsConfirmationModalOpen(false);
+  };
+
+  const handleSubmit = (data: Response) => {
+    const body = {
+      title: data.titleValue,
+      description: data.descriptionValue,
+    };
+
+    if (data.idValue === "") {
+      createSheet(body);
+      hideModal();
+    } else {
+      updateSheet(body, data.idValue);
+      hideModal();
+    }
   };
 
   useEffect(() => {
@@ -137,19 +152,7 @@ const Sheets = () => {
             isOpen={isModalOpen}
             {...modalProps}
             onClose={hideModal}
-            onSubmit={(data: Response) => {
-              const body = {
-                title: data.titleValue,
-                description: data.descriptionValue,
-              };
-              if (data.idValue === "") {
-                createSheet(body);
-                hideModal();
-              } else {
-                updateSheet(body, data.idValue);
-                hideModal();
-              }
-            }}
+            onSubmit={handleSubmit}
           />
           <ConfirmationModal
             isOpen={isConfirmationModalOpen}
@@ -172,7 +175,7 @@ const Sheets = () => {
           </Stack>
           <List className={classes.list}>
             {sheets.length > 0 ? (
-              DATA.currentData().map((sheet: any) => (
+              paginatedSheets.currentData().map((sheet: any) => (
                 <Fragment key={sheet._id}>
                   <ListItem
                     secondaryAction={
