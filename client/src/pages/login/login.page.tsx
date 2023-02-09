@@ -72,7 +72,7 @@ const LoginPage = () => {
           email: { value: "", error: false, errorMessage: "" },
           password: { value: "", error: false, errorMessage: "" },
         });
-        navigate("/profile");
+        navigate("/sheets");
       }
     }
   };

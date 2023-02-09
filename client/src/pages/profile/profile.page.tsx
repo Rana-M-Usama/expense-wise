@@ -33,6 +33,19 @@ const ProfilePage = () => {
     imageUrl: currentUser.imageUrl,
   });
 
+  useEffect(() => {
+    setProfileData({
+      firstName: {
+        value: currentUser.firstName,
+        error: false,
+        errorMessage: "",
+      },
+      lastName: { value: currentUser.lastName, error: false, errorMessage: "" },
+      email: currentUser.email,
+      imageUrl: currentUser.imageUrl,
+    });
+  }, [currentUser]);
+
   const changeHandlerData = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setProfileData({
