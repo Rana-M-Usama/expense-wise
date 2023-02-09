@@ -73,24 +73,6 @@ const ResetPasswordPage = () => {
   };
 
   useEffect(() => {
-    setResetPasswordData({
-      password: {
-        value: resetPasswordData.password.value,
-        error: resetPasswordData.password.error,
-        errorMessage: resetPasswordData.password.errorMessage,
-      },
-      confirmPassword: {
-        value: resetPasswordData.confirmPassword.value,
-        error: resetPasswordData.confirmPassword.error,
-        errorMessage: resetPasswordData.confirmPassword.errorMessage,
-      },
-    });
-  }, [
-    resetPasswordData.password.value,
-    resetPasswordData.confirmPassword.value,
-  ]);
-
-  useEffect(() => {
     if (error) {
       Toast("danger", error);
       clearError();
