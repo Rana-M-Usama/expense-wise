@@ -27,7 +27,7 @@ import type { RootState } from "app/store";
 import SheetModal from "components/sheet/SheetModal";
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
-import usePagination from "components/sheet/Pagination";
+import usePagination from "components/common/pagination/Pagination";
 
 import useStyles from "components/sheet/Sheets.styles";
 

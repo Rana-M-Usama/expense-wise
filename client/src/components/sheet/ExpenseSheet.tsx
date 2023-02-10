@@ -7,17 +7,19 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Pagination,
   Table,
   TableBody,
   TableHead,
   TableRow,
   Typography,
 } from "@mui/material";
-import React, { MouseEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { MoodBad as NoExpensesFoundIcon } from "@mui/icons-material";
 import { useParams } from "react-router-dom";
 
 import {
@@ -31,6 +33,7 @@ import ExpenseModal from "components/expense/ExpenseModal";
 import type { RootState } from "app/store";
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
+import usePagination from "components/common/pagination/Pagination";
 
 import {
   AmountBox,
@@ -91,6 +94,15 @@ const ExpenseSheet = () => {
     spentAmount: null,
     totalAmount: null,
   });
+  let [page, setPage] = useState(1);
+  const [paginate] = useState(10);
+  const count = Math.ceil(expenses.length / paginate);
+  const paginatedExpenses = usePagination(expenses, paginate);
+
+  const handleChange = (event: ChangeEvent<unknown>, page: number) => {
+    setPage(page);
+    paginatedExpenses.jump(page);
+  };
 
   const createExpense = async (body: object) => {
     const response = await request(expenseUrl, "POST", body);
@@ -215,122 +227,177 @@ const ExpenseSheet = () => {
               }
             }}
           />
-
-          <Typography
-            sx={{ mb: 5, display: "flex", justifyContent: "center" }}
-            variant="h4"
+          <Box
+            sx={{
+              marginBottom: "300px",
+            }}
           >
-            {sheetName}
-          </Typography>
-          <Box display="flex" justifyContent="space-between">
-            <Button
-              className={classes.addExpense}
-              sx={{ mb: 2 }}
-              variant="outlined"
-              size="small"
-              onClick={() => showModal({ ...modalProps })}
+            <Typography
+              sx={{ mb: 5, display: "flex", justifyContent: "center" }}
+              variant="h4"
             >
-              Add expense
-            </Button>
-            <IconButton
-              aria-controls="simple-menu"
-              aria-haspopup="true"
-              onClick={handleClick}
-            >
-              <MoreVertIcon />
-            </IconButton>
-            <Menu
-              id="simple-menu"
-              anchorEl={sheetOption}
-              keepMounted
-              open={Boolean(sheetOption)}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleClose}>Delete Sheet</MenuItem>
-              <MenuItem onClick={handleClose}>Sheet Permissions</MenuItem>
-            </Menu>
+              {sheetName}
+            </Typography>
+            <Box display="flex" justifyContent="space-between">
+              <Button
+                className={classes.addExpense}
+                sx={{ mb: 2 }}
+                variant="outlined"
+                size="small"
+                onClick={() => showModal({ ...modalProps })}
+              >
+                Add expense
+              </Button>
+
+              <IconButton
+                aria-controls="simple-menu"
+                aria-haspopup="true"
+                onClick={handleClick}
+              >
+                <MoreVertIcon />
+              </IconButton>
+
+              <Menu
+                id="simple-menu"
+                anchorEl={sheetOption}
+                keepMounted
+                open={Boolean(sheetOption)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>Delete Sheet</MenuItem>
+                <MenuItem onClick={handleClose}>Sheet Permissions</MenuItem>
+              </Menu>
+            </Box>
+            {expenses.length === 0 ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Box sx={{ display: "flex" }}>
+                  <Typography variant="h5">No Expense to Show</Typography>
+                  <NoExpensesFoundIcon
+                    fontSize="large"
+                    sx={{ ml: 1, paddingBottom: 5 }}
+                  />
+                </Box>
+              </Box>
+            ) : (
+              <>
+                <div
+                  style={{ height: expenses.length === 0 ? "300px" : "auto" }}
+                >
+                  <Table
+                    aria-label="customized table"
+                    sx={{ minWidth: 650, mb: 5 }}
+                    size="small"
+                  >
+                    <TableHead>
+                      <TableRow>
+                        {Object.values(headerRow).map(heading => (
+                          <StyledTableCell key={heading} align="center">
+                            {heading}
+                          </StyledTableCell>
+                        ))}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {paginatedExpenses.currentData().map((expense: any) => (
+                        <StyledTableRow key={expense._id}>
+                          <StyledTableCell component="th" scope="row">
+                            {expense.title}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {expense.type}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {expense.amountType}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {expense.status}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {expense.amount}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            <IconButton
+                              aria-label="edit"
+                              onClick={() =>
+                                showModal({
+                                  idValue: expense._id,
+                                  titleValue: expense.title,
+                                  typeValue: expense.type,
+                                  amountValue: expense.amount,
+                                  statusValue: expense.status,
+                                  amountTypeValue: expense.amountType,
+                                  isUpdate: true,
+                                })
+                              }
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton
+                              aria-label="delete"
+                              onClick={() => {
+                                showConfirmationModal({
+                                  expenseId: expense._id,
+                                });
+                              }}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: 10,
+                      marginBottom: 5,
+                    }}
+                  >
+                    {count > 1 && (
+                      <Pagination
+                        count={count}
+                        size="large"
+                        page={page}
+                        variant="outlined"
+                        shape="rounded"
+                        onChange={handleChange}
+                        color="primary"
+                      />
+                    )}
+                  </Box>
+                </div>
+                <Grid
+                  container
+                  spacing={{ xs: 2, md: 3 }}
+                  columns={{ xs: 8, sm: 16, md: 16 }}
+                >
+                  <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
+                    <AmountBox>
+                      Recieved: {sheetBalance.receivedAmount}
+                    </AmountBox>
+                  </Grid>
+                  <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
+                    <AmountBox>
+                      Remaining: {sheetBalance.pendingAmount}
+                    </AmountBox>
+                  </Grid>
+                  <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
+                    <AmountBox>Total: {sheetBalance.totalAmount}</AmountBox>
+                  </Grid>
+                  <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
+                    <AmountBox>Spent: {sheetBalance.spentAmount}</AmountBox>
+                  </Grid>
+                </Grid>
+              </>
+            )}
           </Box>
-          <Table
-            aria-label="customized table"
-            sx={{ minWidth: 650, mb: 5 }}
-            size="small"
-          >
-            <TableHead>
-              <TableRow>
-                {Object.values(headerRow).map(heading => (
-                  <StyledTableCell key={heading} align="center">
-                    {heading}
-                  </StyledTableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {expenses.map(expense => (
-                <StyledTableRow key={expense._id}>
-                  <StyledTableCell component="th" scope="row">
-                    {expense.title}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {expense.type}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {expense.amountType}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {expense.status}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {expense.amount}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    <IconButton
-                      aria-label="edit"
-                      onClick={() =>
-                        showModal({
-                          idValue: expense._id,
-                          titleValue: expense.title,
-                          typeValue: expense.type,
-                          amountValue: expense.amount,
-                          statusValue: expense.status,
-                          amountTypeValue: expense.amountType,
-                          isUpdate: true,
-                        })
-                      }
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="delete"
-                      onClick={() => {
-                        showConfirmationModal({ expenseId: expense._id });
-                      }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-
-          <Grid
-            container
-            spacing={{ xs: 2, md: 3 }}
-            columns={{ xs: 8, sm: 16, md: 16 }}
-          >
-            <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
-              <AmountBox>Recieved: {sheetBalance.receivedAmount}</AmountBox>
-            </Grid>
-            <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
-              <AmountBox>Remaining: {sheetBalance.pendingAmount}</AmountBox>
-            </Grid>
-            <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
-              <AmountBox>Total: {sheetBalance.totalAmount}</AmountBox>
-            </Grid>
-            <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
-              <AmountBox>Spent: {sheetBalance.spentAmount}</AmountBox>
-            </Grid>
-          </Grid>
         </>
       )}
     </Container>
