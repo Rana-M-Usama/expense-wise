@@ -1,6 +1,7 @@
 import {
   Avatar,
   Button,
+  FormControl,
   InputLabel,
   MenuItem,
   Modal,
@@ -206,11 +207,13 @@ const ExpenseModal = ({
               {data.amount.errorMessage}
             </Box>
           )}
-
-          <Box component="form" sx={{ mt: 2 }}>
+          <FormControl
+            component="form"
+            noValidate
+            sx={{ mt: 2, width: "100%" }}
+          >
             <InputLabel id="status-label">Status*</InputLabel>
             <Select
-              sx={{ width: "100%" }}
               className={classes.textfield}
               labelId="status-label"
               label="Status*"
@@ -224,13 +227,16 @@ const ExpenseModal = ({
               <MenuItem value="unpaid">Unpaid</MenuItem>
             </Select>
             {data.status.error && (
-              <Box className={classes.errorMessage}>
+              <div className={classes.errorMessage}>
                 {data.status.errorMessage}
-              </Box>
+              </div>
             )}
-          </Box>
-
-          <Box component="form" sx={{ mt: 2 }}>
+          </FormControl>
+          <FormControl
+            component="form"
+            noValidate
+            sx={{ mt: 2, width: "100%" }}
+          >
             <InputLabel id="amountType-label">Amount Type*</InputLabel>
             <Select
               sx={{ width: "100%" }}
@@ -251,7 +257,7 @@ const ExpenseModal = ({
                 {data.amountType.errorMessage}
               </Box>
             )}
-          </Box>
+          </FormControl>
 
           <Button
             onClick={handleSubmit}

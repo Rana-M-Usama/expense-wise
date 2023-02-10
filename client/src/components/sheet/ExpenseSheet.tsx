@@ -114,11 +114,11 @@ const ExpenseSheet = () => {
   };
 
   const deleteExpense = async (expenseId: string) => {
-    const response = await request(expenseUrl.concat(expenseId), "DELETE");
+    await request(expenseUrl.concat(expenseId), "DELETE");
 
     if (!error) {
       Toast("success", "Successfully expense deleted.");
-      dispatch(removeExpense({ data: response.data, id: expenseId }));
+      dispatch(removeExpense({ id: expenseId }));
     }
   };
 

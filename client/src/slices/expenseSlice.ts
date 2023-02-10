@@ -34,10 +34,7 @@ const expenseSlice = createSlice({
     addExpense: (state, action: PayloadAction<{ data: Expense }>) => {
       state.expenses.push({ ...action.payload.data });
     },
-    removeExpense: (
-      state,
-      action: PayloadAction<{ data: Expense; id: string }>,
-    ) => {
+    removeExpense: (state, action: PayloadAction<{ id: string }>) => {
       const expenseIndex = state.expenses.findIndex(
         expense => expense._id === action.payload.id,
       );
@@ -47,14 +44,14 @@ const expenseSlice = createSlice({
       state,
       action: PayloadAction<{ data: Expense; id: string }>,
     ) => {
-      const expenseIndex = state.expenses.findIndex(
-        expense => expense._id === action.payload.id,
+      const updatedExpenseIndex = state.expenses.findIndex(
+        sheet => sheet._id === action.payload.id,
       );
-      const updateableExpense = state.expenses[expenseIndex];
-      const updatedItem = { ...updateableExpense, ...action.payload.data };
-      const updatedExpenses = [...state.expenses];
-      updatedExpenses[expenseIndex] = updatedItem;
-      state.expenses = updatedExpenses;
+
+      state.expenses[updatedExpenseIndex] = {
+        ...state.expenses[updatedExpenseIndex],
+        ...action.payload.data,
+      };
     },
   },
 });
