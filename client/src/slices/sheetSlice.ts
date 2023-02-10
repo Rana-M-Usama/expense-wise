@@ -33,27 +33,21 @@ const sheetSlice = createSlice({
         permissionType: "admin",
       });
     },
-    removeSheet: (
-      state,
-      action: PayloadAction<{ data: Sheet; id: string }>,
-    ) => {
+    removeSheet: (state, action: PayloadAction<{ id: string }>) => {
       const sheetIndex = state.sheets.findIndex(
         sheet => sheet._id === action.payload.id,
       );
       state.sheets.splice(sheetIndex, 1);
     },
-    modifySheet: (
-      state,
-      action: PayloadAction<{ data: Sheet; id: string }>,
-    ) => {
-      const sheetIndex = state.sheets.findIndex(
+    modifySheet: (state, action) => {
+      const updatedSheetIndex = state.sheets.findIndex(
         sheet => sheet._id === action.payload.id,
       );
-      const updateableSheet = state.sheets[sheetIndex];
-      const updatedItem = { ...updateableSheet, ...action.payload.data };
-      const updatedSheets = [...state.sheets];
-      updatedSheets[sheetIndex] = updatedItem;
-      state.sheets = updatedSheets;
+
+      state.sheets[updatedSheetIndex] = {
+        ...state.sheets[updatedSheetIndex],
+        ...action.payload.data,
+      };
     },
   },
 });

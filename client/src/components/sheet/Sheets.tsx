@@ -1,10 +1,4 @@
 import {
-  addSheet,
-  modifySheet,
-  removeSheet,
-  setSheets,
-} from "slices/sheetSlice";
-import {
   Button,
   CircularProgress,
   Container,
@@ -14,6 +8,7 @@ import {
   ListItemText,
   Pagination,
   Stack,
+  Typography,
 } from "@mui/material";
 import React, { ChangeEvent, Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +16,12 @@ import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import { Box } from "@mui/system";
 import { Link } from "react-router-dom";
 
+import {
+  addSheet,
+  modifySheet,
+  removeSheet,
+  setSheets,
+} from "slices/sheetSlice";
 import ConfirmationModal from "components/common/confirmation/modal";
 import type { RootState } from "app/store";
 import SheetModal from "components/sheet/SheetModal";
@@ -47,7 +48,6 @@ const Sheets = () => {
     descriptionValue: "",
     isUpdate: false,
   };
-
   const dispatch = useDispatch();
   const { loading, request, error, clearError } = useHttp();
   const sheets = useSelector((state: RootState) => state.sheet.sheets);
@@ -58,14 +58,14 @@ const Sheets = () => {
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [sheetId, setSheetId] = useState("");
   const [modalProps, setModalProps] = useState<Props>(initialProps);
-
   const count = Math.ceil(sheets.length / paginate);
-  const DATA = usePagination(sheets, paginate);
+  const paginatedSheets = usePagination(sheets, paginate);
 
   const handleChange = (event: ChangeEvent<unknown>, page: number) => {
     setPage(page);
-    DATA.jump(page);
+    paginatedSheets.jump(page);
   };
+
   const showModal = (props: Props) => {
     setModalProps(props);
     setIsModalOpen(true);
@@ -76,10 +76,7 @@ const Sheets = () => {
   const fetchData = async () => {
     const response = await request("/sheets", "GET");
 
-    if (error) {
-      Toast("danger", error);
-      clearError();
-    } else {
+    if (!error) {
       dispatch(setSheets(response.data));
     }
   };
@@ -87,34 +84,25 @@ const Sheets = () => {
   const createSheet = async (body: object) => {
     const response = await request("/sheets", "POST", body);
 
-    if (error) {
-      Toast("danger", error);
-      clearError();
-    } else {
+    if (!error) {
       Toast("success", "Successfully sheet created.");
       dispatch(addSheet({ data: response.data }));
     }
   };
 
   const deleteSheet = async (sheetId: string) => {
-    const response = await request(`/sheets/${sheetId}`, "DELETE");
+    await request(`/sheets/${sheetId}`, "DELETE");
 
-    if (error) {
-      Toast("danger", error);
-      clearError();
-    } else {
+    if (!error) {
       Toast("success", "Successfully sheet deleted.");
-      dispatch(removeSheet({ data: response.data, id: sheetId }));
+      dispatch(removeSheet({ id: sheetId }));
     }
   };
 
   const updateSheet = async (body: object, sheetId: string) => {
     const response = await request(`/sheets/${sheetId}`, "PUT", body);
 
-    if (error) {
-      Toast("danger", error);
-      clearError();
-    } else {
+    if (!error) {
       Toast("success", "Successfully sheet updated.");
       dispatch(modifySheet({ data: response.data, id: sheetId }));
     }
@@ -128,6 +116,28 @@ const Sheets = () => {
   const hideConfirmationModal = () => {
     setIsConfirmationModalOpen(false);
   };
+
+  const handleSubmit = (data: Response) => {
+    const body = {
+      title: data.titleValue,
+      description: data.descriptionValue,
+    };
+
+    if (data.idValue === "") {
+      createSheet(body);
+      hideModal();
+    } else {
+      updateSheet(body, data.idValue);
+      hideModal();
+    }
+  };
+
+  useEffect(() => {
+    if (error) {
+      Toast("danger", error);
+      clearError();
+    }
+  }, [error]);
 
   useEffect(() => {
     fetchData();
@@ -143,19 +153,7 @@ const Sheets = () => {
             isOpen={isModalOpen}
             {...modalProps}
             onClose={hideModal}
-            onSubmit={(data: Response) => {
-              const body = {
-                title: data.titleValue,
-                description: data.descriptionValue,
-              };
-              if (data.idValue === "") {
-                createSheet(body);
-                hideModal();
-              } else {
-                updateSheet(body, data.idValue);
-                hideModal();
-              }
-            }}
+            onSubmit={handleSubmit}
           />
           <ConfirmationModal
             isOpen={isConfirmationModalOpen}
@@ -177,19 +175,60 @@ const Sheets = () => {
             </Button>
           </Stack>
           <List className={classes.list}>
-            {DATA.currentData().map((sheet: any) => (
-              <Fragment key={sheet._id}>
-                <ListItem
-                  secondaryAction={
-                    <Box sx={{ "& button": { m: 1 } }}>
-                      {(() => {
-                        if (sheet.permissionType === "admin") {
-                          return (
-                            <>
-                              <Link
-                                to={`/${sheet._id}/expenses`}
-                                style={{ textDecoration: "none" }}
-                              >
+            {sheets.length > 0 ? (
+              paginatedSheets.currentData().map((sheet: any) => (
+                <Fragment key={sheet._id}>
+                  <ListItem
+                    secondaryAction={
+                      <Box sx={{ "& button": { m: 1 } }}>
+                        {(() => {
+                          if (sheet.permissionType === "admin") {
+                            return (
+                              <>
+                                <Link
+                                  to={`/${sheet._id}/expenses`}
+                                  style={{ textDecoration: "none" }}
+                                >
+                                  <Button
+                                    className={classes.openButton}
+                                    variant="outlined"
+                                    size="small"
+                                  >
+                                    Open
+                                  </Button>
+                                </Link>
+                                <Button
+                                  className={classes.editButton}
+                                  variant="outlined"
+                                  size="small"
+                                  onClick={() =>
+                                    showModal({
+                                      idValue: sheet._id,
+                                      titleValue: sheet.title,
+                                      descriptionValue: sheet.description,
+                                      isUpdate: true,
+                                    })
+                                  }
+                                >
+                                  Edit
+                                </Button>
+                                <Button
+                                  onClick={() => {
+                                    showConfirmationModal({
+                                      sheetId: sheet._id,
+                                    });
+                                  }}
+                                  className={classes.deleteButton}
+                                  variant="outlined"
+                                  size="small"
+                                >
+                                  Delete
+                                </Button>
+                              </>
+                            );
+                          } else if (sheet.permissionType === "edit") {
+                            return (
+                              <>
                                 <Button
                                   className={classes.openButton}
                                   variant="outlined"
@@ -197,37 +236,25 @@ const Sheets = () => {
                                 >
                                   Open
                                 </Button>
-                              </Link>
-                              <Button
-                                className={classes.editButton}
-                                variant="outlined"
-                                size="small"
-                                onClick={() =>
-                                  showModal({
-                                    idValue: sheet._id,
-                                    titleValue: sheet.title,
-                                    descriptionValue: sheet.description,
-                                    isUpdate: true,
-                                  })
-                                }
-                              >
-                                Edit
-                              </Button>
-                              <Button
-                                onClick={() => {
-                                  showConfirmationModal({ sheetId: sheet._id });
-                                }}
-                                className={classes.deleteButton}
-                                variant="outlined"
-                                size="small"
-                              >
-                                Delete
-                              </Button>
-                            </>
-                          );
-                        } else if (sheet.permissionType === "edit") {
-                          return (
-                            <>
+                                <Button
+                                  className={classes.editButton}
+                                  variant="outlined"
+                                  size="small"
+                                  onClick={() =>
+                                    showModal({
+                                      idValue: sheet._id,
+                                      titleValue: sheet.title,
+                                      descriptionValue: sheet.description,
+                                      isUpdate: true,
+                                    })
+                                  }
+                                >
+                                  Edit
+                                </Button>
+                              </>
+                            );
+                          } else if (sheet.permissionType === "view") {
+                            return (
                               <Button
                                 className={classes.openButton}
                                 variant="outlined"
@@ -235,56 +262,37 @@ const Sheets = () => {
                               >
                                 Open
                               </Button>
-                              <Button
-                                className={classes.editButton}
-                                variant="outlined"
-                                size="small"
-                                onClick={() =>
-                                  showModal({
-                                    idValue: sheet._id,
-                                    titleValue: sheet.title,
-                                    descriptionValue: sheet.description,
-                                    isUpdate: true,
-                                  })
-                                }
-                              >
-                                Edit
-                              </Button>
-                            </>
-                          );
-                        } else if (sheet.permissionType === "view") {
-                          return (
-                            <Button
-                              className={classes.openButton}
-                              variant="outlined"
-                              size="small"
-                            >
-                              Open
-                            </Button>
-                          );
-                        }
-                      })()}
-                    </Box>
-                  }
-                >
-                  <ListItemText primary={sheet.title} />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-              </Fragment>
-            ))}
+                            );
+                          }
+                        })()}
+                      </Box>
+                    }
+                  >
+                    <ListItemText primary={sheet.title} />
+                  </ListItem>
+                  <Divider variant="inset" component="li" />
+                </Fragment>
+              ))
+            ) : (
+              <Typography className={classes.sheetNotFound} variant="h5">
+                No Sheet Available
+              </Typography>
+            )}
           </List>
           <Box
             sx={{ display: "flex", justifyContent: "center", marginTop: 10 }}
           >
-            <Pagination
-              count={count}
-              size="large"
-              page={page}
-              variant="outlined"
-              shape="rounded"
-              onChange={handleChange}
-              color="primary"
-            />
+            {count > 1 && (
+              <Pagination
+                count={count}
+                size="large"
+                page={page}
+                variant="outlined"
+                shape="rounded"
+                onChange={handleChange}
+                color="primary"
+              />
+            )}
           </Box>
         </>
       )}

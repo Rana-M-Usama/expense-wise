@@ -13,10 +13,7 @@ import {
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Box } from "@mui/system";
 
-import {
-  validateEmail,
-  validatePermissionType,
-} from "validators/permission/permission";
+import { validateEmail, validatePermissionType } from "validators/permission";
 import logo from "assets/logo.png";
 import useStyles from "components/permissions/PermissionModal.styles";
 

@@ -32,6 +32,7 @@ const userSlice = createSlice({
     },
     setCurrentUserEmpty: state => {
       state.currentUser = { ...initialState.currentUser };
+      localStorage.removeItem("token");
     },
   },
 });

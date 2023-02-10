@@ -16,7 +16,7 @@ type Props = {
   onSubmit: (isAllow: boolean) => void;
 };
 
-function ConfirmationModal({ isOpen, onClose, onSubmit }: Props) {
+const ConfirmationModal = ({ isOpen, onClose, onSubmit }: Props) => {
   const handleClose = (confirm: boolean) => {
     onClose();
     onSubmit(confirm);
@@ -48,6 +48,6 @@ function ConfirmationModal({ isOpen, onClose, onSubmit }: Props) {
       </Dialog>
     </div>
   );
-}
+};
 
 export default ConfirmationModal;

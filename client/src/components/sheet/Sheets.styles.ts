@@ -32,4 +32,10 @@ export default makeStyles(() => ({
     backgroundColor: styles.list.backgroundColor,
     minHeight: "512px",
   },
+  sheetNotFound: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: "512px",
+  },
 }));
