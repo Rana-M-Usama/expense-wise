@@ -12,7 +12,7 @@ const PrivateRoutes = () => {
     <Routes>
       <Route path="/" element={<Sheets />} />
       <Route path="/sheets" element={<Sheets />} />
-      <Route path="/expenses" element={<ExpenseSheet />} />
+      <Route path="/:id/expenses" element={<ExpenseSheet />} />
       <Route path="/permissions" element={<Permissions />} />
       <Route path="/about" element={<About />} />
       <Route path="/profile" element={<ProfilePage />} />

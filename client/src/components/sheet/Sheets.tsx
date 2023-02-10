@@ -1,10 +1,4 @@
 import {
-  addSheet,
-  modifySheet,
-  removeSheet,
-  setSheets,
-} from "slices/sheetSlice";
-import {
   Button,
   CircularProgress,
   Container,
@@ -20,13 +14,20 @@ import React, { ChangeEvent, Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import { Box } from "@mui/system";
+import { Link } from "react-router-dom";
 
+import {
+  addSheet,
+  modifySheet,
+  removeSheet,
+  setSheets,
+} from "slices/sheetSlice";
 import ConfirmationModal from "components/common/confirmation/modal";
 import type { RootState } from "app/store";
 import SheetModal from "components/sheet/SheetModal";
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
-import usePagination from "components/sheet/Pagination";
+import usePagination from "components/common/pagination/Pagination";
 
 import useStyles from "components/sheet/Sheets.styles";
 
@@ -184,13 +185,18 @@ const Sheets = () => {
                           if (sheet.permissionType === "admin") {
                             return (
                               <>
-                                <Button
-                                  className={classes.openButton}
-                                  variant="outlined"
-                                  size="small"
+                                <Link
+                                  to={`/${sheet._id}/expenses`}
+                                  style={{ textDecoration: "none" }}
                                 >
-                                  Open
-                                </Button>
+                                  <Button
+                                    className={classes.openButton}
+                                    variant="outlined"
+                                    size="small"
+                                  >
+                                    Open
+                                  </Button>
+                                </Link>
                                 <Button
                                   className={classes.editButton}
                                   variant="outlined"
