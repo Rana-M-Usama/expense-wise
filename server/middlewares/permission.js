@@ -35,7 +35,7 @@ const findUserWithEmail = async (req, res, next) => {
     next(
       new ErrorResponse(
         `User not found with this email: ${req.body.userEmail}.`,
-        httpStatus.UNAUTHORIZED,
+        httpStatus.NOT_FOUND,
       ),
     );
   }
