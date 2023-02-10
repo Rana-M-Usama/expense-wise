@@ -364,15 +364,15 @@ const ExpenseSheet = () => {
                   </Box>
                 )}
               </Box>
-              {count > 1 && (
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: 5,
-                    marginBottom: 5,
-                  }}
-                >
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: 5,
+                  marginBottom: 5,
+                }}
+              >
+                {count > 1 && (
                   <Pagination
                     count={count}
                     size="large"
@@ -382,8 +382,8 @@ const ExpenseSheet = () => {
                     onChange={handleChange}
                     color="primary"
                   />
-                </Box>
-              )}
+                )}
+              </Box>
             </div>
           </Box>
           <Grid
