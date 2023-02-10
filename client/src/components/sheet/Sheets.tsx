@@ -165,6 +165,12 @@ const Sheets = () => {
               }
             }}
           />
+          <Typography
+            sx={{ mb: 5, display: "flex", justifyContent: "center" }}
+            variant="h4"
+          >
+            Your Sheets
+          </Typography>
           <Stack
             direction="row"
             justifyContent="space-between"
@@ -181,90 +187,66 @@ const Sheets = () => {
                   <ListItem
                     secondaryAction={
                       <Box sx={{ "& button": { m: 1 } }}>
-                        {(() => {
-                          if (sheet.permissionType === "admin") {
-                            return (
-                              <>
-                                <Link
-                                  to={`/${sheet._id}/expenses`}
-                                  style={{ textDecoration: "none" }}
-                                >
-                                  <Button
-                                    className={classes.openButton}
-                                    variant="outlined"
-                                    size="small"
-                                  >
-                                    Open
-                                  </Button>
-                                </Link>
-                                <Button
-                                  className={classes.editButton}
-                                  variant="outlined"
-                                  size="small"
-                                  onClick={() =>
-                                    showModal({
-                                      idValue: sheet._id,
-                                      titleValue: sheet.title,
-                                      descriptionValue: sheet.description,
-                                      isUpdate: true,
-                                    })
-                                  }
-                                >
-                                  Edit
-                                </Button>
-                                <Button
-                                  onClick={() => {
-                                    showConfirmationModal({
-                                      sheetId: sheet._id,
-                                    });
-                                  }}
-                                  className={classes.deleteButton}
-                                  variant="outlined"
-                                  size="small"
-                                >
-                                  Delete
-                                </Button>
-                              </>
-                            );
-                          } else if (sheet.permissionType === "edit") {
-                            return (
-                              <>
-                                <Button
-                                  className={classes.openButton}
-                                  variant="outlined"
-                                  size="small"
-                                >
-                                  Open
-                                </Button>
-                                <Button
-                                  className={classes.editButton}
-                                  variant="outlined"
-                                  size="small"
-                                  onClick={() =>
-                                    showModal({
-                                      idValue: sheet._id,
-                                      titleValue: sheet.title,
-                                      descriptionValue: sheet.description,
-                                      isUpdate: true,
-                                    })
-                                  }
-                                >
-                                  Edit
-                                </Button>
-                              </>
-                            );
-                          } else if (sheet.permissionType === "view") {
-                            return (
-                              <Button
-                                className={classes.openButton}
-                                variant="outlined"
-                                size="small"
-                              >
-                                Open
-                              </Button>
-                            );
-                          }
-                        })()}
+                        <Link
+                          to={`/${sheet._id}/expenses`}
+                          style={{ textDecoration: "none" }}
+                        >
+                          <Button
+                            className={classes.openButton}
+                            variant="outlined"
+                            size="small"
+                          >
+                            Open
+                          </Button>
+                        </Link>
+                        {sheet.permissionType === "admin" && (
+                          <>
+                            <Button
+                              className={classes.editButton}
+                              variant="outlined"
+                              size="small"
+                              onClick={() =>
+                                showModal({
+                                  idValue: sheet._id,
+                                  titleValue: sheet.title,
+                                  descriptionValue: sheet.description,
+                                  isUpdate: true,
+                                })
+                              }
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                showConfirmationModal({
+                                  sheetId: sheet._id,
+                                });
+                              }}
+                              className={classes.deleteButton}
+                              variant="outlined"
+                              size="small"
+                            >
+                              Delete
+                            </Button>
+                          </>
+                        )}
+                        {sheet.permissionType === "edit" && (
+                          <Button
+                            className={classes.editButton}
+                            variant="outlined"
+                            size="small"
+                            onClick={() =>
+                              showModal({
+                                idValue: sheet._id,
+                                titleValue: sheet.title,
+                                descriptionValue: sheet.description,
+                                isUpdate: true,
+                              })
+                            }
+                          >
+                            Edit
+                          </Button>
+                        )}
                       </Box>
                     }
                   >
@@ -279,10 +261,10 @@ const Sheets = () => {
               </Typography>
             )}
           </List>
-          <Box
-            sx={{ display: "flex", justifyContent: "center", marginTop: 10 }}
-          >
-            {count > 1 && (
+          {count > 1 && (
+            <Box
+              sx={{ display: "flex", justifyContent: "center", marginTop: 5 }}
+            >
               <Pagination
                 count={count}
                 size="large"
@@ -292,8 +274,8 @@ const Sheets = () => {
                 onChange={handleChange}
                 color="primary"
               />
-            )}
-          </Box>
+            </Box>
+          )}
         </>
       )}
     </Container>

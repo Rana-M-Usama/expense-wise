@@ -1,7 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import React from "react";
 
-import About from "components/about/About";
 import ExpenseSheet from "components/sheet/ExpenseSheet";
 import Permissions from "components/permissions/Permissions";
 import ProfilePage from "pages/profile/profile.page";
@@ -11,12 +10,11 @@ const PrivateRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Sheets />} />
-      <Route path="/sheets" element={<Sheets />} />
-      <Route path="/:id/expenses" element={<ExpenseSheet />} />
-      <Route path="/permissions" element={<Permissions />} />
-      <Route path="/about" element={<About />} />
+      <Route path="/:sheetId/expenses" element={<ExpenseSheet />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/sheets/:sheetId/permissions" element={<Permissions />} />
       <Route path="*" element={<div>Page Not Found</div>} />
+      <Route path="/sheets/:sheetId/permissions" element={<Permissions />} />
     </Routes>
   );
 };

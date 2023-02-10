@@ -5,8 +5,8 @@ import {
   Container,
   Grid,
   IconButton,
+  Link,
   Menu,
-  MenuItem,
   Pagination,
   Table,
   TableBody,
@@ -15,12 +15,12 @@ import {
   Typography,
 } from "@mui/material";
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from "react";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { MoodBad as NoExpensesFoundIcon } from "@mui/icons-material";
-import { useParams } from "react-router-dom";
 
 import {
   addExpense,
@@ -77,16 +77,15 @@ const ExpenseSheet = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { loading, request, error, clearError } = useHttp();
-  let { id } = useParams();
-
-  const expenseUrl = `/sheets/${id}/expenses/`;
+  let { sheetId } = useParams();
+  const expenseUrl = `/sheets/${sheetId}/expenses/`;
   const expenses = useSelector((state: RootState) => state.expense.expenses);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalProps, setModalProps] = useState<Props>(initialProps);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [expenseId, setExpenseId] = useState("");
   const [sheetName, setSheetName] = useState("");
+  const [sheetPermissionType, setSheetPermissionType] = useState("");
   const [sheetOption, setSheetOption] = useState<null | Element>(null);
   const [sheetBalance, setSheetBalance] = useState({
     pendingAmount: null,
@@ -95,7 +94,7 @@ const ExpenseSheet = () => {
     totalAmount: null,
   });
   let [page, setPage] = useState(1);
-  const [paginate] = useState(10);
+  const [paginate] = useState(8);
   const count = Math.ceil(expenses.length / paginate);
   const paginatedExpenses = usePagination(expenses, paginate);
 
@@ -132,11 +131,12 @@ const ExpenseSheet = () => {
   };
 
   const fetchSheet = async () => {
-    const response = await request(`/sheets/${id}`, "GET");
+    const response = await request(`/sheets/${sheetId}`, "GET");
 
     if (!error) {
       setSheetBalance(response.data.amounts);
       setSheetName(response.data.title);
+      setSheetPermissionType(response.data.permissionType);
     }
   };
 
@@ -227,28 +227,31 @@ const ExpenseSheet = () => {
               }
             }}
           />
-          <Box
-            sx={{
-              marginBottom: "300px",
-            }}
-          >
+          <Box>
             <Typography
               sx={{ mb: 5, display: "flex", justifyContent: "center" }}
               variant="h4"
             >
               {sheetName}
             </Typography>
-            <Box display="flex" justifyContent="space-between">
-              <Button
-                className={classes.addExpense}
-                sx={{ mb: 2 }}
-                variant="outlined"
-                size="small"
-                onClick={() => showModal({ ...modalProps })}
-              >
-                Add expense
-              </Button>
-
+            <Box
+              display="flex"
+              justifyContent={
+                (sheetPermissionType !== "view" && "space-between") ||
+                "flex-end"
+              }
+            >
+              {sheetPermissionType !== "view" && (
+                <Button
+                  className={classes.addExpense}
+                  sx={{ mb: 2 }}
+                  variant="outlined"
+                  size="small"
+                  onClick={() => showModal({ ...modalProps })}
+                >
+                  Add expense
+                </Button>
+              )}
               <IconButton
                 aria-controls="simple-menu"
                 aria-haspopup="true"
@@ -264,44 +267,33 @@ const ExpenseSheet = () => {
                 open={Boolean(sheetOption)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Delete Sheet</MenuItem>
-                <MenuItem onClick={handleClose}>Sheet Permissions</MenuItem>
+                <Link
+                  sx={{ m: 3 }}
+                  className={classes.menuLink}
+                  component={RouterLink}
+                  to={`/sheets/${sheetId}/permissions`}
+                >
+                  Sheet Permissions
+                </Link>
               </Menu>
             </Box>
-            {expenses.length === 0 ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <Box sx={{ display: "flex" }}>
-                  <Typography variant="h5">No Expense to Show</Typography>
-                  <NoExpensesFoundIcon
-                    fontSize="large"
-                    sx={{ ml: 1, paddingBottom: 5 }}
-                  />
-                </Box>
-              </Box>
-            ) : (
-              <>
-                <div
-                  style={{ height: expenses.length === 0 ? "300px" : "auto" }}
+            <div>
+              <Box className={classes.list}>
+                <Table
+                  aria-label="customized table"
+                  sx={{ minWidth: 650, mb: 5 }}
+                  size="small"
                 >
-                  <Table
-                    aria-label="customized table"
-                    sx={{ minWidth: 650, mb: 5 }}
-                    size="small"
-                  >
-                    <TableHead>
-                      <TableRow>
-                        {Object.values(headerRow).map(heading => (
-                          <StyledTableCell key={heading} align="center">
-                            {heading}
-                          </StyledTableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
+                  <TableHead>
+                    <TableRow>
+                      {Object.values(headerRow).map(heading => (
+                        <StyledTableCell key={heading} align="center">
+                          {heading}
+                        </StyledTableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  {expenses.length !== 0 && (
                     <TableBody>
                       {paginatedExpenses.currentData().map((expense: any) => (
                         <StyledTableRow key={expense._id}>
@@ -351,53 +343,67 @@ const ExpenseSheet = () => {
                         </StyledTableRow>
                       ))}
                     </TableBody>
-                  </Table>
+                  )}
+                </Table>
+                {expenses.length === 0 && (
                   <Box
                     sx={{
                       display: "flex",
                       justifyContent: "center",
-                      marginTop: 10,
-                      marginBottom: 5,
+                      alignItems: "center",
+                      marginTop: "180px",
                     }}
                   >
-                    {count > 1 && (
-                      <Pagination
-                        count={count}
-                        size="large"
-                        page={page}
-                        variant="outlined"
-                        shape="rounded"
-                        onChange={handleChange}
-                        color="primary"
+                    <Box sx={{ display: "flex" }}>
+                      <Typography variant="h5">No Expense to Show</Typography>
+                      <NoExpensesFoundIcon
+                        fontSize="large"
+                        sx={{ ml: 1, paddingBottom: 5 }}
                       />
-                    )}
+                    </Box>
                   </Box>
-                </div>
-                <Grid
-                  container
-                  spacing={{ xs: 2, md: 3 }}
-                  columns={{ xs: 8, sm: 16, md: 16 }}
-                >
-                  <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
-                    <AmountBox>
-                      Recieved: {sheetBalance.receivedAmount}
-                    </AmountBox>
-                  </Grid>
-                  <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
-                    <AmountBox>
-                      Remaining: {sheetBalance.pendingAmount}
-                    </AmountBox>
-                  </Grid>
-                  <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
-                    <AmountBox>Total: {sheetBalance.totalAmount}</AmountBox>
-                  </Grid>
-                  <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
-                    <AmountBox>Spent: {sheetBalance.spentAmount}</AmountBox>
-                  </Grid>
-                </Grid>
-              </>
-            )}
+                )}
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: 5,
+                  marginBottom: 5,
+                }}
+              >
+                {count > 1 && (
+                  <Pagination
+                    count={count}
+                    size="large"
+                    page={page}
+                    variant="outlined"
+                    shape="rounded"
+                    onChange={handleChange}
+                    color="primary"
+                  />
+                )}
+              </Box>
+            </div>
           </Box>
+          <Grid
+            container
+            spacing={{ xs: 2, md: 3 }}
+            columns={{ xs: 8, sm: 16, md: 16 }}
+          >
+            <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
+              <AmountBox>Recieved: {sheetBalance.receivedAmount}</AmountBox>
+            </Grid>
+            <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
+              <AmountBox>Remaining: {sheetBalance.pendingAmount}</AmountBox>
+            </Grid>
+            <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
+              <AmountBox>Total: {sheetBalance.totalAmount}</AmountBox>
+            </Grid>
+            <Grid item xs={2} sm={4} md={4} style={{ width: "20%" }}>
+              <AmountBox>Spent: {sheetBalance.spentAmount}</AmountBox>
+            </Grid>
+          </Grid>
         </>
       )}
     </Container>

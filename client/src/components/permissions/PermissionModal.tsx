@@ -15,14 +15,17 @@ import { Box } from "@mui/system";
 
 import { validateEmail, validatePermissionType } from "validators/permission";
 import logo from "assets/logo.png";
+import { titleize } from "utils/helpers";
 import useStyles from "components/permissions/PermissionModal.styles";
 
 type Response = {
+  idValue: string;
   permissionTypeValue: string;
   emailValue: string;
 };
 
 type Props = Response & {
+  sheetPermissionOptions: string[];
   isOpen: boolean;
   isUpdate: boolean;
   onClose: () => void;
@@ -32,8 +35,10 @@ type Props = Response & {
 
 const Permission = ({
   isOpen,
+  idValue,
   permissionTypeValue,
   emailValue,
+  sheetPermissionOptions,
   isUpdate,
   onClose,
   onSubmit,
@@ -43,6 +48,7 @@ const Permission = ({
     permissionType: { value: "", error: false, errorMessage: "" },
     email: { value: "", error: false, errorMessage: "" },
   });
+  const [permissionOptions, setPermissionOptions] = useState<string[]>([]);
 
   useEffect(() => {
     setData({
@@ -53,6 +59,7 @@ const Permission = ({
       },
       email: { value: emailValue, error: false, errorMessage: "" },
     });
+    setPermissionOptions(sheetPermissionOptions);
   }, [permissionTypeValue, emailValue, onSubmit]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -91,6 +98,7 @@ const Permission = ({
 
     if (!permissionType.error && !email.error) {
       const responseData: Response = {
+        idValue: idValue,
         permissionTypeValue: permissionType.value,
         emailValue: email.value,
       };
@@ -157,9 +165,11 @@ const Permission = ({
               name="permissionType"
               error={data.permissionType.error}
             >
-              <MenuItem value="view">View</MenuItem>
-              <MenuItem value="edit">Edit</MenuItem>
-              <MenuItem value="admin">Admin</MenuItem>
+              {permissionOptions.map(option => (
+                <MenuItem key={option} value={option}>
+                  {titleize(option)}
+                </MenuItem>
+              ))}
             </Select>
             {data.permissionType.error && (
               <div className={classes.errorMessage}>

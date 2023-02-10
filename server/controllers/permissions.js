@@ -9,7 +9,10 @@ import Permission from "../models/Permission";
 // @route     GET /api/v1/sheets/:sheetId/permissions
 // @access    Private
 const getPermissions = asyncHandler(async (req, res) => {
-  const permissions = await Permission.find({ sheet: req.sheet });
+  const permissions = await Permission.find({ sheet: req.sheet })
+    .populate("user", ["email"])
+    .populate("sheet", ["title"]);
+
   return res.status(httpStatus.OK).json({ success: true, permissions });
 });
 
@@ -18,6 +21,8 @@ const getPermissions = asyncHandler(async (req, res) => {
 // @access    Private
 const grantPermission = asyncHandler(async (req, res, next) => {
   req.body.sheet = req.sheet._id;
+  const { _id, email } = req.body.user;
+
   let permission = await Permission.findOne({
     user: req.body.user,
     sheet: req.body.sheet,
@@ -57,7 +62,7 @@ const grantPermission = asyncHandler(async (req, res, next) => {
 
   return res.status(httpStatus.OK).json({
     success: true,
-    data: permission,
+    data: { ...permission._doc, user: { _id, email } },
   });
 });
 

@@ -425,7 +425,10 @@ describe("Permission endpoints", () => {
       expect(res.body.data).toMatchObject({
         sheet: permissionParams.sheet._id,
         type: EDIT,
-        user: user.id,
+        user: {
+          _id: user.id,
+          email: user.email,
+        },
       });
     });
   });

@@ -1,60 +1,91 @@
 import {
+  Box,
   Button,
   Container,
   IconButton,
-  Paper,
+  Pagination,
   Table,
   TableBody,
   TableHead,
   TableRow,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { useParams } from "react-router-dom";
+
+import {
+  addPermission,
+  modifyPermission,
+  removePermission,
+  setPermissions,
+} from "slices/permissionSlice";
+import ConfirmationModal from "components/common/confirmation/modal";
+import PermissionModal from "components/permissions/PermissionModal";
+import type { RootState } from "app/store";
+import Toast from "components/tostify/Toast";
+import useHttp from "utils/useHttp";
+import usePagination from "components/common/pagination/Pagination";
 
 import {
   StyledTableCell,
   StyledTableRow,
   useStyles,
 } from "components/permissions/Permissions.styles";
-import PermissionModal from "components/permissions/PermissionModal";
-
-const createData = (permissionType: string, email: string) => {
-  return { permissionType, email };
-};
-
-const rows = [
-  createData("edit", "usmanjaved@gmail.com"),
-  createData("admin", "aliusman@gmail.com"),
-  createData("view", "Shaheer@gmail.com"),
-  createData("view", "irfan@gmail.com"),
-  createData("edit", "usama@gmail.com"),
-  createData("admin", "hamzaazeem@gmail.com"),
-  createData("view", "ahmedjaved@gmail.com"),
-];
 
 const headerRow = {
   "heading 1": "Permission Type",
   "heading 2": "User",
-  "heading 3": "Action",
 };
 
 type Response = {
+  idValue: string;
   permissionTypeValue: string;
   emailValue: string;
 };
 
 type Props = Response & {
+  sheetPermissionOptions: string[];
   isUpdate: boolean;
 };
 
 const Permissions = () => {
   const initialProps = {
+    idValue: "",
     permissionTypeValue: "",
     emailValue: "",
+    sheetPermissionOptions: [],
     isUpdate: false,
   };
+  const permissions = useSelector(
+    (state: RootState) => state.permission.permissions,
+  );
+  const dispatch = useDispatch();
+  const { request, error, clearError } = useHttp();
+  const { sheetId } = useParams<{ sheetId: string | undefined }>();
+  const [permissionId, setPermissionId] = useState("");
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+  const [sheetPermissionType, setSheetPermissionType] = useState("");
+  let [page, setPage] = useState(1);
+  const [paginate] = useState(10);
+  const count = Math.ceil(permissions.length / paginate);
+  const paginatedPermissions = usePagination(permissions, paginate);
+
+  const handleChange = (event: ChangeEvent<unknown>, page: number) => {
+    setPage(page);
+    paginatedPermissions.jump(page);
+  };
+
+  const fetchSheet = async () => {
+    const response = await request(`/sheets/${sheetId}`, "GET");
+
+    if (!error) {
+      setSheetPermissionType(response.data.permissionType);
+    }
+  };
+
   const classes = useStyles();
   const [IsModalOpen, setIsModalOpen] = useState(false);
   const [modalProps, setModalProps] = useState<Props>(initialProps);
@@ -69,6 +100,69 @@ const Permissions = () => {
     setIsModalOpen(false);
   };
 
+  const fetchPermissions = async () => {
+    const response = await request(`/sheets/${sheetId}/permissions`, "GET");
+
+    if (!error) {
+      dispatch(setPermissions(response.permissions));
+    }
+  };
+
+  const updatePermission = async (body: object, permissionId: string) => {
+    const response = await request(
+      `/sheets/${sheetId}/permissions`,
+      "POST",
+      body,
+    );
+
+    if (!error) {
+      if (permissionId === "") {
+        Toast("success", "Successfully sheet created.");
+        dispatch(addPermission({ data: response.data }));
+      } else {
+        Toast("success", "Successfully sheet updated.");
+        dispatch(modifyPermission({ data: response.data, id: permissionId }));
+      }
+    }
+  };
+
+  const deletePermission = async (permissionId: string) => {
+    const response = await request(
+      `/sheets/${sheetId}/permissions/${permissionId}`,
+      "DELETE",
+    );
+
+    if (!error) {
+      Toast("success", "Successfully permission deleted.");
+      dispatch(removePermission({ data: response.data, id: permissionId }));
+    }
+  };
+
+  const showConfirmationModal = ({
+    permissionId,
+  }: {
+    permissionId: string;
+  }) => {
+    setPermissionId(permissionId);
+    setIsConfirmationModalOpen(true);
+  };
+
+  const hideConfirmationModal = () => {
+    setIsConfirmationModalOpen(false);
+  };
+
+  useEffect(() => {
+    fetchSheet();
+    fetchPermissions();
+  }, []);
+
+  useEffect(() => {
+    if (error) {
+      Toast("danger", error);
+      clearError();
+    }
+  }, [error]);
+
   return (
     <Container maxWidth="md">
       <PermissionModal
@@ -76,21 +170,53 @@ const Permissions = () => {
         {...modalProps}
         onClose={hideModal}
         onSubmit={(data: Response) => {
-          console.log("Data", data);
+          const body = {
+            userEmail: data.emailValue,
+            type: data.permissionTypeValue,
+          };
+          if (data.idValue === "") {
+            updatePermission(body, "");
+            hideModal();
+          } else {
+            updatePermission(body, data.idValue);
+            hideModal();
+          }
+        }}
+      />
+      <ConfirmationModal
+        isOpen={isConfirmationModalOpen}
+        {...modalProps}
+        onClose={hideConfirmationModal}
+        onSubmit={(data: boolean) => {
+          if (data === true) {
+            deletePermission(permissionId);
+          }
         }}
       />
       <Typography
         sx={{ mb: 5, display: "flex", justifyContent: "center" }}
         variant="h4"
       >
-        Sheet 1 Permissions
+        Permissions for {permissions[0]?.sheet?.title}
       </Typography>
       <Button
         className={classes.addExpense}
         sx={{ mb: 2 }}
         variant="outlined"
         size="small"
-        onClick={() => showModal({ ...modalProps })}
+        onClick={() => {
+          let options = ["view"];
+          if (sheetPermissionType === "edit") {
+            options.push("edit");
+          } else if (sheetPermissionType === "admin") {
+            options.push("edit");
+            options.push("admin");
+          }
+          showModal({
+            ...modalProps,
+            sheetPermissionOptions: options,
+          });
+        }}
       >
         Add Permission
       </Button>
@@ -98,11 +224,14 @@ const Permissions = () => {
         aria-label="customized table"
         sx={{ minWidth: 650, mb: 5 }}
         size="small"
-        component={Paper}
       >
         <TableHead>
           <TableRow>
-            {Object.values(headerRow).map(heading => (
+            {Object.values(
+              sheetPermissionType === "admin"
+                ? { ...headerRow, ...{ "heading 3": "Action" } }
+                : headerRow,
+            ).map(heading => (
               <StyledTableCell key={heading} align="center">
                 {heading}
               </StyledTableCell>
@@ -110,35 +239,71 @@ const Permissions = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
-            <StyledTableRow key={row.email}>
+          {paginatedPermissions.currentData().map((permission: any) => (
+            <StyledTableRow key={permission._id}>
               <StyledTableCell component="th" scope="row">
-                {row.email}
+                {permission.type}
               </StyledTableCell>
               <StyledTableCell align="center">
-                {row.permissionType}
+                {permission.user.email}
               </StyledTableCell>
-              <StyledTableCell align="center">
-                <IconButton
-                  aria-label="edit"
-                  onClick={() =>
-                    showModal({
-                      permissionTypeValue: row.permissionType,
-                      emailValue: row.email,
-                      isUpdate: true,
-                    })
-                  }
-                >
-                  <EditIcon />
-                </IconButton>
-                <IconButton aria-label="delete" onClick={() => {}}>
-                  <DeleteIcon />
-                </IconButton>
-              </StyledTableCell>
+
+              {(() => {
+                if (sheetPermissionType === "admin") {
+                  return (
+                    <StyledTableCell align="center">
+                      <IconButton
+                        aria-label="edit"
+                        onClick={() =>
+                          showModal({
+                            idValue: permission._id,
+                            permissionTypeValue: permission.type,
+                            emailValue: permission.user.email,
+                            sheetPermissionOptions: ["view", "edit", "admin"],
+                            isUpdate: true,
+                          })
+                        }
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() =>
+                          showConfirmationModal({
+                            permissionId: permission._id,
+                          })
+                        }
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </StyledTableCell>
+                  );
+                }
+              })()}
             </StyledTableRow>
           ))}
         </TableBody>
       </Table>
+      {count > 1 && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: 5,
+            marginBottom: 5,
+          }}
+        >
+          <Pagination
+            count={count}
+            size="large"
+            page={page}
+            variant="outlined"
+            shape="rounded"
+            onChange={handleChange}
+            color="primary"
+          />
+        </Box>
+      )}
     </Container>
   );
 };

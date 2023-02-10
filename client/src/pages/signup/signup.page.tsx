@@ -1,10 +1,8 @@
 import {
   Box,
   Button,
-  Checkbox,
   Container,
   CssBaseline,
-  FormControlLabel,
   Grid,
   Link,
   TextField,
@@ -241,19 +239,13 @@ const SignupPage = () => {
                     </div>
                   )}
                 </Grid>
-                <Grid item xs={12}>
-                  <FormControlLabel
-                    control={<Checkbox value="allowExtraEmails" />}
-                    label="I want to receive inspiration, marketing
-                      promotions and updates via email."
-                  />
-                </Grid>
               </Grid>
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 color="primary"
+                sx={{ mt: 2 }}
               >
                 Sign Up
               </Button>

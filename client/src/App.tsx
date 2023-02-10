@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 import Navbar from "components/common/layouts/navbar/Navbar";
 import PrivateRoutes from "routes/PrivateRoutes";
 import PublicRoutes from "routes/PublicRoutes";
-import useFetchUser from "utils/helpers";
+import { useFetchUser } from "utils/helpers";
 
 import "App.css";
 import { theme } from "theme";
