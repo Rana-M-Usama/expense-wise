@@ -14,19 +14,11 @@ import {
   Typography,
 } from "@mui/material";
 import React, { MouseEvent, useEffect, useState } from "react";
-import ConfirmationModal from "components/common/confirmation/modal";
+import { useDispatch, useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-
-import {
-  AmountBox,
-  StyledTableCell,
-  StyledTableRow,
-  useStyles,
-} from "components/sheet/ExpenseSheet.styles";
+import { useParams } from "react-router-dom";
 
 import {
   addExpense,
@@ -34,10 +26,18 @@ import {
   removeExpense,
   setExpenses,
 } from "slices/expenseSlice";
+import ConfirmationModal from "components/common/confirmation/modal";
 import ExpenseModal from "components/expense/ExpenseModal";
 import type { RootState } from "app/store";
+import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
-import { useParams } from "react-router-dom";
+
+import {
+  AmountBox,
+  StyledTableCell,
+  StyledTableRow,
+  useStyles,
+} from "components/sheet/ExpenseSheet.styles";
 
 const headerRow = {
   "heading 1": "Title",
@@ -83,6 +83,8 @@ const ExpenseSheet = () => {
   const [modalProps, setModalProps] = useState<Props>(initialProps);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [expenseId, setExpenseId] = useState("");
+  const [sheetName, setSheetName] = useState("");
+  const [sheetOption, setSheetOption] = useState<null | Element>(null);
   const [sheetBalance, setSheetBalance] = useState({
     pendingAmount: null,
     receivedAmount: null,
@@ -92,54 +94,52 @@ const ExpenseSheet = () => {
 
   const createExpense = async (body: object) => {
     const response = await request(expenseUrl, "POST", body);
+
     if (!error) {
+      Toast("success", "Successfully expense created.");
       dispatch(addExpense({ data: response.data }));
     }
   };
 
   const deleteExpense = async (expenseId: string) => {
     const response = await request(expenseUrl.concat(expenseId), "DELETE");
+
     if (!error) {
+      Toast("success", "Successfully expense deleted.");
       dispatch(removeExpense({ data: response.data, id: expenseId }));
-    } else {
-      console.log(error);
     }
   };
 
   const updateExpense = async (body: object, expenseId: string) => {
     const response = await request(expenseUrl.concat(expenseId), "PUT", body);
+
     if (!error) {
+      Toast("success", "Successfully expense updated.");
       dispatch(modifyExpense({ data: response.data, id: expenseId }));
     }
   };
 
   const fetchSheet = async () => {
     const response = await request(`/sheets/${id}`, "GET");
+
     if (!error) {
       setSheetBalance(response.data.amounts);
+      setSheetName(response.data.title);
     }
   };
 
-  const fetchData = async () => {
+  const fetchExpenses = async () => {
     const response = await request(expenseUrl, "GET");
-    if (error) {
-      clearError();
-    } else {
+
+    if (!error) {
       dispatch(setExpenses({ data: response.data }));
     }
   };
-  useEffect(() => {
-    fetchData();
-  }, []);
 
-  useEffect(() => {
-    fetchSheet();
-  }, [expenses]);
-
-  const [sheetOption, setSheetOption] = useState<null | Element>(null);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setSheetOption(event.currentTarget as Element);
   };
+
   const handleClose = () => {
     setSheetOption(null);
   };
@@ -162,6 +162,21 @@ const ExpenseSheet = () => {
   const hideConfirmationModal = () => {
     setIsConfirmationModalOpen(false);
   };
+
+  useEffect(() => {
+    fetchExpenses();
+  }, []);
+
+  useEffect(() => {
+    fetchSheet();
+  }, [expenses]);
+
+  useEffect(() => {
+    if (error) {
+      Toast("danger", error);
+      clearError();
+    }
+  }, [error]);
 
   return (
     <Container maxWidth="md">
@@ -205,7 +220,7 @@ const ExpenseSheet = () => {
             sx={{ mb: 5, display: "flex", justifyContent: "center" }}
             variant="h4"
           >
-            Sheet 1
+            {sheetName}
           </Typography>
           <Box display="flex" justifyContent="space-between">
             <Button
