@@ -43,7 +43,7 @@ const grantPermission = asyncHandler(async (req, res, next) => {
       return next(
         new ErrorResponse(
           "You do not have rights to assign this permission.",
-          httpStatus.UNAUTHORIZED,
+          httpStatus.BAD_REQUEST,
         ),
       );
     }

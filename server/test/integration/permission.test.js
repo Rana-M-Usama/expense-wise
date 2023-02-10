@@ -153,7 +153,7 @@ describe("Permission endpoints", () => {
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
         .set("Authorization", `Bearer ${authToken2}`)
         .send(permissionParams2)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.errors).toMatchObject([
         "You do not have rights to assign this permission.",
@@ -181,7 +181,7 @@ describe("Permission endpoints", () => {
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
         .set("Authorization", `Bearer ${authToken2}`)
         .send(permissionParams2)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.errors).toMatchObject([
         "You do not have rights to assign this permission.",
@@ -209,7 +209,7 @@ describe("Permission endpoints", () => {
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
         .set("Authorization", `Bearer ${authToken2}`)
         .send(permissionParams2)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.errors).toMatchObject([
         "You do not have rights to assign this permission.",
@@ -237,7 +237,7 @@ describe("Permission endpoints", () => {
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
         .set("Authorization", `Bearer ${authToken2}`)
         .send(permissionParams2)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.errors).toMatchObject([
         "You do not have rights to assign this permission.",
@@ -265,7 +265,7 @@ describe("Permission endpoints", () => {
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
         .set("Authorization", `Bearer ${authToken2}`)
         .send(permissionParams2)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.errors).toMatchObject([
         "You do not have rights to assign this permission.",
