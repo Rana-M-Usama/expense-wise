@@ -181,90 +181,65 @@ const Sheets = () => {
                   <ListItem
                     secondaryAction={
                       <Box sx={{ "& button": { m: 1 } }}>
-                        {(() => {
-                          if (sheet.permissionType === "admin") {
-                            return (
-                              <>
-                                <Link
-                                  to={`/${sheet._id}/expenses`}
-                                  style={{ textDecoration: "none" }}
-                                >
-                                  <Button
-                                    className={classes.openButton}
-                                    variant="outlined"
-                                    size="small"
-                                  >
-                                    Open
-                                  </Button>
-                                </Link>
-                                <Button
-                                  className={classes.editButton}
-                                  variant="outlined"
-                                  size="small"
-                                  onClick={() =>
-                                    showModal({
-                                      idValue: sheet._id,
-                                      titleValue: sheet.title,
-                                      descriptionValue: sheet.description,
-                                      isUpdate: true,
-                                    })
-                                  }
-                                >
-                                  Edit
-                                </Button>
-                                <Button
-                                  onClick={() => {
-                                    showConfirmationModal({
-                                      sheetId: sheet._id,
-                                    });
-                                  }}
-                                  className={classes.deleteButton}
-                                  variant="outlined"
-                                  size="small"
-                                >
-                                  Delete
-                                </Button>
-                              </>
-                            );
-                          } else if (sheet.permissionType === "edit") {
-                            return (
-                              <>
-                                <Button
-                                  className={classes.openButton}
-                                  variant="outlined"
-                                  size="small"
-                                >
-                                  Open
-                                </Button>
-                                <Button
-                                  className={classes.editButton}
-                                  variant="outlined"
-                                  size="small"
-                                  onClick={() =>
-                                    showModal({
-                                      idValue: sheet._id,
-                                      titleValue: sheet.title,
-                                      descriptionValue: sheet.description,
-                                      isUpdate: true,
-                                    })
-                                  }
-                                >
-                                  Edit
-                                </Button>
-                              </>
-                            );
-                          } else if (sheet.permissionType === "view") {
-                            return (
-                              <Button
-                                className={classes.openButton}
-                                variant="outlined"
-                                size="small"
-                              >
-                                Open
-                              </Button>
-                            );
-                          }
-                        })()}
+                        <Link
+                          to={`/${sheet._id}/expenses`}
+                          style={{ textDecoration: "none" }}
+                        >
+                          <Button
+                            className={classes.openButton}
+                            variant="outlined"
+                            size="small"
+                          >
+                            Open
+                          </Button>
+                        </Link>
+                        {sheet.permissionType === "admin" ? (
+                          <>
+                            <Button
+                              className={classes.editButton}
+                              variant="outlined"
+                              size="small"
+                              onClick={() =>
+                                showModal({
+                                  idValue: sheet._id,
+                                  titleValue: sheet.title,
+                                  descriptionValue: sheet.description,
+                                  isUpdate: true,
+                                })
+                              }
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                showConfirmationModal({
+                                  sheetId: sheet._id,
+                                });
+                              }}
+                              className={classes.deleteButton}
+                              variant="outlined"
+                              size="small"
+                            >
+                              Delete
+                            </Button>
+                          </>
+                        ) : (
+                          <Button
+                            className={classes.editButton}
+                            variant="outlined"
+                            size="small"
+                            onClick={() =>
+                              showModal({
+                                idValue: sheet._id,
+                                titleValue: sheet.title,
+                                descriptionValue: sheet.description,
+                                isUpdate: true,
+                              })
+                            }
+                          >
+                            Edit
+                          </Button>
+                        )}
                       </Box>
                     }
                   >

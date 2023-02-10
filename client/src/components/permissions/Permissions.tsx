@@ -64,7 +64,7 @@ const Permissions = () => {
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
   const findSheetById = (sheetId: string | undefined) => {
-    return sheets.filter(sheet => sheet._id == sheetId)[0];
+    return sheets.find(sheet => sheet._id === sheetId);
   };
 
   const sheetPermissionIsAdmin = (sheetId: string | undefined) => {

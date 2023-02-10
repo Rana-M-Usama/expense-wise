@@ -119,15 +119,6 @@ const ProfilePage = () => {
               }}
             />
           </Stack>
-          <Button sx={{ my: 2 }} variant="contained" component="label">
-            Upload image
-            <input
-              type="file"
-              hidden
-              onChange={changeHandlerData}
-              name="imageUrl"
-            />
-          </Button>
           <Box component="form" noValidate onSubmit={handleSubmit}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
