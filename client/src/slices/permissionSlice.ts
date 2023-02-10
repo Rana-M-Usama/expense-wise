@@ -28,7 +28,7 @@ const permissionSlice = createSlice({
       state.permissions = { ...initialState.permissions };
     },
     addPermission: (state, action: PayloadAction<{ data: Permission }>) => {
-      state.permissions.unshift({ ...action.payload.data });
+      state.permissions.push({ ...action.payload.data });
     },
     removePermission: (
       state,

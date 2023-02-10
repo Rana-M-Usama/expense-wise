@@ -165,6 +165,12 @@ const Sheets = () => {
               }
             }}
           />
+          <Typography
+            sx={{ mb: 5, display: "flex", justifyContent: "center" }}
+            variant="h4"
+          >
+            Your Sheets
+          </Typography>
           <Stack
             direction="row"
             justifyContent="space-between"
@@ -193,7 +199,7 @@ const Sheets = () => {
                             Open
                           </Button>
                         </Link>
-                        {sheet.permissionType === "admin" ? (
+                        {sheet.permissionType === "admin" && (
                           <>
                             <Button
                               className={classes.editButton}
@@ -223,7 +229,8 @@ const Sheets = () => {
                               Delete
                             </Button>
                           </>
-                        ) : (
+                        )}
+                        {sheet.permissionType === "edit" && (
                           <Button
                             className={classes.editButton}
                             variant="outlined"
@@ -254,10 +261,10 @@ const Sheets = () => {
               </Typography>
             )}
           </List>
-          <Box
-            sx={{ display: "flex", justifyContent: "center", marginTop: 10 }}
-          >
-            {count > 1 && (
+          {count > 1 && (
+            <Box
+              sx={{ display: "flex", justifyContent: "center", marginTop: 5 }}
+            >
               <Pagination
                 count={count}
                 size="large"
@@ -267,8 +274,8 @@ const Sheets = () => {
                 onChange={handleChange}
                 color="primary"
               />
-            )}
-          </Box>
+            </Box>
+          )}
         </>
       )}
     </Container>

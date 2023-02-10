@@ -1,10 +1,8 @@
 import {
   Box,
   Button,
-  Checkbox,
   Container,
   CssBaseline,
-  FormControlLabel,
   Grid,
   Link,
   TextField,
@@ -72,7 +70,7 @@ const LoginPage = () => {
           email: { value: "", error: false, errorMessage: "" },
           password: { value: "", error: false, errorMessage: "" },
         });
-        navigate("/sheets");
+        navigate("/");
       }
     }
   };
@@ -145,11 +143,12 @@ const LoginPage = () => {
                   {loginCredentials.password.errorMessage}
                 </div>
               )}
-              <FormControlLabel
-                control={<Checkbox value="remember" />}
-                label="Remember me"
-              />
-              <Button fullWidth type="submit" variant="contained">
+              <Button
+                fullWidth
+                type="submit"
+                variant="contained"
+                sx={{ mt: 2 }}
+              >
                 Sign in
               </Button>
             </Box>
@@ -158,7 +157,6 @@ const LoginPage = () => {
                 <Link
                   component="button"
                   onClick={() => setModalIsOpen(true)}
-                  href="#"
                   variant="body2"
                 >
                   Forgot password?

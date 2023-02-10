@@ -1,15 +1,17 @@
 import {
+  Box,
   Button,
   Container,
   IconButton,
-  Paper,
+  Pagination,
   Table,
   TableBody,
   TableHead,
   TableRow,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useParams } from "react-router-dom";
@@ -20,17 +22,18 @@ import {
   removePermission,
   setPermissions,
 } from "slices/permissionSlice";
-import {
-  StyledTableCell,
-  StyledTableRow,
-  useStyles,
-} from "components/permissions/Permissions.styles";
-import { useDispatch, useSelector } from "react-redux";
 import ConfirmationModal from "components/common/confirmation/modal";
 import PermissionModal from "components/permissions/PermissionModal";
 import type { RootState } from "app/store";
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
+import usePagination from "components/common/pagination/Pagination";
+
+import {
+  StyledTableCell,
+  StyledTableRow,
+  useStyles,
+} from "components/permissions/Permissions.styles";
 
 const headerRow = {
   "heading 1": "Permission Type",
@@ -56,19 +59,31 @@ const Permissions = () => {
     sheetPermissionOptions: [],
     isUpdate: false,
   };
+  const permissions = useSelector(
+    (state: RootState) => state.permission.permissions,
+  );
   const dispatch = useDispatch();
-  const sheets = useSelector((state: RootState) => state.sheet.sheets);
   const { request, error, clearError } = useHttp();
   const { sheetId } = useParams<{ sheetId: string | undefined }>();
   const [permissionId, setPermissionId] = useState("");
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+  const [sheetPermissionType, setSheetPermissionType] = useState("");
+  let [page, setPage] = useState(1);
+  const [paginate] = useState(10);
+  const count = Math.ceil(permissions.length / paginate);
+  const paginatedPermissions = usePagination(permissions, paginate);
 
-  const findSheetById = (sheetId: string | undefined) => {
-    return sheets.find(sheet => sheet._id === sheetId);
+  const handleChange = (event: ChangeEvent<unknown>, page: number) => {
+    setPage(page);
+    paginatedPermissions.jump(page);
   };
 
-  const sheetPermissionIsAdmin = (sheetId: string | undefined) => {
-    return findSheetById(sheetId)?.permissionType === "admin" ? true : false;
+  const fetchSheet = async () => {
+    const response = await request(`/sheets/${sheetId}`, "GET");
+
+    if (!error) {
+      setSheetPermissionType(response.data.permissionType);
+    }
   };
 
   const classes = useStyles();
@@ -85,7 +100,7 @@ const Permissions = () => {
     setIsModalOpen(false);
   };
 
-  const fetchData = async () => {
+  const fetchPermissions = async () => {
     const response = await request(`/sheets/${sheetId}/permissions`, "GET");
 
     if (!error) {
@@ -136,12 +151,9 @@ const Permissions = () => {
     setIsConfirmationModalOpen(false);
   };
 
-  const permissions = useSelector(
-    (state: RootState) => state.permission.permissions,
-  );
-
   useEffect(() => {
-    fetchData();
+    fetchSheet();
+    fetchPermissions();
   }, []);
 
   useEffect(() => {
@@ -185,7 +197,7 @@ const Permissions = () => {
         sx={{ mb: 5, display: "flex", justifyContent: "center" }}
         variant="h4"
       >
-        Permission {permissions[0]?.sheet?.title}
+        Permissions for {permissions[0]?.sheet?.title}
       </Typography>
       <Button
         className={classes.addExpense}
@@ -194,10 +206,9 @@ const Permissions = () => {
         size="small"
         onClick={() => {
           let options = ["view"];
-          const type = findSheetById(sheetId)?.permissionType;
-          if (type === "edit") {
+          if (sheetPermissionType === "edit") {
             options.push("edit");
-          } else if (type === "admin") {
+          } else if (sheetPermissionType === "admin") {
             options.push("edit");
             options.push("admin");
           }
@@ -213,12 +224,11 @@ const Permissions = () => {
         aria-label="customized table"
         sx={{ minWidth: 650, mb: 5 }}
         size="small"
-        component={Paper}
       >
         <TableHead>
           <TableRow>
             {Object.values(
-              sheetPermissionIsAdmin(sheetId)
+              sheetPermissionType === "admin"
                 ? { ...headerRow, ...{ "heading 3": "Action" } }
                 : headerRow,
             ).map(heading => (
@@ -229,7 +239,7 @@ const Permissions = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {permissions.map((permission: any) => (
+          {paginatedPermissions.currentData().map((permission: any) => (
             <StyledTableRow key={permission._id}>
               <StyledTableCell component="th" scope="row">
                 {permission.type}
@@ -239,7 +249,7 @@ const Permissions = () => {
               </StyledTableCell>
 
               {(() => {
-                if (sheetPermissionIsAdmin(sheetId)) {
+                if (sheetPermissionType === "admin") {
                   return (
                     <StyledTableCell align="center">
                       <IconButton
@@ -274,6 +284,26 @@ const Permissions = () => {
           ))}
         </TableBody>
       </Table>
+      {count > 1 && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: 5,
+            marginBottom: 5,
+          }}
+        >
+          <Pagination
+            count={count}
+            size="large"
+            page={page}
+            variant="outlined"
+            shape="rounded"
+            onChange={handleChange}
+            color="primary"
+          />
+        </Box>
+      )}
     </Container>
   );
 };

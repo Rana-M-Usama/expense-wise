@@ -2,6 +2,7 @@ import httpStatus from "http-status";
 
 import asyncHandler from "../middlewares/async";
 import { getAmountStats } from "../utils/helpers";
+import Permission from "../models/Permission";
 import Sheet from "../models/Sheet";
 
 // @desc      Get sheets
@@ -21,10 +22,14 @@ const getSheets = asyncHandler(async (req, res) => {
 // @access    Private
 const getSheet = asyncHandler(async (req, res) => {
   const amounts = await getAmountStats(req.sheet);
+  const permission = await Permission.findOne({
+    sheet: req.sheet,
+    user: req.user,
+  });
 
   return res.status(httpStatus.OK).json({
     success: true,
-    data: { ...req.sheet._doc, amounts },
+    data: { ...req.sheet._doc, amounts, permissionType: permission.type },
   });
 });
 

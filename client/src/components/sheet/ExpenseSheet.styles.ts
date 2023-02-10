@@ -38,6 +38,11 @@ const useStyles = makeStyles(() => ({
       background: `${styles.theme.primaryColor} !important`,
     },
   },
+  list: {
+    borderRadius: 10,
+    backgroundColor: styles.list.backgroundColor,
+    minHeight: "460px",
+  },
   menuLink: {
     color: "black !important",
     textDecoration: "none !important",
