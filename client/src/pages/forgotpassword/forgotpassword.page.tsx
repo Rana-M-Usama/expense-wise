@@ -65,7 +65,11 @@ const ForgetPasswordPage: FC<Props> = ({ isOpen, onClose }) => {
       });
 
       if (!error) {
-        Toast("success", "Email sent successfully.");
+        Toast(
+          "success",
+          "An email with reset password instructions has been" +
+            "successfully sent to your registered email address.",
+        );
       }
     }
   };

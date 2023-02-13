@@ -124,7 +124,7 @@ const SheetModal = ({
             sx={{ mt: 2 }}
             fullWidth
             id="description"
-            label="description"
+            label="Description"
             value={data.description.value}
             onChange={handleChange}
             name="description"

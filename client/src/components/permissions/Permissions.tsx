@@ -117,10 +117,10 @@ const Permissions = () => {
 
     if (!error) {
       if (permissionId === "") {
-        Toast("success", "Successfully sheet created.");
+        Toast("success", "Permission created successfully.");
         dispatch(addPermission({ data: response.data }));
       } else {
-        Toast("success", "Successfully sheet updated.");
+        Toast("success", "Permission updated successfully.");
         dispatch(modifyPermission({ data: response.data, id: permissionId }));
       }
     }
@@ -133,7 +133,7 @@ const Permissions = () => {
     );
 
     if (!error) {
-      Toast("success", "Successfully permission deleted.");
+      Toast("success", "Permission deleted successfully.");
       dispatch(removePermission({ data: response.data, id: permissionId }));
     }
   };

@@ -99,8 +99,15 @@ const Navbar = () => {
               open={Boolean(menuOpen)}
               onClose={handleClose}
             >
-              <MenuItem onClick={() => navigate("/profile")}>Profile</MenuItem>
-              <MenuItem onClick={logout}>Logout</MenuItem>
+              <MenuItem
+                sx={{ pr: "2rem" }}
+                onClick={() => navigate("/profile")}
+              >
+                Profile
+              </MenuItem>
+              <MenuItem sx={{ pr: "2rem" }} onClick={logout}>
+                Logout
+              </MenuItem>
             </Menu>
           </div>
         )}
