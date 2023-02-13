@@ -95,7 +95,7 @@ describe("Sheet endpoints", () => {
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet._id}`)
         .set("Authorization", `Bearer ${authToken}`)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body.errors).toEqual([
@@ -245,7 +245,7 @@ describe("Sheet endpoints", () => {
         .put(`/api/v1/sheets/${sheet._id}`)
         .set("Authorization", `Bearer ${authToken}`)
         .send({ title: "Updated title", description: "Updated description" })
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body.errors).toEqual([

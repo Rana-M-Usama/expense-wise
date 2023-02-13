@@ -58,10 +58,10 @@ describe("Permission endpoints", () => {
         .post(`/api/v1/sheets/${sheet2._id}/permissions`)
         .set("Authorization", `Bearer ${authToken}`)
         .send(permissionParams)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body).toEqual({
-        statusCode: httpStatus.UNAUTHORIZED,
+        statusCode: httpStatus.BAD_REQUEST,
         errors: ["You are not authorized for this action."],
         success: false,
       });
@@ -86,11 +86,11 @@ describe("Permission endpoints", () => {
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
         .set("Authorization", `Bearer ${authToken}`)
         .send(permissionParams)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body).toEqual({
-        statusCode: httpStatus.UNAUTHORIZED,
+        statusCode: httpStatus.BAD_REQUEST,
         errors: ["You do not have rights to assign this permission."],
         success: false,
       });
@@ -104,11 +104,11 @@ describe("Permission endpoints", () => {
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
         .set("Authorization", `Bearer ${authToken}`)
         .send(permissionParams)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body).toEqual({
-        statusCode: httpStatus.UNAUTHORIZED,
+        statusCode: httpStatus.BAD_REQUEST,
         errors: ["You do not have rights to assign this permission."],
         success: false,
       });
@@ -122,11 +122,11 @@ describe("Permission endpoints", () => {
         .post(`/api/v1/sheets/${sheet._id}/permissions`)
         .set("Authorization", `Bearer ${authToken}`)
         .send(permissionParams)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body).toEqual({
-        statusCode: httpStatus.UNAUTHORIZED,
+        statusCode: httpStatus.BAD_REQUEST,
         errors: ["You do not have rights to assign this permission."],
         success: false,
       });
@@ -462,7 +462,7 @@ describe("Permission endpoints", () => {
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet._id}/permissions`)
         .set("Authorization", `Bearer ${authToken2}`)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body.errors).toEqual([
@@ -552,11 +552,11 @@ describe("Permission endpoints", () => {
       const res = await request(app)
         .delete(`/api/v1/sheets/${sheet._id}/permissions/${permission2._id}`)
         .set("Authorization", `Bearer ${authToken}`)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body).toEqual({
-        statusCode: httpStatus.UNAUTHORIZED,
+        statusCode: httpStatus.BAD_REQUEST,
         errors: ["You are not authorized for this action."],
         success: false,
       });
@@ -573,11 +573,11 @@ describe("Permission endpoints", () => {
       const res = await request(app)
         .delete(`/api/v1/sheets/${sheet._id}/permissions/${permission2._id}`)
         .set("Authorization", `Bearer ${authToken}`)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body).toEqual({
-        statusCode: httpStatus.UNAUTHORIZED,
+        statusCode: httpStatus.BAD_REQUEST,
         errors: ["You are not authorized for this action."],
         success: false,
       });
@@ -594,11 +594,11 @@ describe("Permission endpoints", () => {
       const res = await request(app)
         .delete(`/api/v1/sheets/${sheet._id}/permissions/${permission2._id}`)
         .set("Authorization", `Bearer ${authToken2}`)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body).toEqual({
-        statusCode: httpStatus.UNAUTHORIZED,
+        statusCode: httpStatus.BAD_REQUEST,
         errors: ["You are not authorized for this action."],
         success: false,
       });
