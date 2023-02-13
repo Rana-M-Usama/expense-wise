@@ -55,7 +55,6 @@ const headerRow = {
   "heading 3": "IN/OUT",
   "heading 4": "Status",
   "heading 5": "Amount",
-  "heading 6": "Action",
 };
 
 type Response = {
@@ -102,7 +101,7 @@ const ExpenseSheet = () => {
     totalAmount: null,
   });
   let [page, setPage] = useState(1);
-  const [paginate] = useState(8);
+  const [paginate] = useState(11);
   const count = Math.ceil(expenses.length / paginate);
   const paginatedExpenses = usePagination(expenses, paginate);
 
@@ -149,7 +148,7 @@ const ExpenseSheet = () => {
   };
 
   const fetchExpenses = async () => {
-    const response = await request(expenseUrl, "GET");
+    const response = await request(expenseUrl.concat("?limit=-1"), "GET");
 
     if (!error) {
       dispatch(setExpenses({ data: response.data }));
@@ -250,7 +249,9 @@ const ExpenseSheet = () => {
               >
                 <ArrowBackIosNewIcon />
               </IconButton>
-              <Typography variant="h4">{sheetName}</Typography>
+              <Typography variant="h4" sx={{ overflowWrap: "break-word" }}>
+                {sheetName}
+              </Typography>
             </Box>
             <Box
               display="flex"
@@ -304,7 +305,12 @@ const ExpenseSheet = () => {
                 >
                   <TableHead>
                     <TableRow>
-                      {Object.values(headerRow).map(heading => (
+                      {Object.values(
+                        sheetPermissionType === "admin" ||
+                          sheetPermissionType === "edit"
+                          ? { ...headerRow, ...{ "heading 6": "Action" } }
+                          : headerRow,
+                      ).map(heading => (
                         <StyledTableCell
                           key={heading}
                           align="center"
@@ -319,10 +325,22 @@ const ExpenseSheet = () => {
                     <TableBody>
                       {paginatedExpenses.currentData().map((expense: any) => (
                         <StyledTableRow key={expense._id}>
-                          <StyledTableCell component="th" scope="row">
+                          <StyledTableCell
+                            sx={{
+                              maxWidth: "150px",
+                              overflowWrap: "break-word",
+                            }}
+                            scope="row"
+                          >
                             {expense.title}
                           </StyledTableCell>
-                          <StyledTableCell align="center">
+                          <StyledTableCell
+                            sx={{
+                              maxWidth: "150px",
+                              overflowWrap: "break-word",
+                            }}
+                            align="center"
+                          >
                             {expense.type}
                           </StyledTableCell>
                           <StyledTableCell align="center">
@@ -345,34 +363,39 @@ const ExpenseSheet = () => {
                           <StyledTableCell align="center">
                             {expense.amount}
                           </StyledTableCell>
-                          <StyledTableCell align="center">
-                            <IconButton
-                              aria-label="edit"
-                              onClick={() =>
-                                showModal({
-                                  idValue: expense._id,
-                                  titleValue: expense.title,
-                                  typeValue: expense.type,
-                                  amountValue: expense.amount,
-                                  statusValue: expense.status,
-                                  amountTypeValue: expense.amountType,
-                                  isUpdate: true,
-                                })
-                              }
-                            >
-                              <EditIcon />
-                            </IconButton>
-                            <IconButton
-                              aria-label="delete"
-                              onClick={() => {
-                                showConfirmationModal({
-                                  expenseId: expense._id,
-                                });
-                              }}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </StyledTableCell>
+                          {(sheetPermissionType === "admin" ||
+                            sheetPermissionType === "edit") && (
+                            <StyledTableCell align="center">
+                              <IconButton
+                                sx={{ py: 0 }}
+                                aria-label="edit"
+                                onClick={() =>
+                                  showModal({
+                                    idValue: expense._id,
+                                    titleValue: expense.title,
+                                    typeValue: expense.type,
+                                    amountValue: expense.amount,
+                                    statusValue: expense.status,
+                                    amountTypeValue: expense.amountType,
+                                    isUpdate: true,
+                                  })
+                                }
+                              >
+                                <EditIcon />
+                              </IconButton>
+                              <IconButton
+                                sx={{ py: 0 }}
+                                aria-label="delete"
+                                onClick={() => {
+                                  showConfirmationModal({
+                                    expenseId: expense._id,
+                                  });
+                                }}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </StyledTableCell>
+                          )}
                         </StyledTableRow>
                       ))}
                     </TableBody>

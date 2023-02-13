@@ -32,7 +32,7 @@ const expenseSlice = createSlice({
     },
 
     addExpense: (state, action: PayloadAction<{ data: Expense }>) => {
-      state.expenses.push({ ...action.payload.data });
+      state.expenses.unshift({ ...action.payload.data });
     },
     removeExpense: (state, action: PayloadAction<{ id: string }>) => {
       const expenseIndex = state.expenses.findIndex(
