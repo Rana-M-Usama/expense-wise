@@ -148,7 +148,7 @@ const ExpenseSheet = () => {
   };
 
   const fetchExpenses = async () => {
-    const response = await request(expenseUrl, "GET");
+    const response = await request(expenseUrl.concat("?limit=-1"), "GET");
 
     if (!error) {
       dispatch(setExpenses({ data: response.data }));
@@ -249,7 +249,9 @@ const ExpenseSheet = () => {
               >
                 <ArrowBackIosNewIcon />
               </IconButton>
-              <Typography variant="h4">{sheetName}</Typography>
+              <Typography variant="h4" sx={{ overflowWrap: "break-word" }}>
+                {sheetName}
+              </Typography>
             </Box>
             <Box
               display="flex"
@@ -323,10 +325,22 @@ const ExpenseSheet = () => {
                     <TableBody>
                       {paginatedExpenses.currentData().map((expense: any) => (
                         <StyledTableRow key={expense._id}>
-                          <StyledTableCell component="th" scope="row">
+                          <StyledTableCell
+                            sx={{
+                              maxWidth: "150px",
+                              overflowWrap: "break-word",
+                            }}
+                            scope="row"
+                          >
                             {expense.title}
                           </StyledTableCell>
-                          <StyledTableCell align="center">
+                          <StyledTableCell
+                            sx={{
+                              maxWidth: "150px",
+                              overflowWrap: "break-word",
+                            }}
+                            align="center"
+                          >
                             {expense.type}
                           </StyledTableCell>
                           <StyledTableCell align="center">

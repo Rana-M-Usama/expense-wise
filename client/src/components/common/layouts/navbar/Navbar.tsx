@@ -49,6 +49,11 @@ const Navbar = () => {
     }
   };
 
+  const profile = async () => {
+    navigate("/profile");
+    setMenuOpen(null);
+  };
+
   useEffect(() => {
     if (error) {
       Toast("danger", error);
@@ -108,10 +113,7 @@ const Navbar = () => {
               open={Boolean(menuOpen)}
               onClose={handleClose}
             >
-              <MenuItem
-                sx={{ pr: "2rem" }}
-                onClick={() => navigate("/profile")}
-              >
+              <MenuItem sx={{ pr: "2rem" }} onClick={profile}>
                 Profile
               </MenuItem>
               <MenuItem sx={{ pr: "2rem" }} onClick={logout}>

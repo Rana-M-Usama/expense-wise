@@ -77,7 +77,7 @@ const Sheets = () => {
   const hideModal = () => setIsModalOpen(false);
 
   const fetchData = async () => {
-    const response = await request("/sheets", "GET");
+    const response = await request("/sheets?limit=-1", "GET");
 
     if (!error) {
       dispatch(setSheets(response.data));
@@ -188,6 +188,7 @@ const Sheets = () => {
               paginatedSheets.currentData().map((sheet: any) => (
                 <Fragment key={sheet._id}>
                   <ListItem
+                    sx={{ gap: "5rem" }}
                     secondaryAction={
                       <Box sx={{ "& button": { m: 1 } }}>
                         <Link
@@ -253,7 +254,14 @@ const Sheets = () => {
                       </Box>
                     }
                   >
-                    <ListItemText primary={sheet.title} />
+                    <ListItemText
+                      primary={sheet.title}
+                      sx={{ maxWidth: "200px", overflowWrap: "break-word" }}
+                    />
+                    <ListItemText
+                      primary={sheet.description}
+                      sx={{ maxWidth: "200px", overflowWrap: "break-word" }}
+                    />
                   </ListItem>
                   <Divider variant="inset" component="li" />
                 </Fragment>

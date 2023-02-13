@@ -210,7 +210,7 @@ const Permissions = () => {
         >
           <ArrowBackIosNewIcon />
         </IconButton>
-        <Typography variant="h4">
+        <Typography variant="h4" sx={{ overflowWrap: "break-word" }}>
           Permissions for {permissions[0]?.sheet?.title}
         </Typography>
       </Box>

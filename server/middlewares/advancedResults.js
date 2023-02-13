@@ -57,8 +57,7 @@ const advancedResults =
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     const total = await model.countDocuments();
-
-    query = query.skip(startIndex).limit(limit);
+    if (limit > 0) query = query.skip(startIndex).limit(limit);
 
     if (populate) {
       query = query.populate(populate);
@@ -69,19 +68,20 @@ const advancedResults =
 
     // Pagination result
     const pagination = {};
+    if (limit > 0) {
+      if (endIndex < total) {
+        pagination.next = {
+          page: page + 1,
+          limit,
+        };
+      }
 
-    if (endIndex < total) {
-      pagination.next = {
-        page: page + 1,
-        limit,
-      };
-    }
-
-    if (startIndex > 0) {
-      pagination.prev = {
-        page: page - 1,
-        limit,
-      };
+      if (startIndex > 0) {
+        pagination.prev = {
+          page: page - 1,
+          limit,
+        };
+      }
     }
 
     res.advancedResults = {
