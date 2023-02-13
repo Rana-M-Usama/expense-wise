@@ -10,7 +10,7 @@ const permissionPolicy = async (req, res, next) => {
   next(
     new ErrorResponse(
       "You can't access this permission.",
-      httpStatus.UNAUTHORIZED,
+      httpStatus.BAD_REQUEST,
     ),
   );
 };
@@ -23,7 +23,7 @@ const grantPermissionPolicy = async (req, res, next) => {
   next(
     new ErrorResponse(
       "You do not have rights to assign this permission.",
-      httpStatus.UNAUTHORIZED,
+      httpStatus.BAD_REQUEST,
     ),
   );
 };

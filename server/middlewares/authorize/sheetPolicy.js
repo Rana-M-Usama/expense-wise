@@ -16,7 +16,7 @@ const sheetPolicy = async (req, res, next) => {
   next(
     new ErrorResponse(
       "You are not authorized for this action.",
-      httpStatus.UNAUTHORIZED,
+      httpStatus.BAD_REQUEST,
     ),
   );
 };
@@ -29,7 +29,7 @@ const viewSheetPolicy = async (req, res, next) => {
   next(
     new ErrorResponse(
       "You are not authorized to access this sheet.",
-      httpStatus.UNAUTHORIZED,
+      httpStatus.BAD_REQUEST,
     ),
   );
 };
@@ -42,7 +42,7 @@ const editSheetPolicy = async (req, res, next) => {
   next(
     new ErrorResponse(
       "You are not authorized to edit this sheet.",
-      httpStatus.UNAUTHORIZED,
+      httpStatus.BAD_REQUEST,
     ),
   );
 };
@@ -55,7 +55,7 @@ const adminSheetPolicy = async (req, res, next) => {
   next(
     new ErrorResponse(
       "You are not authorized for this action.",
-      httpStatus.UNAUTHORIZED,
+      httpStatus.BAD_REQUEST,
     ),
   );
 };
