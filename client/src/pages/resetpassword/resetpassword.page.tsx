@@ -8,10 +8,9 @@ import {
   Typography,
 } from "@mui/material";
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
-
+import { useNavigate, useParams } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Lock } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 
 import { validateConfirmPassword, validatePassword } from "validators/auth";
 import Toast from "components/tostify/Toast";
@@ -22,6 +21,7 @@ import useStyles from "pages/resetpassword/resetpassword.styles";
 const ResetPasswordPage = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const { resetToken } = useParams<{ resetToken: string | undefined }>();
   const { loading, request, error, clearError } = useHttp();
 
   const [resetPasswordData, setResetPasswordData] = useState({
@@ -62,7 +62,7 @@ const ResetPasswordPage = () => {
 
     if (!(password.error || confirmPassword.error)) {
       const payload = { password: resetPasswordData.password.value };
-      await request("auth/reset-password/:reset_token}", "PUT", payload);
+      await request(`/auth/reset-password/${resetToken}`, "PUT", payload);
 
       if (!error) {
         Toast("success", "Password reset successfully.");

@@ -3,7 +3,6 @@ import { styles } from "constants/styles";
 
 export default makeStyles(() => ({
   container: {
-    width: "50%",
     display: "flex !important",
     justifyContent: "center",
     alignItems: "center ",
