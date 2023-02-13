@@ -41,7 +41,7 @@ const useStyles = makeStyles(() => ({
   list: {
     borderRadius: 10,
     backgroundColor: styles.list.backgroundColor,
-    minHeight: "460px",
+    minHeight: "444px",
   },
   menuLink: {
     color: "black !important",

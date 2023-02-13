@@ -101,7 +101,7 @@ const ExpenseSheet = () => {
     totalAmount: null,
   });
   let [page, setPage] = useState(1);
-  const [paginate] = useState(8);
+  const [paginate] = useState(11);
   const count = Math.ceil(expenses.length / paginate);
   const paginatedExpenses = usePagination(expenses, paginate);
 
@@ -304,7 +304,8 @@ const ExpenseSheet = () => {
                   <TableHead>
                     <TableRow>
                       {Object.values(
-                        sheetPermissionType === "admin"
+                        sheetPermissionType === "admin" ||
+                          sheetPermissionType === "edit"
                           ? { ...headerRow, ...{ "heading 6": "Action" } }
                           : headerRow,
                       ).map(heading => (
@@ -348,9 +349,11 @@ const ExpenseSheet = () => {
                           <StyledTableCell align="center">
                             {expense.amount}
                           </StyledTableCell>
-                          {sheetPermissionType === "admin" && (
+                          {(sheetPermissionType === "admin" ||
+                            sheetPermissionType === "edit") && (
                             <StyledTableCell align="center">
                               <IconButton
+                                sx={{ py: 0 }}
                                 aria-label="edit"
                                 onClick={() =>
                                   showModal({
@@ -367,6 +370,7 @@ const ExpenseSheet = () => {
                                 <EditIcon />
                               </IconButton>
                               <IconButton
+                                sx={{ py: 0 }}
                                 aria-label="delete"
                                 onClick={() => {
                                   showConfirmationModal({
