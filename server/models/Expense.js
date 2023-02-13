@@ -11,6 +11,7 @@ const ExpenseSchema = new mongoose.Schema({
   },
   type: {
     type: String,
+    trim: true,
     required: [true, "Type is required."],
     maxlength: [100, "Type can not be longer than 100 characters."],
   },
