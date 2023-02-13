@@ -55,7 +55,6 @@ const headerRow = {
   "heading 3": "IN/OUT",
   "heading 4": "Status",
   "heading 5": "Amount",
-  "heading 6": "Action",
 };
 
 type Response = {
@@ -304,7 +303,11 @@ const ExpenseSheet = () => {
                 >
                   <TableHead>
                     <TableRow>
-                      {Object.values(headerRow).map(heading => (
+                      {Object.values(
+                        sheetPermissionType === "admin"
+                          ? { ...headerRow, ...{ "heading 6": "Action" } }
+                          : headerRow,
+                      ).map(heading => (
                         <StyledTableCell
                           key={heading}
                           align="center"
@@ -345,34 +348,36 @@ const ExpenseSheet = () => {
                           <StyledTableCell align="center">
                             {expense.amount}
                           </StyledTableCell>
-                          <StyledTableCell align="center">
-                            <IconButton
-                              aria-label="edit"
-                              onClick={() =>
-                                showModal({
-                                  idValue: expense._id,
-                                  titleValue: expense.title,
-                                  typeValue: expense.type,
-                                  amountValue: expense.amount,
-                                  statusValue: expense.status,
-                                  amountTypeValue: expense.amountType,
-                                  isUpdate: true,
-                                })
-                              }
-                            >
-                              <EditIcon />
-                            </IconButton>
-                            <IconButton
-                              aria-label="delete"
-                              onClick={() => {
-                                showConfirmationModal({
-                                  expenseId: expense._id,
-                                });
-                              }}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </StyledTableCell>
+                          {sheetPermissionType === "admin" && (
+                            <StyledTableCell align="center">
+                              <IconButton
+                                aria-label="edit"
+                                onClick={() =>
+                                  showModal({
+                                    idValue: expense._id,
+                                    titleValue: expense.title,
+                                    typeValue: expense.type,
+                                    amountValue: expense.amount,
+                                    statusValue: expense.status,
+                                    amountTypeValue: expense.amountType,
+                                    isUpdate: true,
+                                  })
+                                }
+                              >
+                                <EditIcon />
+                              </IconButton>
+                              <IconButton
+                                aria-label="delete"
+                                onClick={() => {
+                                  showConfirmationModal({
+                                    expenseId: expense._id,
+                                  });
+                                }}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </StyledTableCell>
+                          )}
                         </StyledTableRow>
                       ))}
                     </TableBody>
