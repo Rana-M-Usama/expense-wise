@@ -12,9 +12,10 @@ import {
 } from "@mui/material";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { useParams } from "react-router-dom";
 
 import {
   addPermission,
@@ -34,6 +35,7 @@ import {
   StyledTableRow,
   useStyles,
 } from "components/permissions/Permissions.styles";
+import { styles } from "constants/styles";
 
 const headerRow = {
   "heading 1": "Permission Type",
@@ -63,6 +65,7 @@ const Permissions = () => {
     (state: RootState) => state.permission.permissions,
   );
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { request, error, clearError } = useHttp();
   const { sheetId } = useParams<{ sheetId: string | undefined }>();
   const [permissionId, setPermissionId] = useState("");
@@ -193,12 +196,24 @@ const Permissions = () => {
           }
         }}
       />
-      <Typography
-        sx={{ mb: 5, display: "flex", justifyContent: "center" }}
-        variant="h4"
-      >
-        Permissions for {permissions[0]?.sheet?.title}
-      </Typography>
+      <Box sx={{ textAlign: "center", mb: 5 }}>
+        <IconButton
+          sx={{
+            float: "left",
+            width: 35,
+            height: 40,
+            color: styles.theme.primaryColor,
+          }}
+          onClick={() => {
+            navigate(`/sheets/${sheetId}/expenses`);
+          }}
+        >
+          <ArrowBackIosNewIcon />
+        </IconButton>
+        <Typography variant="h4">
+          Permissions for {permissions[0]?.sheet?.title}
+        </Typography>
+      </Box>
       <Button
         className={classes.addExpense}
         sx={{ mb: 2 }}

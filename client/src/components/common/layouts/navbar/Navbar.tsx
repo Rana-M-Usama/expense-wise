@@ -2,15 +2,16 @@ import { AccountCircle, Menu as MenuIcon } from "@mui/icons-material";
 import {
   AppBar,
   IconButton,
+  Link,
   Menu,
   MenuItem,
   Toolbar,
   Typography,
 } from "@mui/material";
 import React, { MouseEvent, useEffect, useState } from "react";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import DrawerMenu from "components/common/layouts/drawer/DrawerMenu";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 import { setCurrentUserEmpty } from "slices/userSlice";
 import Toast from "components/tostify/Toast";
@@ -69,8 +70,16 @@ const Navbar = () => {
           <MenuIcon />
         </IconButton>
         <DrawerMenu open={drawerOpen} toggle={toggleSlider} />
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          ExpenseWise
+        <Typography component="div" sx={{ flexGrow: 1 }}>
+          <Link
+            component={RouterLink}
+            to="/"
+            variant="h6"
+            color="inherit"
+            underline="none"
+          >
+            ExpenseWise
+          </Link>
         </Typography>
         {auth && (
           <div>
