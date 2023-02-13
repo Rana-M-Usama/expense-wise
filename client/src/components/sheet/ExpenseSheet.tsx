@@ -21,8 +21,9 @@ import {
 } from "@mui/material";
 import { green, red } from "@mui/material/colors";
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from "react";
-import { Link as RouterLink, useParams } from "react-router-dom";
+import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -46,6 +47,7 @@ import {
   StyledTableRow,
   useStyles,
 } from "components/sheet/ExpenseSheet.styles";
+import { styles } from "constants/styles";
 
 const headerRow = {
   "heading 1": "Title",
@@ -81,6 +83,7 @@ const ExpenseSheet = () => {
   };
   const classes = useStyles();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { loading, request, error, clearError } = useHttp();
   let { sheetId } = useParams();
   const expenseUrl = `/sheets/${sheetId}/expenses/`;
@@ -233,12 +236,22 @@ const ExpenseSheet = () => {
             }}
           />
           <Box>
-            <Typography
-              sx={{ mt: 5, mb: 3, display: "flex", justifyContent: "center" }}
-              variant="h4"
-            >
-              {sheetName}
-            </Typography>
+            <Box sx={{ textAlign: "center", mt: 5, mb: 3 }}>
+              <IconButton
+                sx={{
+                  float: "left",
+                  width: 35,
+                  height: 40,
+                  color: styles.theme.primaryColor,
+                }}
+                onClick={() => {
+                  navigate(`/`);
+                }}
+              >
+                <ArrowBackIosNewIcon />
+              </IconButton>
+              <Typography variant="h4">{sheetName}</Typography>
+            </Box>
             <Box
               display="flex"
               justifyContent={
