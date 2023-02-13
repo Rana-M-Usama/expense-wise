@@ -49,13 +49,11 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
   const resetToken = user.getResetPasswordToken();
   await user.save({ validateBeforeSave: false });
 
-  const resetUrl = `${req.protocol}://${req.get(
-    "host",
-  )}/api/v1/auth/reset-password/${resetToken}`;
+  const resetUrl = `${req.get("origin")}/reset-password/${resetToken}`;
 
   const message =
     "You are receiving this email because you has requested the reset".concat(
-      ` of a password. Make a PUT request to: \n\n ${resetUrl}`,
+      ` of a password. Reset link: \n\n ${resetUrl}`,
     );
 
   try {
@@ -96,7 +94,7 @@ const resetPassword = asyncHandler(async (req, res, next) => {
   });
 
   if (!user) {
-    if (user.resetPasswordExpire < Date.now()) {
+    if (user?.resetPasswordExpire < Date.now()) {
       return next(
         new ErrorResponse(
           "Expired password reset token, please generate a new one.",
