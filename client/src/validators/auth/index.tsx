@@ -1,4 +1,5 @@
 const validateEmail = (email: string) => {
+  email = email?.trim();
   if (!email) {
     return { error: true, errorMessage: "Email is required." };
   } else if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
@@ -50,6 +51,7 @@ const validateConfirmPassword = (password: string, confirmPassword: string) => {
 };
 
 const validateFirstName = (firstName: string) => {
+  firstName = firstName?.trim();
   if (!firstName) {
     return { error: true, errorMessage: "First name is required." };
   } else {
@@ -58,6 +60,7 @@ const validateFirstName = (firstName: string) => {
 };
 
 const validateLastName = (lastName: string) => {
+  lastName = lastName?.trim();
   if (!lastName) {
     return { error: true, errorMessage: "Last name is required." };
   } else {

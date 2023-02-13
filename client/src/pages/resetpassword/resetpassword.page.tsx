@@ -65,7 +65,7 @@ const ResetPasswordPage = () => {
       await request("auth/reset-password/:reset_token}", "PUT", payload);
 
       if (!error) {
-        Toast("success", "Successfully reset password.");
+        Toast("success", "Password reset successfully.");
         setResetPasswordData({ password, confirmPassword });
         navigate("/");
       }

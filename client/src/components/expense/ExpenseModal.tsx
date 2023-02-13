@@ -181,7 +181,7 @@ const ExpenseModal = ({
             sx={{ mt: 2 }}
             fullWidth
             id="type"
-            label="type"
+            label="Type"
             value={data.type.value}
             onChange={handleChange}
             name="type"
@@ -196,7 +196,7 @@ const ExpenseModal = ({
             sx={{ mt: 2 }}
             fullWidth
             id="amount"
-            label="amount"
+            label="Amount"
             value={data.amount.value}
             onChange={handleChange}
             name="amount"

@@ -45,7 +45,7 @@ describe("Expense endpoints", () => {
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet2._id}/expenses/`)
         .set("Authorization", `Bearer ${authToken}`)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body.errors).toEqual([
@@ -141,7 +141,7 @@ describe("Expense endpoints", () => {
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet2._id}/expenses/${expense2._id}`)
         .set("Authorization", `Bearer ${authToken}`)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body.errors).toEqual([
@@ -179,7 +179,7 @@ describe("Expense endpoints", () => {
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet2._id}/expenses/${expense._id}`)
         .set("Authorization", `Bearer ${authToken}`)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body.errors).toEqual([
@@ -306,7 +306,7 @@ describe("Expense endpoints", () => {
         .put(`/api/v1/sheets/${sheet2._id}/expenses/${expense2._id}`)
         .set("Authorization", `Bearer ${authToken}`)
         .send({})
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body.errors).toEqual([
@@ -363,7 +363,7 @@ describe("Expense endpoints", () => {
       const res = await request(app)
         .delete(`/api/v1/sheets/${sheet2._id}/expenses/${expense2._id}`)
         .set("Authorization", `Bearer ${authToken}`)
-        .expect(httpStatus.UNAUTHORIZED);
+        .expect(httpStatus.BAD_REQUEST);
 
       expect(res.body.success).toBeFalsy();
       expect(res.body.errors).toEqual([

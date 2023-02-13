@@ -7,6 +7,7 @@ const validatePermissionType = (permissionType: string) => {
 };
 
 const validateEmail = (email: string) => {
+  email = email?.trim();
   if (!email) {
     return { error: true, errorMessage: "Email is required." };
   } else if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {

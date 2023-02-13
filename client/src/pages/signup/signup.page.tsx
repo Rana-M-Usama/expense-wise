@@ -90,7 +90,7 @@ const SignupPage = () => {
       });
 
       if (!error) {
-        Toast("success", "Successfully signed up.");
+        Toast("success", "User registered successfully.");
         setSignupData({
           firstName: { value: "", error: false, errorMessage: "" },
           lastName: { value: "", error: false, errorMessage: "" },

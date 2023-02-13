@@ -1,4 +1,9 @@
 import {
+  ArrowDownward,
+  ArrowUpward,
+  MoodBad as NoExpensesFoundIcon,
+} from "@mui/icons-material";
+import {
   Box,
   Button,
   CircularProgress,
@@ -14,13 +19,13 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { green, red } from "@mui/material/colors";
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { MoodBad as NoExpensesFoundIcon } from "@mui/icons-material";
 
 import {
   addExpense,
@@ -107,7 +112,7 @@ const ExpenseSheet = () => {
     const response = await request(expenseUrl, "POST", body);
 
     if (!error) {
-      Toast("success", "Successfully expense created.");
+      Toast("success", "Expense created successfully.");
       dispatch(addExpense({ data: response.data }));
     }
   };
@@ -116,7 +121,7 @@ const ExpenseSheet = () => {
     await request(expenseUrl.concat(expenseId), "DELETE");
 
     if (!error) {
-      Toast("success", "Successfully expense deleted.");
+      Toast("success", "Expense deleted successfully.");
       dispatch(removeExpense({ id: expenseId }));
     }
   };
@@ -125,7 +130,7 @@ const ExpenseSheet = () => {
     const response = await request(expenseUrl.concat(expenseId), "PUT", body);
 
     if (!error) {
-      Toast("success", "Successfully expense updated.");
+      Toast("success", "Expense updated successfully.");
       dispatch(modifyExpense({ data: response.data, id: expenseId }));
     }
   };
@@ -229,7 +234,7 @@ const ExpenseSheet = () => {
           />
           <Box>
             <Typography
-              sx={{ mb: 5, display: "flex", justifyContent: "center" }}
+              sx={{ mt: 5, mb: 3, display: "flex", justifyContent: "center" }}
               variant="h4"
             >
               {sheetName}
@@ -287,7 +292,11 @@ const ExpenseSheet = () => {
                   <TableHead>
                     <TableRow>
                       {Object.values(headerRow).map(heading => (
-                        <StyledTableCell key={heading} align="center">
+                        <StyledTableCell
+                          key={heading}
+                          align="center"
+                          sx={{ width: "17%" }}
+                        >
                           {heading}
                         </StyledTableCell>
                       ))}
@@ -304,7 +313,18 @@ const ExpenseSheet = () => {
                             {expense.type}
                           </StyledTableCell>
                           <StyledTableCell align="center">
-                            {expense.amountType}
+                            {expense.amountType === "incoming" && (
+                              <Box sx={{ display: "flex", gap: "6px" }}>
+                                <Typography>Incoming</Typography>
+                                <ArrowDownward sx={{ color: green.A700 }} />
+                              </Box>
+                            )}
+                            {expense.amountType === "outgoing" && (
+                              <Box sx={{ display: "flex", gap: "6px" }}>
+                                <Typography>Outgoing</Typography>
+                                <ArrowUpward sx={{ color: red.A700 }} />
+                              </Box>
+                            )}
                           </StyledTableCell>
                           <StyledTableCell align="center">
                             {expense.status}

@@ -1,5 +1,6 @@
 const validateTitle = (title: string) => {
-  if (title === "") {
+  title = title?.trim();
+  if (!title) {
     return { error: true, errorMessage: "Title is required." };
   } else if (title.length > 100) {
     return {
@@ -12,8 +13,9 @@ const validateTitle = (title: string) => {
 };
 
 const validateType = (type: string) => {
-  if (type === "") {
-    return { error: true, errorMessage: "Type is required" };
+  type = type?.trim();
+  if (!type) {
+    return { error: true, errorMessage: "Type is required." };
   } else if (type.length > 100) {
     return {
       error: true,
@@ -28,7 +30,7 @@ const validateAmount = (amount: number) => {
   let amountValue = amount.toString();
   const regex = /^[0-9]*\.?[0-9]+$/;
   if (amountValue === "0") {
-    return { error: true, errorMessage: "Amount is required" };
+    return { error: true, errorMessage: "Amount is required." };
   } else if (!regex.test(amountValue)) {
     return {
       error: true,
@@ -40,16 +42,16 @@ const validateAmount = (amount: number) => {
 };
 
 const validateStatus = (status: string) => {
-  if (status === "") {
-    return { error: true, errorMessage: "Status is required" };
+  if (!status) {
+    return { error: true, errorMessage: "Status is required." };
   } else {
     return { error: false, errorMessage: "" };
   }
 };
 
 const validateAmountType = (amountType: string) => {
-  if (amountType === "") {
-    return { error: true, errorMessage: "Amount type is required" };
+  if (!amountType) {
+    return { error: true, errorMessage: "Amount type is required." };
   } else {
     return { error: false, errorMessage: "" };
   }

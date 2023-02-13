@@ -14,7 +14,10 @@ import React, { ChangeEvent, Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import { Box } from "@mui/system";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import {
   addSheet,
@@ -85,7 +88,7 @@ const Sheets = () => {
     const response = await request("/sheets", "POST", body);
 
     if (!error) {
-      Toast("success", "Successfully sheet created.");
+      Toast("success", "Sheet created successfully.");
       dispatch(addSheet({ data: response.data }));
     }
   };
@@ -94,7 +97,7 @@ const Sheets = () => {
     await request(`/sheets/${sheetId}`, "DELETE");
 
     if (!error) {
-      Toast("success", "Successfully sheet deleted.");
+      Toast("success", "Sheet deleted successfully.");
       dispatch(removeSheet({ id: sheetId }));
     }
   };
@@ -103,7 +106,7 @@ const Sheets = () => {
     const response = await request(`/sheets/${sheetId}`, "PUT", body);
 
     if (!error) {
-      Toast("success", "Successfully sheet updated.");
+      Toast("success", "Sheet updated successfully.");
       dispatch(modifySheet({ data: response.data, id: sheetId }));
     }
   };
@@ -166,7 +169,7 @@ const Sheets = () => {
             }}
           />
           <Typography
-            sx={{ mb: 5, display: "flex", justifyContent: "center" }}
+            sx={{ mt: 5, mb: 3, display: "flex", justifyContent: "center" }}
             variant="h4"
           >
             Your Sheets
@@ -188,7 +191,7 @@ const Sheets = () => {
                     secondaryAction={
                       <Box sx={{ "& button": { m: 1 } }}>
                         <Link
-                          to={`/${sheet._id}/expenses`}
+                          to={`/sheets/${sheet._id}/expenses`}
                           style={{ textDecoration: "none" }}
                         >
                           <Button
@@ -196,7 +199,7 @@ const Sheets = () => {
                             variant="outlined"
                             size="small"
                           >
-                            Open
+                            <VisibilityIcon sx={{ width: 20, height: 25 }} />
                           </Button>
                         </Link>
                         {sheet.permissionType === "admin" && (
@@ -214,7 +217,7 @@ const Sheets = () => {
                                 })
                               }
                             >
-                              Edit
+                              <EditIcon sx={{ width: 20, height: 25 }} />
                             </Button>
                             <Button
                               onClick={() => {
@@ -226,7 +229,7 @@ const Sheets = () => {
                               variant="outlined"
                               size="small"
                             >
-                              Delete
+                              <DeleteIcon sx={{ width: 20, height: 25 }} />
                             </Button>
                           </>
                         )}
@@ -244,7 +247,7 @@ const Sheets = () => {
                               })
                             }
                           >
-                            Edit
+                            <EditIcon sx={{ width: 20, height: 25 }} />
                           </Button>
                         )}
                       </Box>

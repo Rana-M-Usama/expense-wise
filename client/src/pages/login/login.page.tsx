@@ -64,7 +64,7 @@ const LoginPage = () => {
 
       if (!error) {
         dispatch(setCurrentUser(response.data.user));
-        Toast("success", "Successfully logged in.");
+        Toast("success", "Logged in successfully.");
         localStorage.setItem("token", response.data.token);
         setLoginCredentials({
           email: { value: "", error: false, errorMessage: "" },
