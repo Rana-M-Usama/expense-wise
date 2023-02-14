@@ -198,11 +198,11 @@ const ExpenseSheet = () => {
   }, [error]);
 
   return (
-    <Container maxWidth="md">
+    <>
       {loading && !expenses ? (
         <CircularProgress />
       ) : (
-        <>
+        <Container maxWidth="md">
           <ExpenseModal
             isOpen={isModalOpen}
             {...modalProps}
@@ -460,9 +460,9 @@ const ExpenseSheet = () => {
               <AmountBox>Spent: {sheetBalance.spentAmount}</AmountBox>
             </Grid>
           </Grid>
-        </>
+        </Container>
       )}
-    </Container>
+    </>
   );
 };
 
