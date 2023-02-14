@@ -147,11 +147,11 @@ const Sheets = () => {
   }, []);
 
   return (
-    <Container maxWidth="md">
+    <>
       {loading ? (
         <CircularProgress />
       ) : (
-        <>
+        <Container maxWidth="md">
           <SheetModal
             isOpen={isModalOpen}
             {...modalProps}
@@ -287,9 +287,9 @@ const Sheets = () => {
               />
             </Box>
           )}
-        </>
+        </Container>
       )}
-    </Container>
+    </>
   );
 };
 

@@ -18,8 +18,8 @@ const validatePassword = (password: string) => {
     return {
       error: true,
       errorMessage:
-        "Please provide a valid password, minimum six characters, " +
-        "at least one capital letter and a number.",
+        "Your password must be at least 6 characters long and contain at " +
+        "least one uppercase letter, one lowercase letter and one number.",
     };
   } else {
     return { error: false, errorMessage: "" };
@@ -37,8 +37,9 @@ const validateConfirmPassword = (password: string, confirmPassword: string) => {
     return {
       error: true,
       errorMessage:
-        "Please provide a valid confirm password, minimum six characters, " +
-        "at least one capital letter and a number.",
+        "Your confirm password must be at least 6 characters long " +
+        "and contain at least one uppercase letter, one lowercase " +
+        "letter and one number.",
     };
   } else if (password !== confirmPassword) {
     return {
