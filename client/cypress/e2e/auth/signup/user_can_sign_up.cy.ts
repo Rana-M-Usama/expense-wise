@@ -31,10 +31,10 @@ describe("on Sign up Page", () => {
       cy.register("FirstName", "LastName", "a", "a", "a");
       cy.contains("Please provide a valid email.");
       cy.contains(
-        "Please provide a valid password, minimum six characters, at least one capital letter and a number.",
+        "Your password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter and one number.",
       );
       cy.contains(
-        "Please provide a valid confirm password, minimum six characters, at least one capital letter and a number.",
+        "Your confirm password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter and one number.",
       );
     });
   });
