@@ -8,6 +8,7 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
+import { faker } from "@faker-js/faker";
 
 Cypress.Commands.add("login", (email: string, password: string) => {
   cy.visit("/");
@@ -34,3 +35,27 @@ Cypress.Commands.add(
     cy.contains("Sign Up").click();
   },
 );
+
+Cypress.Commands.add("createSheet", (title: string, description: string) => {
+  cy.get('svg[data-testid="AddCircleRoundedIcon"]').click();
+  cy.get("input[name='title']").type(title);
+  cy.get("input[name='description']").type(description);
+  cy.contains("Add Sheet").click();
+});
+
+Cypress.Commands.add(
+  "editSheet",
+  (updatedTitle: string, updatedDescription: string) => {
+    cy.get('svg[data-testid="EditIcon"]').first().click();
+    cy.get("input[name='title']").clear().type(updatedTitle);
+    cy.get("input[name='description']").clear().type(updatedDescription);
+    cy.contains("Update Sheet").click();
+  },
+);
+
+Cypress.Commands.add("createSheetList", (length: number) => {
+  for (let i = 0; i < length; i++) {
+    cy.createSheet(faker.company.name(), faker.lorem.sentence());
+    cy.contains("Sheet created successfully.");
+  }
+});

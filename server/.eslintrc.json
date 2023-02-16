@@ -10,7 +10,7 @@
     {
       "files": ["**/*.test.js", "**/*.factory.js"],
       "rules": {
-        "max-len": "off" // disable max line length for tests
+        "max-len": "off" // disable max line length for specs
       }
     }
   ],
