@@ -59,7 +59,7 @@ const validateFirstName = (firstName: string) => {
     return {
       error: true,
       errorMessage:
-        "Please provide a valid first name, it can only contain alphabets,",
+        "Please provide a valid first name, it can only contain alphabets.",
     };
   } else if (firstName.length > 50) {
     return {
@@ -79,7 +79,7 @@ const validateLastName = (lastName: string) => {
     return {
       error: true,
       errorMessage:
-        "Please provide a valid last name, it can only contain alphabets,",
+        "Please provide a valid last name, it can only contain alphabets.",
     };
   } else {
     return { error: false, errorMessage: "" };
