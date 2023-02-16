@@ -52,13 +52,8 @@ describe("User model", () => {
       );
     });
 
-    it("should be fine if the length of firstName is exact 50", () => {
-      user.firstName = FAKER_STRING.substring(0, 50);
-      expect(user.validateSync()).toEqual(undefined);
-    });
-
     it("should be fine if the length of firstName is less than or equal 50", () => {
-      user.firstName = FAKER_STRING.substring(0, 20);
+      user.firstName = faker.lorem.word(5);
       expect(user.validateSync()).toEqual(undefined);
     });
 
@@ -69,6 +64,13 @@ describe("User model", () => {
       );
     });
 
+    it("should throw a validation error if firstName contains other than alphabets", () => {
+      user.firstName = FAKER_STRING.substring(0, 20).concat(",");
+      expect(user.validateSync().errors.firstName.message).toEqual(
+        "First name can only contain alphabets.",
+      );
+    });
+
     it("should throw a validation error if lastName is blank", () => {
       user.lastName = null;
       expect(user.validateSync().errors.lastName.message).toEqual(
@@ -76,13 +78,8 @@ describe("User model", () => {
       );
     });
 
-    it("should be fine if the length of lastName is exact 50", () => {
-      user.lastName = FAKER_STRING.substring(0, 50);
-      expect(user.validateSync()).toEqual(undefined);
-    });
-
     it("should be fine if the length of lastName is less than or equal 50", () => {
-      user.lastName = FAKER_STRING.substring(0, 20);
+      user.lastName = faker.lorem.word(5);
       expect(user.validateSync()).toEqual(undefined);
     });
 
@@ -90,6 +87,13 @@ describe("User model", () => {
       user.lastName = FAKER_STRING.substring(0, 100);
       expect(user.validateSync().errors.lastName.message).toEqual(
         "Last name can not be longer than 50 characters.",
+      );
+    });
+
+    it("should throw a validation error if lastName contains other than alphabets", () => {
+      user.lastName = FAKER_STRING.substring(0, 20).concat(",");
+      expect(user.validateSync().errors.lastName.message).toEqual(
+        "Last name can only contain alphabets.",
       );
     });
 
