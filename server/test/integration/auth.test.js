@@ -18,8 +18,8 @@ describe("Auth endpoints", () => {
 
   beforeEach(async () => {
     userParams = {
-      firstName: faker.name.fullName(),
-      lastName: faker.name.fullName(),
+      firstName: faker.lorem.word(5),
+      lastName: faker.lorem.word(5),
       email: faker.internet.email().toLowerCase(),
       password: "Admin123*",
     };

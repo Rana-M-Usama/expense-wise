@@ -55,6 +55,17 @@ const validateFirstName = (firstName: string) => {
   firstName = firstName?.trim();
   if (!firstName) {
     return { error: true, errorMessage: "First name is required." };
+  } else if (!/^[A-Za-z ]+$/.test(firstName)) {
+    return {
+      error: true,
+      errorMessage:
+        "Please provide a valid first name, it can only contain alphabets,",
+    };
+  } else if (firstName.length > 50) {
+    return {
+      error: true,
+      errorMessage: "First name can not be longer than 50 characters.",
+    };
   } else {
     return { error: false, errorMessage: "" };
   }
@@ -64,6 +75,12 @@ const validateLastName = (lastName: string) => {
   lastName = lastName?.trim();
   if (!lastName) {
     return { error: true, errorMessage: "Last name is required." };
+  } else if (!/^[A-Za-z ]+$/.test(lastName)) {
+    return {
+      error: true,
+      errorMessage:
+        "Please provide a valid last name, it can only contain alphabets,",
+    };
   } else {
     return { error: false, errorMessage: "" };
   }
