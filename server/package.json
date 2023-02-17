@@ -10,6 +10,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --es-module-specifier-resolution=node index.js",
+    "start:test": "NODE_ENV=test nodemon --es-module-specifier-resolution=node index.js",
     "lint": "eslint .",
     "lint_fix": "eslint . --fix",
     "test": "NODE_OPTIONS=--experimental-vm-modules NODE_ENV=test jest --runInBand"

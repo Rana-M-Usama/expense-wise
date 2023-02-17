@@ -9,6 +9,24 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 import { faker } from "@faker-js/faker";
+import axios from "axios";
+
+Cypress.Commands.add("clearDB", async () => {
+  const url = Cypress.env("serverUrl") + Cypress.env("clearTestDbEndpoint");
+  const config = {
+    headers: { Authorization: `Bearer ${Cypress.env("DEVELOPER_TOKEN")}` },
+  };
+
+  try {
+    await axios.get(url, config);
+  } catch (error) {
+    Cypress.log({
+      name: "clearDB",
+      message: `Failed to clear test database: ${error.message}`,
+      consoleProps: () => ({ error }),
+    });
+  }
+});
 
 Cypress.Commands.add("login", (email: string, password: string) => {
   cy.visit("/");
@@ -43,15 +61,12 @@ Cypress.Commands.add("createSheet", (title: string, description: string) => {
   cy.contains("Add Sheet").click();
 });
 
-Cypress.Commands.add(
-  "editSheet",
-  (updatedTitle: string, updatedDescription: string) => {
-    cy.get('svg[data-testid="EditIcon"]').first().click();
-    cy.get("input[name='title']").clear().type(updatedTitle);
-    cy.get("input[name='description']").clear().type(updatedDescription);
-    cy.contains("Update Sheet").click();
-  },
-);
+Cypress.Commands.add("editSheet", (title: string, description: string) => {
+  cy.get('svg[data-testid="EditIcon"]').first().click();
+  cy.get("input[name='title']").clear().type(title);
+  cy.get("input[name='description']").clear().type(description);
+  cy.contains("Update Sheet").click();
+});
 
 Cypress.Commands.add("createSheetList", (length: number) => {
   for (let i = 0; i < length; i++) {
@@ -59,3 +74,63 @@ Cypress.Commands.add("createSheetList", (length: number) => {
     cy.contains("Sheet created successfully.");
   }
 });
+
+Cypress.Commands.add(
+  "createExpense",
+  (
+    title: string,
+    type: string,
+    amount: string,
+    status: string,
+    amountType: string,
+  ) => {
+    cy.contains("Add expense").click();
+    cy.get("input[name='title']").type(title);
+    cy.get("input[name='type']").type(type);
+    cy.get("input[name='amount']").type(amount);
+    cy.get("#status").click();
+    cy.get(`[data-value=${status}]`).click();
+    cy.get("#amountType").click();
+    cy.get(`[data-value=${amountType}]`).click();
+
+    cy.contains("Add Expense").click();
+  },
+);
+
+Cypress.Commands.add(
+  "editExpense",
+  (
+    title: string,
+    type: string,
+    amount: string,
+    status: string,
+    amountType: string,
+  ) => {
+    cy.get('svg[data-testid="EditIcon"]').first().click();
+    cy.get("input[name='title']").clear().type(title);
+    cy.get("input[name='type']").clear().type(type);
+    cy.get("input[name='amount']").clear().type(amount);
+    cy.get("#status").click();
+    cy.get(`[data-value=${status}]`).click();
+    cy.get("#amountType").click();
+    cy.get(`[data-value=${amountType}]`).click();
+
+    cy.contains("Update Expense").click();
+  },
+);
+
+Cypress.Commands.add(
+  "createExpenseList",
+  (length: number, amount: string, status: string, amountType: string) => {
+    for (let i = 0; i < length; i++) {
+      cy.createExpense(
+        faker.company.name(),
+        faker.animal.type(),
+        amount,
+        status,
+        amountType,
+      );
+      cy.contains("Expense created successfully.");
+    }
+  },
+);
