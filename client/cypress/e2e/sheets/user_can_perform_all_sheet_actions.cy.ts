@@ -10,40 +10,43 @@ describe("Sheet Page", () => {
       let title1, title2;
 
       before(() => {
+        cy.clearDB();
         cy.register(
-          faker.internet.userName(),
-          faker.internet.userName(),
+          faker.lorem.word(5),
+          faker.lorem.word(5),
           email,
           password,
           password,
         );
 
         cy.login(email, password);
-        cy.contains("Logged in successfully.");
+        cy.contains("Logged in successfully.").should("be.visible");
 
         // Create first sheet
         title1 = faker.company.name();
         const description1 = faker.lorem.sentence();
         cy.createSheet(title1, description1);
-        cy.contains("Sheet created successfully.");
+        cy.contains("Sheet created successfully.").should("be.visible");
 
         // Create second sheet
         title2 = faker.company.name();
         const description2 = faker.lorem.sentence();
         cy.createSheet(title2, description2);
-        cy.contains("Sheet created successfully.");
+        cy.contains("Sheet created successfully.").should("be.visible");
       });
 
       it("performs CRUD operations on sheets", () => {
         // Validate Sheet
         cy.createSheet(" ", " ");
-        cy.contains("Title is required");
-        cy.contains("Description is required");
+        cy.contains("Title is required").should("be.visible");
+        cy.contains("Description is required").should("be.visible");
 
         cy.visit("/");
         cy.createSheet(FAKER_STRING.substring(0, 110), " ");
-        cy.contains("Title can not be longer than 100 characters.");
-        cy.contains("Description is required");
+        cy.contains("Title can not be longer than 100 characters.").should(
+          "be.visible",
+        );
+        cy.contains("Description is required").should("be.visible");
 
         // Assert that two sheets were created
         cy.visit("/");
@@ -53,12 +56,12 @@ describe("Sheet Page", () => {
 
         // Edit first sheet
         cy.editSheet("updated title", "updated description");
-        cy.contains("Sheet updated successfully.");
+        cy.contains("Sheet updated successfully.").should("be.visible");
 
-        // Delete second sheet
+        // Delete first sheet
         cy.get('svg[data-testid="DeleteIcon"]').first().click();
         cy.contains("Yes").click();
-        cy.contains("Sheet deleted successfully.");
+        cy.contains("Sheet deleted successfully.").should("be.visible");
         cy.get(".MuiList-root")
           .find("li.MuiListItem-root")
           .should("have.length", 1);

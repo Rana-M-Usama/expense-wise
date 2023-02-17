@@ -1,7 +1,11 @@
 describe("Visiting Sign Up Page", () => {
+  before(() => {
+    cy.clearDB();
+  });
+
   it("renders sign up page", () => {
     cy.visit("/signup");
-    cy.contains("Sign Up");
+    cy.contains("Sign Up").should("be.visible");
   });
 
   context("User can click on sign up link", () => {
