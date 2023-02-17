@@ -1,12 +1,12 @@
 import {
   Button,
-  CircularProgress,
   Container,
   Divider,
   List,
   ListItem,
   ListItemText,
   Pagination,
+  Skeleton,
   Stack,
   Typography,
 } from "@mui/material";
@@ -58,6 +58,7 @@ const Sheets = () => {
   const [paginate] = useState(10);
   const classes = useStyles();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pageLoading, setPageLoading] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [sheetId, setSheetId] = useState("");
   const [modalProps, setModalProps] = useState<Props>(initialProps);
@@ -77,8 +78,9 @@ const Sheets = () => {
   const hideModal = () => setIsModalOpen(false);
 
   const fetchData = async () => {
+    setPageLoading(true);
     const response = await request("/sheets?limit=-1", "GET");
-
+    setPageLoading(false);
     if (!error) {
       dispatch(setSheets(response.data));
     }
@@ -88,6 +90,7 @@ const Sheets = () => {
     const response = await request("/sheets", "POST", body);
 
     if (!error) {
+      hideModal();
       Toast("success", "Sheet created successfully.");
       dispatch(addSheet({ data: response.data }));
     }
@@ -97,6 +100,7 @@ const Sheets = () => {
     await request(`/sheets/${sheetId}`, "DELETE");
 
     if (!error) {
+      hideConfirmationModal();
       Toast("success", "Sheet deleted successfully.");
       dispatch(removeSheet({ id: sheetId }));
     }
@@ -106,6 +110,7 @@ const Sheets = () => {
     const response = await request(`/sheets/${sheetId}`, "PUT", body);
 
     if (!error) {
+      hideModal();
       Toast("success", "Sheet updated successfully.");
       dispatch(modifySheet({ data: response.data, id: sheetId }));
     }
@@ -128,10 +133,8 @@ const Sheets = () => {
 
     if (data.idValue === "") {
       createSheet(body);
-      hideModal();
     } else {
       updateSheet(body, data.idValue);
-      hideModal();
     }
   };
 
@@ -148,93 +151,72 @@ const Sheets = () => {
 
   return (
     <>
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <Container maxWidth="md">
-          <SheetModal
-            isOpen={isModalOpen}
-            {...modalProps}
-            onClose={hideModal}
-            onSubmit={handleSubmit}
-          />
-          <ConfirmationModal
-            isOpen={isConfirmationModalOpen}
-            {...modalProps}
-            onClose={hideConfirmationModal}
-            onSubmit={(data: boolean) => {
-              if (data === true) {
-                deleteSheet(sheetId);
-              }
-            }}
-          />
-          <Typography
-            sx={{ mt: 5, mb: 3, display: "flex", justifyContent: "center" }}
-            variant="h4"
-          >
-            Your Sheets
-          </Typography>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            style={{ marginBottom: 15 }}
-          >
-            <Button onClick={() => showModal({ ...initialProps })}>
-              <AddCircleRoundedIcon sx={{ width: 40, height: 45 }} />
-            </Button>
-          </Stack>
-          <List className={classes.list}>
-            {sheets.length > 0 ? (
-              paginatedSheets.currentData().map((sheet: any) => (
-                <Fragment key={sheet._id}>
-                  <ListItem
-                    sx={{ gap: "5rem" }}
-                    secondaryAction={
-                      <Box sx={{ "& button": { m: 1 } }}>
-                        <Link
-                          to={`/sheets/${sheet._id}/expenses`}
-                          style={{ textDecoration: "none" }}
+      <Container maxWidth="md">
+        <SheetModal
+          loading={loading}
+          isOpen={isModalOpen}
+          {...modalProps}
+          onClose={hideModal}
+          onSubmit={handleSubmit}
+        />
+        <ConfirmationModal
+          loading={loading}
+          isOpen={isConfirmationModalOpen}
+          {...modalProps}
+          onClose={hideConfirmationModal}
+          onSubmit={(data: boolean) => {
+            if (data === true) {
+              deleteSheet(sheetId);
+            }
+          }}
+        />
+        <Typography
+          sx={{ mt: 5, display: "flex", justifyContent: "center" }}
+          variant="h4"
+        >
+          Your Sheets
+        </Typography>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          style={{ marginBottom: 15 }}
+        >
+          <Button onClick={() => showModal({ ...initialProps })}>
+            <AddCircleRoundedIcon sx={{ width: 40, height: 45 }} />
+          </Button>
+        </Stack>
+        <List className={classes.list}>
+          {pageLoading ? (
+            <Typography className={classes.sheetNotFound} variant="h5">
+              <Box sx={{ width: "95%" }}>
+                {Array(15)
+                  .fill(0)
+                  .map((_, index) => {
+                    return <Skeleton key={index} />;
+                  })}
+              </Box>
+            </Typography>
+          ) : sheets.length > 0 ? (
+            paginatedSheets.currentData().map((sheet: any) => (
+              <Fragment key={sheet._id}>
+                <ListItem
+                  sx={{ gap: "5rem" }}
+                  secondaryAction={
+                    <Box sx={{ "& button": { m: 1 } }}>
+                      <Link
+                        to={`/sheets/${sheet._id}/expenses`}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <Button
+                          className={classes.openButton}
+                          variant="outlined"
+                          size="small"
                         >
-                          <Button
-                            className={classes.openButton}
-                            variant="outlined"
-                            size="small"
-                          >
-                            <VisibilityIcon sx={{ width: 20, height: 25 }} />
-                          </Button>
-                        </Link>
-                        {sheet.permissionType === "admin" && (
-                          <>
-                            <Button
-                              className={classes.editButton}
-                              variant="outlined"
-                              size="small"
-                              onClick={() =>
-                                showModal({
-                                  idValue: sheet._id,
-                                  titleValue: sheet.title,
-                                  descriptionValue: sheet.description,
-                                  isUpdate: true,
-                                })
-                              }
-                            >
-                              <EditIcon sx={{ width: 20, height: 25 }} />
-                            </Button>
-                            <Button
-                              onClick={() => {
-                                showConfirmationModal({
-                                  sheetId: sheet._id,
-                                });
-                              }}
-                              className={classes.deleteButton}
-                              variant="outlined"
-                              size="small"
-                            >
-                              <DeleteIcon sx={{ width: 20, height: 25 }} />
-                            </Button>
-                          </>
-                        )}
-                        {sheet.permissionType === "edit" && (
+                          <VisibilityIcon sx={{ width: 20, height: 25 }} />
+                        </Button>
+                      </Link>
+                      {sheet.permissionType === "admin" && (
+                        <>
                           <Button
                             className={classes.editButton}
                             variant="outlined"
@@ -250,45 +232,72 @@ const Sheets = () => {
                           >
                             <EditIcon sx={{ width: 20, height: 25 }} />
                           </Button>
-                        )}
-                      </Box>
-                    }
-                  >
-                    <ListItemText
-                      primary={sheet.title}
-                      sx={{ maxWidth: "200px", overflowWrap: "break-word" }}
-                    />
-                    <ListItemText
-                      primary={sheet.description}
-                      sx={{ maxWidth: "200px", overflowWrap: "break-word" }}
-                    />
-                  </ListItem>
-                  <Divider variant="inset" component="li" />
-                </Fragment>
-              ))
-            ) : (
-              <Typography className={classes.sheetNotFound} variant="h5">
-                No Sheet Available
-              </Typography>
-            )}
-          </List>
-          {count > 1 && (
-            <Box
-              sx={{ display: "flex", justifyContent: "center", marginTop: 5 }}
-            >
-              <Pagination
-                count={count}
-                size="large"
-                page={page}
-                variant="outlined"
-                shape="rounded"
-                onChange={handleChange}
-                color="primary"
-              />
-            </Box>
+                          <Button
+                            onClick={() => {
+                              showConfirmationModal({
+                                sheetId: sheet._id,
+                              });
+                            }}
+                            className={classes.deleteButton}
+                            variant="outlined"
+                            size="small"
+                          >
+                            <DeleteIcon sx={{ width: 20, height: 25 }} />
+                          </Button>
+                        </>
+                      )}
+                      {sheet.permissionType === "edit" && (
+                        <Button
+                          className={classes.editButton}
+                          variant="outlined"
+                          size="small"
+                          onClick={() =>
+                            showModal({
+                              idValue: sheet._id,
+                              titleValue: sheet.title,
+                              descriptionValue: sheet.description,
+                              isUpdate: true,
+                            })
+                          }
+                        >
+                          <EditIcon sx={{ width: 20, height: 25 }} />
+                        </Button>
+                      )}
+                    </Box>
+                  }
+                >
+                  <ListItemText
+                    primary={sheet.title}
+                    sx={{ maxWidth: "200px", overflowWrap: "break-word" }}
+                  />
+                  <ListItemText
+                    primary={sheet.description}
+                    sx={{ maxWidth: "200px", overflowWrap: "break-word" }}
+                  />
+                </ListItem>
+                <Divider variant="inset" component="li" sx={{ m: 0 }} />
+              </Fragment>
+            ))
+          ) : (
+            <Typography className={classes.sheetNotFound} variant="h5">
+              No Sheet Available
+            </Typography>
           )}
-        </Container>
-      )}
+        </List>
+        {count > 1 && (
+          <Box sx={{ display: "flex", justifyContent: "center", marginTop: 5 }}>
+            <Pagination
+              count={count}
+              size="large"
+              page={page}
+              variant="outlined"
+              shape="rounded"
+              onChange={handleChange}
+              color="primary"
+            />
+          </Box>
+        )}
+      </Container>
     </>
   );
 };

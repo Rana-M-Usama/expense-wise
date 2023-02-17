@@ -63,7 +63,7 @@ const Navbar = () => {
 
   return (
     <AppBar>
-      <Toolbar>
+      <Toolbar sx={{ height: "64px" }}>
         <IconButton
           onClick={toggleSlider}
           size="large"

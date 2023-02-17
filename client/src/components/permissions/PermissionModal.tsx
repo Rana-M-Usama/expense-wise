@@ -1,6 +1,7 @@
 import {
   Avatar,
   Button,
+  CircularProgress,
   FormControl,
   InputLabel,
   MenuItem,
@@ -31,6 +32,7 @@ type Props = Response & {
   onClose: () => void;
   // eslint-disable-next-line no-unused-vars
   onSubmit: (data: Response) => void;
+  loading: boolean;
 };
 
 const Permission = ({
@@ -42,6 +44,7 @@ const Permission = ({
   isUpdate,
   onClose,
   onSubmit,
+  loading,
 }: Props) => {
   const classes = useStyles();
   const [data, setData] = useState({
@@ -184,8 +187,15 @@ const Permission = ({
             variant="contained"
             color="primary"
             sx={{ mt: 2 }}
+            disabled={loading}
           >
-            {isUpdate ? "Update Permission" : "Add Permission"}
+            {loading ? (
+              <CircularProgress size={25} />
+            ) : isUpdate ? (
+              "Update Permission"
+            ) : (
+              "Add Permission"
+            )}
           </Button>
         </form>
       </Box>

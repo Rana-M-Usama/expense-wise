@@ -10,16 +10,17 @@ import {
 import React from "react";
 
 type Props = {
+  loading: boolean;
   isOpen: boolean;
   onClose: () => void;
   // eslint-disable-next-line no-unused-vars
   onSubmit: (isAllow: boolean) => void;
 };
 
-const ConfirmationModal = ({ isOpen, onClose, onSubmit }: Props) => {
+const ConfirmationModal = ({ loading, isOpen, onClose, onSubmit }: Props) => {
   const handleClose = (confirm: boolean) => {
-    onClose();
-    onSubmit(confirm);
+    if (confirm) onSubmit(confirm);
+    else onClose();
   };
 
   return (
@@ -37,10 +38,18 @@ const ConfirmationModal = ({ isOpen, onClose, onSubmit }: Props) => {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => handleClose(false)} color="primary">
+            <Button
+              onClick={() => handleClose(false)}
+              disabled={loading}
+              color="primary"
+            >
               No
             </Button>
-            <Button onClick={() => handleClose(true)} color="primary">
+            <Button
+              color="primary"
+              onClick={() => handleClose(true)}
+              disabled={loading}
+            >
               Yes
             </Button>
           </DialogActions>

@@ -21,8 +21,10 @@ export default makeStyles(() => ({
   },
 
   avatar: {
-    width: "30% !important",
-    height: "30% !important",
+    width: 150,
+    height: 90,
+    borderRadius: 0,
+    marginBottom: 10,
   },
 
   textfield: {

@@ -42,7 +42,8 @@ export default makeStyles(() => ({
   },
 
   img: {
-    height: "200px",
+    height: "170px",
+    marginBottom: 20,
   },
 
   textField: {

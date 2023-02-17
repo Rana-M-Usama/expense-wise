@@ -46,7 +46,7 @@ describe("Expense Page", () => {
         // Check expenses count
         cy.get("table.MuiTable-root")
           .find("tr.MuiTableRow-root")
-          .should("have.length", 1);
+          .should("have.length", 2);
         cy.contains("No Expense to Show").should("be.visible");
 
         //add expense to sheet
@@ -103,7 +103,7 @@ describe("Expense Page", () => {
         // Check expense changes
         cy.get("table.MuiTable-root")
           .find("tr.MuiTableRow-root")
-          .should("have.length", 1);
+          .should("have.length", 2);
 
         // Add 12 more expenses to sheet
         cy.createExpenseList(4, "120", "unpaid", "incoming");

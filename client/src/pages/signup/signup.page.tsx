@@ -112,154 +112,149 @@ const SignupPage = () => {
 
   return (
     <Container component="main" className={classes.container}>
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <>
-          <CssBaseline />
-          <Box
-            className={classes.img}
-            src={logo}
-            component="img"
-            alt="expenseWise"
-          />
-          <Box
-            sx={{
-              width: {
-                xl: "50%",
-                lg: "60%",
-                md: "70%",
-                sm: "90%",
-              },
-            }}
-          >
-            <Box component="form" noValidate onSubmit={handleSubmit}>
-              <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    className={classes.textField}
-                    autoComplete="given-name"
-                    id="firstName"
-                    label="First Name"
-                    required
-                    fullWidth
-                    autoFocus
-                    type="text"
-                    placeholder="First Name"
-                    name="firstName"
-                    value={signupData.firstName.value}
-                    onChange={changeHandlerData}
-                    error={signupData.firstName.error}
-                  />
-                  {signupData.firstName.error && (
-                    <div className={classes.errorMessage}>
-                      {signupData.firstName.errorMessage}
-                    </div>
-                  )}
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    className={classes.textField}
-                    required
-                    fullWidth
-                    id="lastName"
-                    label="Last Name"
-                    autoComplete="family-name"
-                    type="text"
-                    placeholder="Last Name"
-                    name="lastName"
-                    value={signupData.lastName.value}
-                    onChange={changeHandlerData}
-                    error={signupData.lastName.error}
-                  />
-                  {signupData.lastName.error && (
-                    <div className={classes.errorMessage}>
-                      {signupData.lastName.errorMessage}
-                    </div>
-                  )}
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    className={classes.textField}
-                    required
-                    fullWidth
-                    id="email"
-                    autoComplete="email"
-                    label="Email Address"
-                    type="email"
-                    placeholder="Email"
-                    name="email"
-                    value={signupData.email.value}
-                    onChange={changeHandlerData}
-                    error={signupData.email.error}
-                  />
-                  {signupData.email.error && (
-                    <div className={classes.errorMessage}>
-                      {signupData.email.errorMessage}
-                    </div>
-                  )}
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    className={classes.textField}
-                    required
-                    fullWidth
-                    label="Password"
-                    id="password"
-                    autoComplete="new-password"
-                    type="password"
-                    placeholder="Password"
-                    name="password"
-                    value={signupData.password.value}
-                    onChange={changeHandlerData}
-                    error={signupData.password.error}
-                  />
-                  {signupData.password.error && (
-                    <div className={classes.errorMessage}>
-                      {signupData.password.errorMessage}
-                    </div>
-                  )}
-                  <TextField
-                    className={classes.textField}
-                    margin="normal"
-                    required
-                    fullWidth
-                    label="Confirm Password"
-                    id="Confirm password"
-                    type="password"
-                    placeholder="Confirm password"
-                    name="confirmPassword"
-                    value={signupData.confirmPassword.value}
-                    onChange={changeHandlerData}
-                    error={signupData.confirmPassword.error}
-                  />
-                  {signupData.confirmPassword.error && (
-                    <div className={classes.errorMessage}>
-                      {signupData.confirmPassword.errorMessage}
-                    </div>
-                  )}
-                </Grid>
-              </Grid>
-              <Button
-                type="submit"
+      <CssBaseline />
+      <Box
+        className={classes.img}
+        src={logo}
+        component="img"
+        alt="expenseWise"
+      />
+      <Box
+        sx={{
+          width: {
+            xl: "50%",
+            lg: "60%",
+            md: "70%",
+            sm: "90%",
+          },
+        }}
+      >
+        <Box component="form" noValidate onSubmit={handleSubmit}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                className={classes.textField}
+                autoComplete="given-name"
+                id="firstName"
+                label="First Name"
+                required
                 fullWidth
-                variant="contained"
-                color="primary"
-                sx={{ mt: 2 }}
-              >
-                Sign Up
-              </Button>
-              <Grid container justifyContent="flex-end">
-                <Grid item>
-                  <Link component={RouterLink} to="/" variant="body2">
-                    Already have an account? Sign in
-                  </Link>
-                </Grid>
-              </Grid>
-            </Box>
-          </Box>
-        </>
-      )}
+                autoFocus
+                type="text"
+                placeholder="First Name"
+                name="firstName"
+                value={signupData.firstName.value}
+                onChange={changeHandlerData}
+                error={signupData.firstName.error}
+              />
+              {signupData.firstName.error && (
+                <div className={classes.errorMessage}>
+                  {signupData.firstName.errorMessage}
+                </div>
+              )}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                className={classes.textField}
+                required
+                fullWidth
+                id="lastName"
+                label="Last Name"
+                autoComplete="family-name"
+                type="text"
+                placeholder="Last Name"
+                name="lastName"
+                value={signupData.lastName.value}
+                onChange={changeHandlerData}
+                error={signupData.lastName.error}
+              />
+              {signupData.lastName.error && (
+                <div className={classes.errorMessage}>
+                  {signupData.lastName.errorMessage}
+                </div>
+              )}
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                className={classes.textField}
+                required
+                fullWidth
+                id="email"
+                autoComplete="email"
+                label="Email Address"
+                type="email"
+                placeholder="Email"
+                name="email"
+                value={signupData.email.value}
+                onChange={changeHandlerData}
+                error={signupData.email.error}
+              />
+              {signupData.email.error && (
+                <div className={classes.errorMessage}>
+                  {signupData.email.errorMessage}
+                </div>
+              )}
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                className={classes.textField}
+                required
+                fullWidth
+                label="Password"
+                id="password"
+                autoComplete="new-password"
+                type="password"
+                placeholder="Password"
+                name="password"
+                value={signupData.password.value}
+                onChange={changeHandlerData}
+                error={signupData.password.error}
+              />
+              {signupData.password.error && (
+                <div className={classes.errorMessage}>
+                  {signupData.password.errorMessage}
+                </div>
+              )}
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                className={classes.textField}
+                required
+                fullWidth
+                label="Confirm Password"
+                id="Confirm password"
+                type="password"
+                placeholder="Confirm password"
+                name="confirmPassword"
+                value={signupData.confirmPassword.value}
+                onChange={changeHandlerData}
+                error={signupData.confirmPassword.error}
+              />
+              {signupData.confirmPassword.error && (
+                <div className={classes.errorMessage}>
+                  {signupData.confirmPassword.errorMessage}
+                </div>
+              )}
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3, height: "50px" }}
+          >
+            {loading ? <CircularProgress sx={{ color: "white" }} /> : "Sign Up"}
+          </Button>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link component={RouterLink} to="/" variant="body2">
+                Already have an account? Sign in
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
     </Container>
   );
 };

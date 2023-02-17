@@ -1,6 +1,7 @@
 import {
   Avatar,
   Button,
+  CircularProgress,
   FormControl,
   InputLabel,
   MenuItem,
@@ -39,6 +40,7 @@ type Props = Response & {
   onClose: () => void;
   // eslint-disable-next-line no-unused-vars
   onSubmit: (data: Response) => void;
+  loading: boolean;
 };
 
 const ExpenseModal = ({
@@ -52,6 +54,7 @@ const ExpenseModal = ({
   isUpdate,
   onClose,
   onSubmit,
+  loading,
 }: Props) => {
   const classes = useStyles();
 
@@ -197,6 +200,7 @@ const ExpenseModal = ({
             fullWidth
             id="amount"
             label="Amount"
+            type="number"
             value={data.amount.value}
             onChange={handleChange}
             name="amount"
@@ -265,8 +269,15 @@ const ExpenseModal = ({
             variant="contained"
             color="primary"
             sx={{ mt: 2 }}
+            disabled={loading}
           >
-            {isUpdate ? "Update Expense" : "Add Expense"}
+            {loading ? (
+              <CircularProgress size={25} />
+            ) : isUpdate ? (
+              "Update Expense"
+            ) : (
+              "Add Expense"
+            )}
           </Button>
         </Box>
       </Box>

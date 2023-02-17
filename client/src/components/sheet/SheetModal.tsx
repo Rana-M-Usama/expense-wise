@@ -1,4 +1,11 @@
-import { Avatar, Button, Modal, TextField, Typography } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  CircularProgress,
+  Modal,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Box } from "@mui/system";
 
@@ -16,6 +23,7 @@ type Response = {
 type Props = Response & {
   isOpen: boolean;
   isUpdate: boolean;
+  loading: boolean;
   onClose: () => void;
   // eslint-disable-next-line no-unused-vars
   onSubmit: (data: Response) => void;
@@ -29,6 +37,7 @@ const SheetModal = ({
   isUpdate,
   onClose,
   onSubmit,
+  loading,
 }: Props) => {
   const classes = useStyles();
   const [data, setData] = useState({
@@ -142,8 +151,15 @@ const SheetModal = ({
             variant="contained"
             color="primary"
             sx={{ mt: 2 }}
+            disabled={loading}
           >
-            {isUpdate ? "Update Sheet" : "Add Sheet"}
+            {loading ? (
+              <CircularProgress size={25} />
+            ) : isUpdate ? (
+              "Update Sheet"
+            ) : (
+              "Add Sheet"
+            )}
           </Button>
         </Box>
       </Box>

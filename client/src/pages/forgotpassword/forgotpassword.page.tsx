@@ -151,7 +151,7 @@ const ForgetPasswordPage: FC<Props> = ({ isOpen, onClose }) => {
               </div>
             )}
             <Button fullWidth type="submit" variant="contained">
-              {loading ? <CircularProgress /> : "Send My Password"}
+              {loading ? <CircularProgress /> : "Send Email"}
             </Button>
           </Box>
         </Container>

@@ -21,16 +21,24 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <header className="App-header">{isLogin && <Navbar />}</header>
-      <div className="App-body">
-        {loading ? (
+      {loading ? (
+        <div className="App-body-public">
           <CircularProgress />
-        ) : isLogin ? (
-          <PrivateRoutes />
-        ) : (
+        </div>
+      ) : isLogin ? (
+        <>
+          <header className="App-header">
+            <Navbar />
+          </header>
+          <div className="App-body">
+            <PrivateRoutes />
+          </div>
+        </>
+      ) : (
+        <div className="App-body-public">
           <PublicRoutes />
-        )}
-      </div>
+        </div>
+      )}
       <ToastContainer />
     </ThemeProvider>
   );

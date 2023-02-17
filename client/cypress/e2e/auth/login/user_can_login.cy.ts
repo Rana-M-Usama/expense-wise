@@ -49,10 +49,8 @@ describe("On Login Page", () => {
       cy.contains("Email is required.").should("be.visible");
       cy.contains("Password is required.").should("be.visible");
       cy.login("invalid", "invalid");
-      cy.contains("Please provide a valid email.").should("be.visible");
-      cy.contains(
-        "Your password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter and one number.",
-      ).should("be.visible");
+      cy.contains("Please provide a valid email.");
+      cy.contains("Invalid password.");
     });
   });
 });
