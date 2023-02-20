@@ -1,23 +1,29 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   CssBaseline,
+  FormControl,
   Grid,
+  IconButton,
+  InputAdornment,
+  InputLabel,
   Link,
+  OutlinedInput,
   TextField,
 } from "@mui/material";
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import CircularProgress from "@mui/material/CircularProgress";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 
+import { validateEmail, validateLoginPassword } from "validators/auth";
 import ForgotPasswordPage from "pages/forgotpassword/forgotpassword.page";
 import { setCurrentUser } from "slices/userSlice";
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
 
-import { validateEmail, validatePassword } from "validators/auth";
 import logo from "assets/logo.png";
 import useStyles from "pages/login/login.styles";
 
@@ -31,6 +37,13 @@ const LoginPage = () => {
     email: { value: "", error: false, errorMessage: "" },
     password: { value: "", error: false, errorMessage: "" },
   });
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleClickShowPassword = () => setShowPassword(show => !show);
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    event.preventDefault();
+  };
 
   const changeHandlerData = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -51,7 +64,7 @@ const LoginPage = () => {
     email = { ...email, ...validateEmail(loginCredentials.email.value) };
     password = {
       ...password,
-      ...validatePassword(loginCredentials.password.value),
+      ...validateLoginPassword(loginCredentials.password.value),
     };
 
     setLoginCredentials({ email, password });
@@ -84,97 +97,109 @@ const LoginPage = () => {
 
   return (
     <Container component="main" className={classes.container}>
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <>
-          <CssBaseline />
-          <Box
-            component="img"
-            className={classes.img}
-            src={logo}
-            alt="expenseWise"
+      <CssBaseline />
+      <Box
+        component="img"
+        className={classes.img}
+        src={logo}
+        alt="expenseWise"
+      />
+      <Box
+        sx={{
+          width: {
+            xl: "35%",
+            lg: "35%",
+            md: "40%",
+            sm: "90%",
+          },
+        }}
+      >
+        <Box component="form" onSubmit={handleSubmit}>
+          <TextField
+            margin="normal"
+            autoComplete="email"
+            id="email"
+            fullWidth
+            autoFocus
+            label="Email Address*"
+            className={classes.textField}
+            placeholder="Email"
+            name="email"
+            value={loginCredentials.email.value}
+            onChange={changeHandlerData}
+            error={loginCredentials.email.error}
           />
-          <Box
-            sx={{
-              width: {
-                xl: "35%",
-                lg: "35%",
-                md: "40%",
-                sm: "90%",
-              },
-            }}
+          {loginCredentials.email.error && (
+            <div className={classes.errorMessage}>
+              {loginCredentials.email.errorMessage}
+            </div>
+          )}
+          <FormControl
+            fullWidth
+            className={classes.textField}
+            sx={{ mt: 2 }}
+            variant="outlined"
           >
-            <Box component="form" onSubmit={handleSubmit}>
-              <TextField
-                margin="normal"
-                autoComplete="email"
-                id="email"
-                fullWidth
-                autoFocus
-                label="Email Address"
-                className={classes.textField}
-                placeholder="Email"
-                name="email"
-                value={loginCredentials.email.value}
-                onChange={changeHandlerData}
-                error={loginCredentials.email.error}
-              />
-              {loginCredentials.email.error && (
-                <div className={classes.errorMessage}>
-                  {loginCredentials.email.errorMessage}
-                </div>
-              )}
-              <TextField
-                margin="normal"
-                label="Password"
-                type="password"
-                id="password"
-                fullWidth
-                autoComplete="current-password"
-                className={classes.textField}
-                name="password"
-                value={loginCredentials.password.value}
-                onChange={changeHandlerData}
-                error={loginCredentials.password.error}
-              />
-              {loginCredentials.password.error && (
-                <div className={classes.errorMessage}>
-                  {loginCredentials.password.errorMessage}
-                </div>
-              )}
-              <Button
-                fullWidth
-                type="submit"
-                variant="contained"
-                sx={{ mt: 2 }}
-              >
-                Sign in
-              </Button>
-            </Box>
-            <Grid container>
-              <Grid item xs>
-                <Link
-                  component="button"
-                  onClick={() => setModalIsOpen(true)}
-                  variant="body2"
-                >
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link component={RouterLink} to="/signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-            <ForgotPasswordPage
-              isOpen={modalIsOpen}
-              onClose={() => setModalIsOpen(false)}
+            <InputLabel htmlFor="password">Password*</InputLabel>
+            <OutlinedInput
+              label="Password"
+              autoComplete="current-password"
+              name="password"
+              value={loginCredentials.password.value}
+              onChange={changeHandlerData}
+              error={loginCredentials.password.error}
+              id="password"
+              type={showPassword ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
             />
-          </Box>
-        </>
-      )}
+          </FormControl>
+          {loginCredentials.password.error && (
+            <div className={classes.errorMessage}>
+              {loginCredentials.password.errorMessage}
+            </div>
+          )}
+          <Button
+            fullWidth
+            type="submit"
+            variant="contained"
+            disabled={loading}
+            sx={{ mt: 3, height: "50px" }}
+          >
+            {loading ? <CircularProgress /> : "Sign in"}
+          </Button>
+        </Box>
+        <Grid container>
+          <Grid item xs>
+            <Link
+              component="button"
+              onClick={() => setModalIsOpen(true)}
+              variant="body2"
+            >
+              Forgot password?
+            </Link>
+          </Grid>
+          <Grid item>
+            <Link component={RouterLink} to="/signup" variant="body2">
+              {"Don't have an account? Sign Up"}
+            </Link>
+          </Grid>
+        </Grid>
+        <ForgotPasswordPage
+          isOpen={modalIsOpen}
+          onClose={() => setModalIsOpen(false)}
+        />
+      </Box>
     </Container>
   );
 };

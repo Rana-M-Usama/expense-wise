@@ -41,11 +41,15 @@ const useStyles = makeStyles(() => ({
   list: {
     borderRadius: 10,
     backgroundColor: styles.list.backgroundColor,
-    minHeight: "444px",
+    height: "444px",
   },
   menuLink: {
     color: "black !important",
     textDecoration: "none !important",
+  },
+  tableContainer: {
+    minHeight: "444px",
+    backgroundColor: styles.list.backgroundColor,
   },
 }));
 

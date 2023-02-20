@@ -37,7 +37,7 @@ const DrawerMenu: FC<Props> = ({ open, toggle }) => {
       <Box sx={{ alignItems: "center" }}>
         <Avatar
           className={classes.avatar}
-          sx={{ width: 150, height: 150 }}
+          sx={{ width: 150, height: 90, my: 5 }}
           src={logo}
           alt="wolfPack"
         />

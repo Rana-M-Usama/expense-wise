@@ -1,17 +1,19 @@
 import {
   Avatar,
   Button,
+  CircularProgress,
   FormControl,
+  IconButton,
   InputLabel,
   MenuItem,
   Modal,
   Select,
   SelectChangeEvent,
   TextField,
-  Typography,
 } from "@mui/material";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Box } from "@mui/system";
+import { CloseOutlined } from "@mui/icons-material";
 
 import {
   validateAmount,
@@ -39,6 +41,7 @@ type Props = Response & {
   onClose: () => void;
   // eslint-disable-next-line no-unused-vars
   onSubmit: (data: Response) => void;
+  loading: boolean;
 };
 
 const ExpenseModal = ({
@@ -52,6 +55,7 @@ const ExpenseModal = ({
   isUpdate,
   onClose,
   onSubmit,
+  loading,
 }: Props) => {
   const classes = useStyles();
 
@@ -151,11 +155,18 @@ const ExpenseModal = ({
           },
         }}
       >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <IconButton sx={{ p: 0 }} onClick={onClose}>
+            <CloseOutlined />
+          </IconButton>
+        </Box>
         <Box className={classes.box}>
           <Avatar className={classes.avatar} src={logo} alt="expenseWise" />
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Expense
-          </Typography>
         </Box>
 
         <Box>
@@ -164,7 +175,7 @@ const ExpenseModal = ({
             sx={{ mt: 2 }}
             fullWidth
             id="title"
-            label="Title"
+            label="Title*"
             value={data.title.value}
             onChange={handleChange}
             name="title"
@@ -181,7 +192,7 @@ const ExpenseModal = ({
             sx={{ mt: 2 }}
             fullWidth
             id="type"
-            label="Type"
+            label="Type*"
             value={data.type.value}
             onChange={handleChange}
             name="type"
@@ -196,7 +207,9 @@ const ExpenseModal = ({
             sx={{ mt: 2 }}
             fullWidth
             id="amount"
-            label="Amount"
+            label="Amount*"
+            type="number"
+            InputProps={{ inputProps: { min: 0 } }}
             value={data.amount.value}
             onChange={handleChange}
             name="amount"
@@ -265,8 +278,15 @@ const ExpenseModal = ({
             variant="contained"
             color="primary"
             sx={{ mt: 2 }}
+            disabled={loading}
           >
-            {isUpdate ? "Update Expense" : "Add Expense"}
+            {loading ? (
+              <CircularProgress size={25} />
+            ) : isUpdate ? (
+              "Update Expense"
+            ) : (
+              "Add Expense"
+            )}
           </Button>
         </Box>
       </Box>

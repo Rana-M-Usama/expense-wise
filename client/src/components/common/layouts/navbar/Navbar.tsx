@@ -63,7 +63,7 @@ const Navbar = () => {
 
   return (
     <AppBar>
-      <Toolbar>
+      <Toolbar sx={{ height: "64px" }}>
         <IconButton
           onClick={toggleSlider}
           size="large"
@@ -99,6 +99,7 @@ const Navbar = () => {
               <AccountCircle />
             </IconButton>
             <Menu
+              sx={{ mt: 4 }}
               id="menu-appbar"
               anchorEl={menuOpen}
               anchorOrigin={{

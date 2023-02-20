@@ -18,7 +18,6 @@ import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
 
 import { styles } from "constants/styles";
-import userImage from "assets/user.png";
 import useStyles from "pages//profile/profile.styles";
 
 const ProfilePage = () => {
@@ -102,97 +101,95 @@ const ProfilePage = () => {
       component="main"
       maxWidth="md"
       className={classes.container}
-      sx={{ boxShadow: 5 }}
+      sx={{ boxShadow: 5, mt: 5 }}
     >
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <>
-          <Stack sx={{ alignItems: "center", p: 2 }}>
-            <Avatar
-              alt="Remy Sharp"
-              src={userImage}
-              sx={{
-                width: 200,
-                height: 200,
-                border: `5px solid ${styles.userAvatar.border}`,
-              }}
-            />
-          </Stack>
-          <Box component="form" noValidate onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Box className={classes.box}>
-                  <Typography>First Name</Typography>
-                  <TextField
-                    className={classes.textfield}
-                    variant="outlined"
-                    inputProps={{ style: { padding: 7 } }}
-                    type="text"
-                    placeholder="First Name"
-                    name="firstName"
-                    value={profileData.firstName.value}
-                    onChange={changeHandlerData}
-                    error={profileData.firstName.error}
-                  />
-                  {profileData.firstName.error && (
-                    <div className={classes.errorMessage}>
-                      {profileData.firstName.errorMessage}
-                    </div>
-                  )}
-                </Box>
-              </Grid>
-              <Grid item xs={12}>
-                <Box className={classes.box}>
-                  <Typography>Last Name</Typography>
-                  <TextField
-                    className={classes.textfield}
-                    variant="outlined"
-                    inputProps={{ style: { padding: 7 } }}
-                    type="text"
-                    placeholder="Last Name"
-                    name="lastName"
-                    value={profileData.lastName.value}
-                    onChange={changeHandlerData}
-                    error={profileData.lastName.error}
-                  />
-                  {profileData.lastName.error && (
-                    <div className={classes.errorMessage}>
-                      {profileData.lastName.errorMessage}
-                    </div>
-                  )}
-                </Box>
-              </Grid>
-              <Grid item xs={12}>
-                <Box className={classes.box}>
-                  <Typography>Email</Typography>
-                  <TextField
-                    disabled
-                    className={classes.textfield}
-                    variant="outlined"
-                    inputProps={{ style: { padding: 7 } }}
-                    type="email"
-                    placeholder="Email"
-                    name="email"
-                    value={profileData.email}
-                    onChange={changeHandlerData}
-                  />
-                </Box>
-              </Grid>
-              <Grid container justifyContent="center">
-                <Button
-                  type="submit"
-                  sx={{ my: 2 }}
-                  variant="contained"
-                  color="primary"
-                >
-                  Update
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
-        </>
-      )}
+      <Stack sx={{ alignItems: "center", p: 2 }}>
+        <Avatar
+          alt="Remy Sharp"
+          sx={{
+            width: 150,
+            height: 150,
+            bgcolor: `${styles.theme.primaryColor}`,
+            border: `5px solid ${styles.userAvatar.border}`,
+            fontSize: 150,
+          }}
+        >
+          {profileData.firstName.value.substring(0, 1).toUpperCase()}
+        </Avatar>
+      </Stack>
+      <Box component="form" noValidate onSubmit={handleSubmit}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Box className={classes.box}>
+              <Typography>First Name</Typography>
+              <TextField
+                className={classes.textfield}
+                variant="outlined"
+                inputProps={{ style: { padding: 7 } }}
+                type="text"
+                placeholder="First Name"
+                name="firstName"
+                value={profileData.firstName.value}
+                onChange={changeHandlerData}
+                error={profileData.firstName.error}
+              />
+              {profileData.firstName.error && (
+                <div className={classes.errorMessage}>
+                  {profileData.firstName.errorMessage}
+                </div>
+              )}
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
+            <Box className={classes.box}>
+              <Typography>Last Name</Typography>
+              <TextField
+                className={classes.textfield}
+                variant="outlined"
+                inputProps={{ style: { padding: 7 } }}
+                type="text"
+                placeholder="Last Name"
+                name="lastName"
+                value={profileData.lastName.value}
+                onChange={changeHandlerData}
+                error={profileData.lastName.error}
+              />
+              {profileData.lastName.error && (
+                <div className={classes.errorMessage}>
+                  {profileData.lastName.errorMessage}
+                </div>
+              )}
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
+            <Box className={classes.box}>
+              <Typography>Email</Typography>
+              <TextField
+                disabled
+                className={classes.textfield}
+                variant="outlined"
+                inputProps={{ style: { padding: 7 } }}
+                type="email"
+                placeholder="Email"
+                name="email"
+                value={profileData.email}
+                onChange={changeHandlerData}
+              />
+            </Box>
+          </Grid>
+          <Grid container justifyContent="center">
+            <Button
+              type="submit"
+              sx={{ my: 2, width: "160px" }}
+              variant="contained"
+              color="primary"
+              disabled={loading}
+            >
+              {loading ? <CircularProgress size={25} /> : "Update Profile"}
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
     </Container>
   );
 };

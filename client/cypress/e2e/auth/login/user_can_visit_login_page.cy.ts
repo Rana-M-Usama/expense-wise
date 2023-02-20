@@ -16,13 +16,15 @@ describe("Visiting Login Page", () => {
       cy.contains("Forgot Password?").should("be.visible");
       cy.contains("You can reset your password here").should("be.visible");
       cy.get("input[name='email']");
-      cy.contains("Send My Password").should("be.visible");
+      cy.contains("Send Email").should("be.visible");
       cy.get("button[type='submit']");
 
       cy.get("button[type='button']")
         .get("svg[data-testid='CloseOutlinedIcon']")
         .click();
-      cy.get("button[type='button']").should("not.exist");
+      cy.get("button[type='button']")
+        .get("svg[data-testid='CloseOutlinedIcon']")
+        .should("not.exist");
     });
   });
 

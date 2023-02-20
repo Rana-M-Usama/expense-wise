@@ -9,6 +9,21 @@ const validateEmail = (email: string) => {
   }
 };
 
+const validateLoginPassword = (password: string) => {
+  if (!password) {
+    return { error: true, errorMessage: "Password is required." };
+  } else if (
+    !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z\d@$!%*#?&]{6,}$/.test(password)
+  ) {
+    return {
+      error: true,
+      errorMessage: "Invalid password.",
+    };
+  } else {
+    return { error: false, errorMessage: "" };
+  }
+};
+
 const validatePassword = (password: string) => {
   if (!password) {
     return { error: true, errorMessage: "Password is required." };
@@ -29,18 +44,6 @@ const validatePassword = (password: string) => {
 const validateConfirmPassword = (password: string, confirmPassword: string) => {
   if (!confirmPassword) {
     return { error: true, errorMessage: "Confirm password is required." };
-  } else if (
-    !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z\d@$!%*#?&]{6,}$/.test(
-      confirmPassword,
-    )
-  ) {
-    return {
-      error: true,
-      errorMessage:
-        "Your confirm password must be at least 6 characters long " +
-        "and contain at least one uppercase letter, one lowercase " +
-        "letter and one number.",
-    };
   } else if (password !== confirmPassword) {
     return {
       error: true,
@@ -89,6 +92,7 @@ const validateLastName = (lastName: string) => {
 export {
   validateEmail,
   validatePassword,
+  validateLoginPassword,
   validateFirstName,
   validateLastName,
   validateConfirmPassword,

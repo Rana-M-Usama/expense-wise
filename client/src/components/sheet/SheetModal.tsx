@@ -1,6 +1,15 @@
-import { Avatar, Button, Modal, TextField, Typography } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  CircularProgress,
+  IconButton,
+  Modal,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Box } from "@mui/system";
+import { CloseOutlined } from "@mui/icons-material";
 
 import { validateDescription, validateTitle } from "validators/sheet";
 
@@ -16,6 +25,7 @@ type Response = {
 type Props = Response & {
   isOpen: boolean;
   isUpdate: boolean;
+  loading: boolean;
   onClose: () => void;
   // eslint-disable-next-line no-unused-vars
   onSubmit: (data: Response) => void;
@@ -29,6 +39,7 @@ const SheetModal = ({
   isUpdate,
   onClose,
   onSubmit,
+  loading,
 }: Props) => {
   const classes = useStyles();
   const [data, setData] = useState({
@@ -94,6 +105,16 @@ const SheetModal = ({
           },
         }}
       >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <IconButton sx={{ p: 0 }} onClick={onClose}>
+            <CloseOutlined />
+          </IconButton>
+        </Box>
         <Box className={classes.box}>
           <Avatar className={classes.avatar} src={logo} alt="expenseWise" />
           <Typography id="modal-modal-title" variant="h6" component="h2">
@@ -142,8 +163,15 @@ const SheetModal = ({
             variant="contained"
             color="primary"
             sx={{ mt: 2 }}
+            disabled={loading}
           >
-            {isUpdate ? "Update Sheet" : "Add Sheet"}
+            {loading ? (
+              <CircularProgress size={25} />
+            ) : isUpdate ? (
+              "Update Sheet"
+            ) : (
+              "Add Sheet"
+            )}
           </Button>
         </Box>
       </Box>

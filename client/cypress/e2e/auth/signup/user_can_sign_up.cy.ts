@@ -38,8 +38,14 @@ describe("on Sign up Page", () => {
         "Your password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter and one number.",
       ).should("be.visible");
       cy.contains(
-        "Your confirm password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter and one number.",
+        "Your password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter and one number.",
       ).should("be.visible");
+      cy.register("FirstName", "LastName", "a", "admin123*", "a");
+      cy.contains("Please provide a valid email.");
+      cy.contains("Confirm password does not matches with password.");
+      cy.register("FirstName", "LastName", "a", "Admin123*", "a");
+      cy.contains("Please provide a valid email.");
+      cy.contains("Confirm password does not matches with password.");
     });
   });
 });
