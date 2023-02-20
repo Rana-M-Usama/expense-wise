@@ -16,9 +16,10 @@ export default makeStyles(() => ({
     border: `1px solid ${styles.editButton.border} !important`,
     "&:hover": {
       color: `${styles.editButton.hoverColor} !important`,
+      background: `${styles.editButton.hoverBackgroundColor} !important`,
       border: `1px solid ${styles.editButton.hoverBorderColor}`,
     },
-    [`@media (max-width: 576px)`]: {
+    [`@media (max-width: 666px)`]: {
       marginTop: 5,
     },
   },
@@ -31,7 +32,7 @@ export default makeStyles(() => ({
       border: `1px solid ${styles.deleteButton.hoverBorderColor}`,
       background: `${styles.deleteButton.hoverBackgroundColor} !important`,
     },
-    [`@media (max-width: 576px)`]: {
+    [`@media (max-width: 666px)`]: {
       marginTop: 5,
     },
   },
@@ -43,5 +44,12 @@ export default makeStyles(() => ({
   tableContainer: {
     minHeight: "444px",
     backgroundColor: styles.list.backgroundColor,
+  },
+  buttonGroup: {
+    [`@media (max-width: 666px)`]: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    },
   },
 }));

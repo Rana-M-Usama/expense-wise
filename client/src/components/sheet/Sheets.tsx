@@ -232,10 +232,26 @@ const Sheets = () => {
                   ) : sheets.length > 0 ? (
                     paginatedSheets.currentData().map((sheet: any) => (
                       <StyledTableRow key={sheet._id}>
-                        <StyledTableCell>{sheet.title}</StyledTableCell>
-                        <StyledTableCell>{sheet.description}</StyledTableCell>
+                        <StyledTableCell
+                          sx={{
+                            maxWidth: "150px",
+                            overflowWrap: "break-word",
+                            minWidth: "100px",
+                          }}
+                        >
+                          {sheet.title}
+                        </StyledTableCell>
+                        <StyledTableCell
+                          sx={{
+                            maxWidth: "150px",
+                            overflowWrap: "break-word",
+                            minWidth: "100px",
+                          }}
+                        >
+                          {sheet.description}
+                        </StyledTableCell>
                         <StyledTableCell align="right">
-                          <Box>
+                          <Box className={classes.buttonGroup}>
                             <Link
                               to={`/sheets/${sheet._id}/expenses`}
                               style={{ textDecoration: "none" }}
