@@ -35,6 +35,12 @@ Cypress.Commands.add("login", (email: string, password: string) => {
   cy.contains("Sign in").click();
 });
 
+Cypress.Commands.add("logout", () => {
+  cy.get('[data-testid="AccountCircleIcon"]').click({ force: true });
+  cy.contains("Logout").click({ force: true });
+  cy.contains("Successfully logged out.");
+});
+
 Cypress.Commands.add(
   "register",
   (
@@ -132,5 +138,27 @@ Cypress.Commands.add(
       );
       cy.contains("Expense created successfully.");
     }
+  },
+);
+
+Cypress.Commands.add(
+  "createPermission",
+  (email: string, permissionType: string) => {
+    cy.contains("Add Permission").click();
+    cy.get("input[name='email']").type(email);
+    cy.get("#permissionType").click();
+    cy.get(`[data-value=${permissionType}]`).click();
+    cy.get("button[type='submit']").contains("Add Permission").click();
+  },
+);
+
+Cypress.Commands.add(
+  "editPermission",
+  (email: string, permissionType: string) => {
+    cy.get('svg[data-testid="EditIcon"]').last().click();
+    cy.get("input[name='email']").clear().type(email);
+    cy.get("#permissionType").click();
+    cy.get(`[data-value=${permissionType}]`).click();
+    cy.get("button[type='submit']").contains("Update Permission").click();
   },
 );
