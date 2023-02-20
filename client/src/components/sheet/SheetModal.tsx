@@ -2,12 +2,14 @@ import {
   Avatar,
   Button,
   CircularProgress,
+  IconButton,
   Modal,
   TextField,
   Typography,
 } from "@mui/material";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Box } from "@mui/system";
+import { CloseOutlined } from "@mui/icons-material";
 
 import { validateDescription, validateTitle } from "validators/sheet";
 
@@ -103,6 +105,16 @@ const SheetModal = ({
           },
         }}
       >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <IconButton sx={{ p: 0 }} onClick={onClose}>
+            <CloseOutlined />
+          </IconButton>
+        </Box>
         <Box className={classes.box}>
           <Avatar className={classes.avatar} src={logo} alt="expenseWise" />
           <Typography id="modal-modal-title" variant="h6" component="h2">

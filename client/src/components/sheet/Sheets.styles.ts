@@ -3,6 +3,7 @@ import { styles } from "constants/styles";
 
 export default makeStyles(() => ({
   openButton: {
+    marginRight: 10,
     "&:hover": {
       color: styles.openButton.hoverColor,
       border: `1px solid ${styles.openButton.hoverBorderColor}`,
@@ -10,15 +11,19 @@ export default makeStyles(() => ({
     },
   },
   editButton: {
+    marginRight: 10,
     color: `${styles.editButton.color} !important`,
     border: `1px solid ${styles.editButton.border} !important`,
     "&:hover": {
       color: `${styles.editButton.hoverColor} !important`,
       border: `1px solid ${styles.editButton.hoverBorderColor}`,
-      background: `${styles.editButton.hoverBackgroundColor} !important`,
+    },
+    [`@media (max-width: 576px)`]: {
+      marginTop: 5,
     },
   },
   deleteButton: {
+    marginRight: 10,
     color: `${styles.deleteButton.color} !important`,
     border: `1px solid ${styles.deleteButton.border} !important`,
     "&:hover": {
@@ -26,16 +31,17 @@ export default makeStyles(() => ({
       border: `1px solid ${styles.deleteButton.hoverBorderColor}`,
       background: `${styles.deleteButton.hoverBackgroundColor} !important`,
     },
+    [`@media (max-width: 576px)`]: {
+      marginTop: 5,
+    },
   },
   list: {
     borderRadius: 10,
     backgroundColor: styles.list.backgroundColor,
-    minHeight: "500px",
+    height: "444px",
   },
-  sheetNotFound: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: "500px",
+  tableContainer: {
+    minHeight: "444px",
+    backgroundColor: styles.list.backgroundColor,
   },
 }));

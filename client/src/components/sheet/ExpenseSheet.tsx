@@ -304,7 +304,7 @@ const ExpenseSheet = () => {
                 </Link>
               </Menu>
             </Box>
-            <div>
+            <Box className={classes.tableContainer}>
               <Box sx={{ overflowX: "auto" }}>
                 <TableContainer>
                   <Table aria-label="customized table" size="small">
@@ -438,35 +438,24 @@ const ExpenseSheet = () => {
                   </Table>
                 </TableContainer>
               </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: 5,
-                  marginBottom: 5,
-                }}
-              >
-                {count > 1 && (
-                  <Pagination
-                    count={count}
-                    size="large"
-                    page={page}
-                    variant="outlined"
-                    shape="rounded"
-                    onChange={handleChange}
-                    color="primary"
-                  />
-                )}
-              </Box>
-            </div>
+            </Box>
+            <Box
+              sx={{ display: "flex", justifyContent: "center", mt: 5, mb: 2 }}
+            >
+              {count > 1 && (
+                <Pagination
+                  count={count}
+                  size="large"
+                  page={page}
+                  variant="outlined"
+                  shape="rounded"
+                  onChange={handleChange}
+                  color="primary"
+                />
+              )}
+            </Box>
           </Box>
-          <Grid
-            container
-            spacing={2}
-            justifyContent="center"
-            alignItems="center"
-            sx={{ mb: 3 }}
-          >
+          <Grid container spacing={2} sx={{ mt: 3, mb: 2 }}>
             <Grid item xs={12} sm={6} md={3}>
               <AmountBox>Recieved: {sheetBalance.receivedAmount}</AmountBox>
             </Grid>

@@ -47,6 +47,10 @@ const useStyles = makeStyles(() => ({
     color: "black !important",
     textDecoration: "none !important",
   },
+  tableContainer: {
+    minHeight: "444px",
+    backgroundColor: styles.list.backgroundColor,
+  },
 }));
 
 export { useStyles, StyledTableCell, StyledTableRow, AmountBox };

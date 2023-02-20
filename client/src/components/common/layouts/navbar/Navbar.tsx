@@ -99,6 +99,7 @@ const Navbar = () => {
               <AccountCircle />
             </IconButton>
             <Menu
+              sx={{ mt: 4 }}
               id="menu-appbar"
               anchorEl={menuOpen}
               anchorOrigin={{
