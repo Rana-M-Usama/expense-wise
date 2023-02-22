@@ -1,6 +1,6 @@
-import { AccountCircle, Menu as MenuIcon } from "@mui/icons-material";
 import {
   AppBar,
+  Avatar,
   IconButton,
   Link,
   Menu,
@@ -10,12 +10,17 @@ import {
 } from "@mui/material";
 import React, { MouseEvent, useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import DrawerMenu from "components/common/layouts/drawer/DrawerMenu";
-import { useDispatch } from "react-redux";
+import { Menu as MenuIcon } from "@mui/icons-material";
+import { Stack } from "@mui/system";
 
+import type { RootState } from "app/store";
 import { setCurrentUserEmpty } from "slices/userSlice";
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
+
+import { styles } from "constants/styles";
 
 const Navbar = () => {
   const [auth] = useState(true);
@@ -24,6 +29,7 @@ const Navbar = () => {
   const { request, error, clearError } = useHttp();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState<null | HTMLElement>(null);
+  const currentUser = useSelector((state: RootState) => state.user.currentUser);
 
   const handleMenu = (event: MouseEvent<HTMLElement>) => {
     setMenuOpen(event.currentTarget);
@@ -88,16 +94,22 @@ const Navbar = () => {
         </Typography>
         {auth && (
           <div>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
+            <Stack onClick={handleMenu} sx={{ alignItems: "center" }}>
+              <Avatar
+                alt="Remy Sharp"
+                sx={{
+                  width: 30,
+                  height: 30,
+                  fontSize: 30,
+                  cursor: "pointer",
+                  bgcolor: "white",
+                  color: `${styles.theme.primaryColor}`,
+                  border: `2px solid ${styles.userAvatar.border}`,
+                }}
+              >
+                {currentUser.firstName.substring(0, 1).toUpperCase()}
+              </Avatar>
+            </Stack>
             <Menu
               sx={{ mt: 4 }}
               id="menu-appbar"

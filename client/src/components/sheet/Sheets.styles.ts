@@ -3,7 +3,7 @@ import { styles } from "constants/styles";
 
 export default makeStyles(() => ({
   openButton: {
-    marginRight: 10,
+    marginRight: "10px !important",
     "&:hover": {
       color: styles.openButton.hoverColor,
       border: `1px solid ${styles.openButton.hoverBorderColor}`,
@@ -11,7 +11,7 @@ export default makeStyles(() => ({
     },
   },
   editButton: {
-    marginRight: 10,
+    marginRight: "10px !important",
     color: `${styles.editButton.color} !important`,
     border: `1px solid ${styles.editButton.border} !important`,
     "&:hover": {
@@ -24,7 +24,7 @@ export default makeStyles(() => ({
     },
   },
   deleteButton: {
-    marginRight: 10,
+    marginRight: "10px !important",
     color: `${styles.deleteButton.color} !important`,
     border: `1px solid ${styles.deleteButton.border} !important`,
     "&:hover": {

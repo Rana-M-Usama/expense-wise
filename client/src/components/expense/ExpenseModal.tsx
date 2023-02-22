@@ -171,11 +171,12 @@ const ExpenseModal = ({
 
         <Box>
           <TextField
+            required
             className={classes.textfield}
             sx={{ mt: 2 }}
             fullWidth
             id="title"
-            label="Title*"
+            label="Title"
             value={data.title.value}
             onChange={handleChange}
             name="title"
@@ -188,11 +189,12 @@ const ExpenseModal = ({
           )}
 
           <TextField
+            required
             className={classes.textfield}
             sx={{ mt: 2 }}
             fullWidth
             id="type"
-            label="Type*"
+            label="Type"
             value={data.type.value}
             onChange={handleChange}
             name="type"
@@ -203,11 +205,12 @@ const ExpenseModal = ({
           )}
 
           <TextField
+            required
             className={classes.textfield}
             sx={{ mt: 2 }}
             fullWidth
             id="amount"
-            label="Amount*"
+            label="Amount"
             type="number"
             InputProps={{ inputProps: { min: 0 } }}
             value={data.amount.value}
@@ -221,36 +224,12 @@ const ExpenseModal = ({
             </Box>
           )}
           <FormControl
+            required
             component="form"
             noValidate
             sx={{ mt: 2, width: "100%" }}
           >
-            <InputLabel id="status-label">Status*</InputLabel>
-            <Select
-              className={classes.textfield}
-              labelId="status-label"
-              label="Status*"
-              id="status"
-              value={data.status.value}
-              onChange={handleSelectChange}
-              name="status"
-              error={data.status.error}
-            >
-              <MenuItem value="paid">Paid</MenuItem>
-              <MenuItem value="unpaid">Unpaid</MenuItem>
-            </Select>
-            {data.status.error && (
-              <div className={classes.errorMessage}>
-                {data.status.errorMessage}
-              </div>
-            )}
-          </FormControl>
-          <FormControl
-            component="form"
-            noValidate
-            sx={{ mt: 2, width: "100%" }}
-          >
-            <InputLabel id="amountType-label">Amount Type*</InputLabel>
+            <InputLabel id="amountType-label">Amount Type</InputLabel>
             <Select
               sx={{ width: "100%" }}
               className={classes.textfield}
@@ -269,6 +248,32 @@ const ExpenseModal = ({
               <Box className={classes.errorMessage}>
                 {data.amountType.errorMessage}
               </Box>
+            )}
+          </FormControl>
+          <FormControl
+            required
+            component="form"
+            noValidate
+            sx={{ mt: 2, width: "100%" }}
+          >
+            <InputLabel id="status-label">Status</InputLabel>
+            <Select
+              className={classes.textfield}
+              labelId="status-label"
+              label="Status"
+              id="status"
+              value={data.status.value}
+              onChange={handleSelectChange}
+              name="status"
+              error={data.status.error}
+            >
+              <MenuItem value="paid">Paid</MenuItem>
+              <MenuItem value="unpaid">Unpaid</MenuItem>
+            </Select>
+            {data.status.error && (
+              <div className={classes.errorMessage}>
+                {data.status.errorMessage}
+              </div>
             )}
           </FormControl>
 

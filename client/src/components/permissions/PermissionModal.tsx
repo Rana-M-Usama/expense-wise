@@ -3,16 +3,17 @@ import {
   Button,
   CircularProgress,
   FormControl,
+  IconButton,
   InputLabel,
   MenuItem,
   Modal,
   Select,
   SelectChangeEvent,
   TextField,
-  Typography,
 } from "@mui/material";
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Box } from "@mui/system";
+import { CloseOutlined } from "@mui/icons-material";
 
 import { validateEmail, validatePermissionType } from "validators/permission";
 import logo from "assets/logo.png";
@@ -128,11 +129,18 @@ const Permission = ({
           },
         }}
       >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <IconButton sx={{ p: 0 }} onClick={onClose}>
+            <CloseOutlined />
+          </IconButton>
+        </Box>
         <Box className={classes.box}>
           <Avatar className={classes.avatar} src={logo} alt="expenseWise" />
-          <Typography id="modal-modal-email" variant="h6" component="h2">
-            Permission
-          </Typography>
         </Box>
 
         <form onSubmit={handleSubmit}>
@@ -141,7 +149,7 @@ const Permission = ({
             sx={{ mt: 2 }}
             fullWidth
             id="email"
-            label="Email*"
+            label="Email *"
             value={data.email.value}
             onChange={handleChange}
             name="email"
@@ -153,15 +161,16 @@ const Permission = ({
           )}
 
           <FormControl
+            required
             component="form"
             noValidate
             sx={{ mt: 2, width: "100%" }}
           >
-            <InputLabel id="permissionType-label">Permission Type*</InputLabel>
+            <InputLabel id="permissionType-label">Permission Type</InputLabel>
             <Select
               className={classes.textfield}
               labelId="permissionType-label"
-              label="permissionType*"
+              label="permissionType"
               id="permissionType"
               value={data.permissionType.value}
               onChange={handleSelectChange}

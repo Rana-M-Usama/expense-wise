@@ -247,11 +247,7 @@ const Permissions = () => {
         >
           Add Permission
         </Button>
-        <Table
-          aria-label="customized table"
-          sx={{ minWidth: 650, mb: 5 }}
-          size="small"
-        >
+        <Table aria-label="customized table" sx={{ mb: 5 }} size="small">
           <TableHead>
             <TableRow>
               {Object.values(

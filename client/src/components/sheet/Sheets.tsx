@@ -200,104 +200,73 @@ const Sheets = () => {
           </Button>
         </Stack>
         <Box className={classes.tableContainer}>
-          <Box sx={{ overflowX: "auto" }}>
-            <TableContainer>
-              <Table aria-label="customized table" size="small">
-                <TableHead>
-                  <TableRow>
-                    {Object.values(headerRow).map(heading => (
+          <TableContainer sx={{ overflowX: "auto" }}>
+            <Table aria-label="customized table" size="small">
+              <TableHead>
+                <TableRow>
+                  {Object.values(headerRow).map((heading, index) => (
+                    <StyledTableCell
+                      key={heading}
+                      sx={{
+                        minWidth: "100px",
+                        pl: `${index === 2 ? "100px" : ""}`,
+                      }}
+                    >
+                      {heading}
+                    </StyledTableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {pageLoading ? (
+                  <StyledTableRow className={classes.list}>
+                    <StyledTableCell colSpan={3}>
+                      <Box sx={{ width: "100%" }}>
+                        {Array(15)
+                          .fill(0)
+                          .map((_, index) => {
+                            return <Skeleton height={28} key={index} />;
+                          })}
+                      </Box>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ) : sheets.length > 0 ? (
+                  paginatedSheets.currentData().map((sheet: any) => (
+                    <StyledTableRow key={sheet._id}>
                       <StyledTableCell
-                        key={heading}
-                        align="center"
-                        sx={{ minWidth: "100px" }}
+                        sx={{
+                          maxWidth: "150px",
+                          overflowWrap: "break-word",
+                          minWidth: "100px",
+                        }}
                       >
-                        {heading}
+                        {sheet.title}
                       </StyledTableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {pageLoading ? (
-                    <StyledTableRow className={classes.list}>
-                      <StyledTableCell colSpan={3}>
-                        <Box sx={{ width: "100%" }}>
-                          {Array(15)
-                            .fill(0)
-                            .map((_, index) => {
-                              return <Skeleton height={28} key={index} />;
-                            })}
-                        </Box>
+                      <StyledTableCell
+                        sx={{
+                          maxWidth: "150px",
+                          overflowWrap: "break-word",
+                          minWidth: "100px",
+                        }}
+                      >
+                        {sheet.description}
                       </StyledTableCell>
-                    </StyledTableRow>
-                  ) : sheets.length > 0 ? (
-                    paginatedSheets.currentData().map((sheet: any) => (
-                      <StyledTableRow key={sheet._id}>
-                        <StyledTableCell
-                          sx={{
-                            maxWidth: "150px",
-                            overflowWrap: "break-word",
-                            minWidth: "100px",
-                          }}
-                        >
-                          {sheet.title}
-                        </StyledTableCell>
-                        <StyledTableCell
-                          sx={{
-                            maxWidth: "150px",
-                            overflowWrap: "break-word",
-                            minWidth: "100px",
-                          }}
-                        >
-                          {sheet.description}
-                        </StyledTableCell>
-                        <StyledTableCell align="right">
-                          <Box className={classes.buttonGroup}>
-                            <Link
-                              to={`/sheets/${sheet._id}/expenses`}
-                              style={{ textDecoration: "none" }}
+                      <StyledTableCell sx={{ width: "230px" }}>
+                        <Box className={classes.buttonGroup}>
+                          <Link
+                            to={`/sheets/${sheet._id}/expenses`}
+                            style={{ textDecoration: "none" }}
+                          >
+                            <Button
+                              className={classes.openButton}
+                              variant="outlined"
+                              size="small"
                             >
-                              <Button
-                                className={classes.openButton}
-                                variant="outlined"
-                                size="small"
-                              >
-                                <VisibilityIcon
-                                  sx={{ width: 20, height: 25 }}
-                                />
-                              </Button>
-                            </Link>
-                            {sheet.permissionType === "admin" && (
-                              <>
-                                <Button
-                                  className={classes.editButton}
-                                  variant="outlined"
-                                  size="small"
-                                  onClick={() =>
-                                    showModal({
-                                      idValue: sheet._id,
-                                      titleValue: sheet.title,
-                                      descriptionValue: sheet.description,
-                                      isUpdate: true,
-                                    })
-                                  }
-                                >
-                                  <EditIcon sx={{ width: 20, height: 25 }} />
-                                </Button>
-                                <Button
-                                  onClick={() => {
-                                    showConfirmationModal({
-                                      sheetId: sheet._id,
-                                    });
-                                  }}
-                                  className={classes.deleteButton}
-                                  variant="outlined"
-                                  size="small"
-                                >
-                                  <DeleteIcon sx={{ width: 20, height: 25 }} />
-                                </Button>
-                              </>
-                            )}
-                            {sheet.permissionType === "edit" && (
+                              <VisibilityIcon sx={{ width: 20, height: 25 }} />
+                            </Button>
+                          </Link>
+                          {sheet.permissionType === "admin" && (
+                            <>
                               <Button
                                 className={classes.editButton}
                                 variant="outlined"
@@ -313,30 +282,57 @@ const Sheets = () => {
                               >
                                 <EditIcon sx={{ width: 20, height: 25 }} />
                               </Button>
-                            )}
-                          </Box>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))
-                  ) : (
-                    <StyledTableRow className={classes.list}>
-                      <StyledTableCell colSpan={3}>
-                        <Box sx={{ display: "flex", justifyContent: "center" }}>
-                          <Typography variant="h5">
-                            No Sheet Available
-                          </Typography>
-                          <NoExpensesFoundIcon
-                            fontSize="large"
-                            sx={{ ml: 1, paddingBottom: 5 }}
-                          />
+                              <Button
+                                onClick={() => {
+                                  showConfirmationModal({
+                                    sheetId: sheet._id,
+                                  });
+                                }}
+                                className={classes.deleteButton}
+                                variant="outlined"
+                                size="small"
+                              >
+                                <DeleteIcon sx={{ width: 20, height: 25 }} />
+                              </Button>
+                            </>
+                          )}
+                          {sheet.permissionType === "edit" && (
+                            <Button
+                              className={classes.editButton}
+                              variant="outlined"
+                              size="small"
+                              onClick={() =>
+                                showModal({
+                                  idValue: sheet._id,
+                                  titleValue: sheet.title,
+                                  descriptionValue: sheet.description,
+                                  isUpdate: true,
+                                })
+                              }
+                            >
+                              <EditIcon sx={{ width: 20, height: 25 }} />
+                            </Button>
+                          )}
                         </Box>
                       </StyledTableCell>
                     </StyledTableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
+                  ))
+                ) : (
+                  <StyledTableRow className={classes.list}>
+                    <StyledTableCell colSpan={3}>
+                      <Box sx={{ display: "flex", justifyContent: "center" }}>
+                        <Typography variant="h5">No Sheet Available</Typography>
+                        <NoExpensesFoundIcon
+                          fontSize="large"
+                          sx={{ ml: 1, paddingBottom: 5 }}
+                        />
+                      </Box>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
         {count > 1 && (
           <Box sx={{ display: "flex", justifyContent: "center", mt: 5, mb: 2 }}>

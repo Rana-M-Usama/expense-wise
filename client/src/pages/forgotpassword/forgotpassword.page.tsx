@@ -128,7 +128,7 @@ const ForgetPasswordPage: FC<Props> = ({ isOpen, onClose }) => {
               margin="normal"
               id="email"
               autoComplete="email"
-              label="Email Address"
+              label="Email Address *"
               fullWidth
               autoFocus
               className={classes.textField}

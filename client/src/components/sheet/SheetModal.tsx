@@ -5,7 +5,6 @@ import {
   IconButton,
   Modal,
   TextField,
-  Typography,
 } from "@mui/material";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Box } from "@mui/system";
@@ -117,13 +116,11 @@ const SheetModal = ({
         </Box>
         <Box className={classes.box}>
           <Avatar className={classes.avatar} src={logo} alt="expenseWise" />
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Sheet
-          </Typography>
         </Box>
 
         <Box>
           <TextField
+            required
             className={classes.textfield}
             sx={{ mt: 2 }}
             fullWidth
@@ -141,6 +138,7 @@ const SheetModal = ({
           )}
 
           <TextField
+            required
             className={classes.textfield}
             sx={{ mt: 2 }}
             fullWidth
