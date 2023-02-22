@@ -99,7 +99,10 @@ const Navbar = () => {
         </Typography>
         {auth && (
           <div>
-            <Stack onClick={handleMenu} sx={{ alignItems: "center" }}>
+            <Stack
+              onClick={handleMenu}
+              sx={{ boxSizing: "initial", alignItems: "center" }}
+            >
               <Avatar
                 alt="Remy Sharp"
                 sx={{
