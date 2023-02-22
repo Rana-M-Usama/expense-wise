@@ -60,6 +60,11 @@ const Navbar = () => {
     setMenuOpen(null);
   };
 
+  const changePassword = async () => {
+    navigate("/update-password");
+    setMenuOpen(null);
+  };
+
   useEffect(() => {
     if (error) {
       Toast("danger", error);
@@ -94,13 +99,14 @@ const Navbar = () => {
         </Typography>
         {auth && (
           <div>
-            <Stack onClick={handleMenu} sx={{ alignItems: "center" }}>
+            <Stack
+              onClick={handleMenu}
+              sx={{ boxSizing: "initial", alignItems: "center" }}
+            >
               <Avatar
                 alt="Remy Sharp"
                 sx={{
-                  width: 30,
-                  height: 30,
-                  fontSize: 30,
+                  fontSize: 35,
                   cursor: "pointer",
                   bgcolor: "white",
                   color: `${styles.theme.primaryColor}`,
@@ -111,7 +117,7 @@ const Navbar = () => {
               </Avatar>
             </Stack>
             <Menu
-              sx={{ mt: 4 }}
+              sx={{ mt: 5 }}
               id="menu-appbar"
               anchorEl={menuOpen}
               anchorOrigin={{
@@ -128,6 +134,9 @@ const Navbar = () => {
             >
               <MenuItem sx={{ pr: "2rem" }} onClick={profile}>
                 Profile
+              </MenuItem>
+              <MenuItem sx={{ pr: "2rem" }} onClick={changePassword}>
+                Change Password
               </MenuItem>
               <MenuItem sx={{ pr: "2rem" }} onClick={logout}>
                 Logout
