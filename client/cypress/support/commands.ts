@@ -36,7 +36,7 @@ Cypress.Commands.add("login", (email: string, password: string) => {
 });
 
 Cypress.Commands.add("logout", () => {
-  cy.get('[data-testid="AccountCircleIcon"]').click({ force: true });
+  cy.get(".MuiStack-root .MuiAvatar-root").click({ force: true });
   cy.contains("Logout").click({ force: true });
   cy.contains("Successfully logged out.");
 });

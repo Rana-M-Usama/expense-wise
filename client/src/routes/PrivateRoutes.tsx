@@ -15,7 +15,6 @@ const PrivateRoutes = () => {
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/sheets/:sheetId/permissions" element={<Permissions />} />
       <Route path="*" element={<PageNotFound />} />
-      <Route path="/sheets/:sheetId/permissions" element={<Permissions />} />
     </Routes>
   );
 };

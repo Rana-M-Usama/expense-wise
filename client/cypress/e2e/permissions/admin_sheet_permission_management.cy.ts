@@ -67,19 +67,19 @@ describe("Permissions Management with admin", () => {
         cy.createPermission(" ", "admin");
         cy.contains("Email is required.").should("be.visible");
 
-        cy.reload();
+        cy.get('svg[data-testid="CloseOutlinedIcon"]').click();
         cy.createPermission("invalid", "admin");
         cy.contains("Please provide a valid email.").should("be.visible");
 
         // Attempt to grant permission to a non-existent email address
-        cy.reload();
+        cy.get('svg[data-testid="CloseOutlinedIcon"]').click();
         cy.createPermission("invalid@email.com", "view");
         cy.contains(
           "User not found with this email: invalid@email.com.",
         ).should("be.visible");
 
         // createPermissions
-        cy.reload();
+        cy.get('svg[data-testid="CloseOutlinedIcon"]').click();
         cy.createPermission(duplicateEmail, "admin");
         cy.contains("Permission created successfully.");
         cy.get("table.MuiTable-root")
@@ -136,10 +136,8 @@ describe("Permissions Management with admin", () => {
         // authorized admin has the ability to assign all permissions to users.
         cy.createPermission(duplicateEmail1, "admin");
         cy.contains("Permission created successfully.");
-        cy.reload();
         cy.editPermission(duplicateEmail1, "edit");
         cy.contains("Permission updated successfully.");
-        cy.reload();
         cy.editPermission(duplicateEmail1, "view");
         cy.contains("Permission updated successfully.");
 

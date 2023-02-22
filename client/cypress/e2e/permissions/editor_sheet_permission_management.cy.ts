@@ -64,22 +64,22 @@ describe("Permissions Management with admin", () => {
           .should("have.length", 2);
 
         // Validate Permission
-        cy.createPermission(" ", "edit");
+        cy.createPermission(" ", "view");
         cy.contains("Email is required.").should("be.visible");
 
-        cy.reload();
-        cy.createPermission("invalid", "edit");
+        cy.get('svg[data-testid="CloseOutlinedIcon"]').click();
+        cy.createPermission("invalid", "view");
         cy.contains("Please provide a valid email.").should("be.visible");
 
         // Attempt to grant permission to a non-existent email address
-        cy.reload();
-        cy.createPermission("invalid@email.com", "edit");
+        cy.get('svg[data-testid="CloseOutlinedIcon"]').click();
+        cy.createPermission("invalid@email.com", "view");
         cy.contains(
           "User not found with this email: invalid@email.com.",
         ).should("be.visible");
 
         // createPermissions
-        cy.reload();
+        cy.get('svg[data-testid="CloseOutlinedIcon"]').click();
         cy.createPermission(duplicateEmail, "edit");
         cy.contains("Permission created successfully.");
         cy.get("table.MuiTable-root")
@@ -133,11 +133,11 @@ describe("Permissions Management with admin", () => {
         cy.url().should("include", "/sheets");
         cy.url().should("include", "/permissions");
 
-        // authorized admin has the ability to assign all permissions to users.
+        // authorized editor has the ability to assign only view and edit permission to users.
         cy.contains("Add Permission").click();
         cy.get("#permissionType").click();
         cy.get("[data-value=admin").should("not.exist");
-        cy.reload();
+        cy.get('svg[data-testid="CloseOutlinedIcon"]').click({ force: true });
         cy.createPermission(duplicateEmail1, "edit");
         cy.contains("Permission created successfully.");
         cy.createPermission(duplicateEmail1, "view");
