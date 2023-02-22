@@ -116,12 +116,11 @@ const LoginPage = () => {
       >
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
-            margin="normal"
             autoComplete="email"
             id="email"
             fullWidth
             autoFocus
-            label="Email Address*"
+            label="Email Address *"
             className={classes.textField}
             placeholder="Email"
             name="email"
@@ -140,9 +139,9 @@ const LoginPage = () => {
             sx={{ mt: 2 }}
             variant="outlined"
           >
-            <InputLabel htmlFor="password">Password*</InputLabel>
+            <InputLabel htmlFor="password">Password *</InputLabel>
             <OutlinedInput
-              label="Password"
+              label="Password *"
               autoComplete="current-password"
               name="password"
               value={loginCredentials.password.value}

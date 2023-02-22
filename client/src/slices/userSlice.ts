@@ -34,10 +34,14 @@ const userSlice = createSlice({
       state.currentUser = { ...initialState.currentUser };
       localStorage.removeItem("token");
     },
+    modifyCurrentUser: (state, action) => {
+      state.currentUser = { ...state.currentUser, ...action.payload };
+    },
   },
 });
 
 const userReducer = userSlice.reducer;
-const { setCurrentUser, setCurrentUserEmpty } = userSlice.actions;
+const { setCurrentUser, setCurrentUserEmpty, modifyCurrentUser } =
+  userSlice.actions;
 
-export { userReducer, setCurrentUser, setCurrentUserEmpty };
+export { userReducer, setCurrentUser, setCurrentUserEmpty, modifyCurrentUser };

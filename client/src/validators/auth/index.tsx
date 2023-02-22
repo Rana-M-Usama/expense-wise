@@ -13,7 +13,7 @@ const validateLoginPassword = (password: string) => {
   if (!password) {
     return { error: true, errorMessage: "Password is required." };
   } else if (
-    !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z\d@$!%*#?&]{6,}$/.test(password)
+    !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z\d@$!%*#?&-]{6,}$/.test(password)
   ) {
     return {
       error: true,
@@ -28,7 +28,7 @@ const validatePassword = (password: string) => {
   if (!password) {
     return { error: true, errorMessage: "Password is required." };
   } else if (
-    !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z\d@$!%*#?&]{6,}$/.test(password)
+    !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z\d@$!%*#?&-]{6,}$/.test(password)
   ) {
     return {
       error: true,

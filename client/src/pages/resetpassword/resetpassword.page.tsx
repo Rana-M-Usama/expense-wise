@@ -102,10 +102,10 @@ const ResetPasswordPage = () => {
             <Box component="form" onSubmit={handleSubmit}>
               <TextField
                 color="primary"
-                margin="normal"
                 id="password"
+                sx={{ mt: 2 }}
                 fullWidth
-                label="New Password"
+                label="New Password *"
                 autoComplete="current-password"
                 className={classes.textField}
                 type="password"
@@ -122,10 +122,10 @@ const ResetPasswordPage = () => {
               )}
               <TextField
                 color="primary"
-                margin="normal"
                 id="password"
+                sx={{ mt: 2 }}
                 fullWidth
-                label="Confirm Password"
+                label="Confirm Password *"
                 autoComplete="current-password"
                 className={classes.textField}
                 type="password"
@@ -140,7 +140,13 @@ const ResetPasswordPage = () => {
                   {resetPasswordData.confirmPassword.errorMessage}
                 </div>
               )}
-              <Button type="submit" fullWidth variant="contained">
+
+              <Button
+                type="submit"
+                fullWidth
+                sx={{ mt: 3 }}
+                variant="contained"
+              >
                 Reset Password
               </Button>
             </Box>

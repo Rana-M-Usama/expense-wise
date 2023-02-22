@@ -305,139 +305,137 @@ const ExpenseSheet = () => {
               </Menu>
             </Box>
             <Box className={classes.tableContainer}>
-              <Box sx={{ overflowX: "auto" }}>
-                <TableContainer>
-                  <Table aria-label="customized table" size="small">
-                    <TableHead>
-                      <TableRow>
-                        {Object.values(
-                          sheetPermissionType === "admin" ||
-                            sheetPermissionType === "edit"
-                            ? { ...headerRow, ...{ "heading 6": "Action" } }
-                            : headerRow,
-                        ).map(heading => (
+              <TableContainer sx={{ overflowX: "auto" }}>
+                <Table aria-label="customized table" size="small">
+                  <TableHead>
+                    <TableRow>
+                      {Object.values(
+                        sheetPermissionType === "admin" ||
+                          sheetPermissionType === "edit"
+                          ? { ...headerRow, ...{ "heading 6": "Action" } }
+                          : headerRow,
+                      ).map(heading => (
+                        <StyledTableCell
+                          key={heading}
+                          align="center"
+                          sx={{ minWidth: "100px" }}
+                        >
+                          {heading}
+                        </StyledTableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {pageLoading ? (
+                      <StyledTableRow className={classes.list}>
+                        <StyledTableCell colSpan={6}>
+                          <Box sx={{ width: "100%" }}>
+                            {Array(15)
+                              .fill(0)
+                              .map((_, index) => {
+                                return <Skeleton height={28} key={index} />;
+                              })}
+                          </Box>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ) : expenses.length !== 0 ? (
+                      paginatedExpenses.currentData().map((expense: any) => (
+                        <StyledTableRow key={expense._id}>
                           <StyledTableCell
-                            key={heading}
-                            align="center"
-                            sx={{ minWidth: "100px" }}
+                            sx={{
+                              maxWidth: "150px",
+                              overflowWrap: "break-word",
+                              minWidth: "100px",
+                            }}
+                            scope="row"
                           >
-                            {heading}
+                            {expense.title}
                           </StyledTableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {pageLoading ? (
-                        <StyledTableRow className={classes.list}>
-                          <StyledTableCell colSpan={6}>
-                            <Box sx={{ width: "100%" }}>
-                              {Array(15)
-                                .fill(0)
-                                .map((_, index) => {
-                                  return <Skeleton height={28} key={index} />;
-                                })}
-                            </Box>
+                          <StyledTableCell
+                            sx={{
+                              maxWidth: "150px",
+                              overflowWrap: "break-word",
+                              minWidth: "100px",
+                            }}
+                            align="center"
+                          >
+                            {expense.type}
                           </StyledTableCell>
-                        </StyledTableRow>
-                      ) : expenses.length !== 0 ? (
-                        paginatedExpenses.currentData().map((expense: any) => (
-                          <StyledTableRow key={expense._id}>
-                            <StyledTableCell
-                              sx={{
-                                maxWidth: "150px",
-                                overflowWrap: "break-word",
-                                minWidth: "100px",
-                              }}
-                              scope="row"
-                            >
-                              {expense.title}
-                            </StyledTableCell>
-                            <StyledTableCell
-                              sx={{
-                                maxWidth: "150px",
-                                overflowWrap: "break-word",
-                                minWidth: "100px",
-                              }}
-                              align="center"
-                            >
-                              {expense.type}
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              {expense.amountType === "incoming" && (
-                                <Box sx={{ display: "flex", gap: "6px" }}>
-                                  <Typography>Incoming</Typography>
-                                  <ArrowDownward sx={{ color: green.A700 }} />
-                                </Box>
-                              )}
-                              {expense.amountType === "outgoing" && (
-                                <Box sx={{ display: "flex", gap: "6px" }}>
-                                  <Typography>Outgoing</Typography>
-                                  <ArrowUpward sx={{ color: red.A700 }} />
-                                </Box>
-                              )}
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              {expense.status}
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              {expense.amount}
-                            </StyledTableCell>
-                            {(sheetPermissionType === "admin" ||
-                              sheetPermissionType === "edit") && (
-                              <StyledTableCell align="center">
-                                <IconButton
-                                  sx={{ py: 0 }}
-                                  aria-label="edit"
-                                  onClick={() =>
-                                    showModal({
-                                      idValue: expense._id,
-                                      titleValue: expense.title,
-                                      typeValue: expense.type,
-                                      amountValue: expense.amount,
-                                      statusValue: expense.status,
-                                      amountTypeValue: expense.amountType,
-                                      isUpdate: true,
-                                    })
-                                  }
-                                >
-                                  <EditIcon />
-                                </IconButton>
-                                <IconButton
-                                  sx={{ py: 0 }}
-                                  aria-label="delete"
-                                  onClick={() => {
-                                    showConfirmationModal({
-                                      expenseId: expense._id,
-                                    });
-                                  }}
-                                >
-                                  <DeleteIcon />
-                                </IconButton>
-                              </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {expense.amountType === "incoming" && (
+                              <Box sx={{ display: "flex", gap: "6px" }}>
+                                <Typography>Incoming</Typography>
+                                <ArrowDownward sx={{ color: green.A700 }} />
+                              </Box>
                             )}
-                          </StyledTableRow>
-                        ))
-                      ) : (
-                        <StyledTableRow className={classes.list}>
-                          <StyledTableCell colSpan={6}>
-                            <Box
-                              sx={{ display: "flex", justifyContent: "center" }}
-                            >
-                              <Typography variant="h5">
-                                No Expense to Show
-                              </Typography>
-                              <NoExpensesFoundIcon
-                                fontSize="large"
-                                sx={{ ml: 1, paddingBottom: 5 }}
-                              />
-                            </Box>
+                            {expense.amountType === "outgoing" && (
+                              <Box sx={{ display: "flex", gap: "6px" }}>
+                                <Typography>Outgoing</Typography>
+                                <ArrowUpward sx={{ color: red.A700 }} />
+                              </Box>
+                            )}
                           </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {expense.status}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {expense.amount}
+                          </StyledTableCell>
+                          {(sheetPermissionType === "admin" ||
+                            sheetPermissionType === "edit") && (
+                            <StyledTableCell align="center">
+                              <IconButton
+                                sx={{ py: 0 }}
+                                aria-label="edit"
+                                onClick={() =>
+                                  showModal({
+                                    idValue: expense._id,
+                                    titleValue: expense.title,
+                                    typeValue: expense.type,
+                                    amountValue: expense.amount,
+                                    statusValue: expense.status,
+                                    amountTypeValue: expense.amountType,
+                                    isUpdate: true,
+                                  })
+                                }
+                              >
+                                <EditIcon />
+                              </IconButton>
+                              <IconButton
+                                sx={{ py: 0 }}
+                                aria-label="delete"
+                                onClick={() => {
+                                  showConfirmationModal({
+                                    expenseId: expense._id,
+                                  });
+                                }}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </StyledTableCell>
+                          )}
                         </StyledTableRow>
-                      )}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Box>
+                      ))
+                    ) : (
+                      <StyledTableRow className={classes.list}>
+                        <StyledTableCell colSpan={6}>
+                          <Box
+                            sx={{ display: "flex", justifyContent: "center" }}
+                          >
+                            <Typography variant="h5">
+                              No Expense to Show
+                            </Typography>
+                            <NoExpensesFoundIcon
+                              fontSize="large"
+                              sx={{ ml: 1, paddingBottom: 5 }}
+                            />
+                          </Box>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </Box>
             <Box
               sx={{ display: "flex", justifyContent: "center", mt: 5, mb: 2 }}
