@@ -12,6 +12,9 @@ export default makeStyles(() => ({
     backgroundColor: "white",
     boxShadow: "20 !important",
     transform: "translate(-50%, -50%)",
+    [`@media (max-width: 450px)`]: {
+      maxWidth: "250px",
+    },
   },
 
   box: {
