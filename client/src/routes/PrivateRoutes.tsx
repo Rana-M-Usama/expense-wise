@@ -6,6 +6,7 @@ import PageNotFound from "components/PageNotFound";
 import Permissions from "components/permissions/Permissions";
 import ProfilePage from "pages/profile/profile.page";
 import Sheets from "components/sheet/Sheets";
+import UpdatePasswordPage from "pages/resetpassword/updatepassword";
 
 const PrivateRoutes = () => {
   return (
@@ -14,6 +15,7 @@ const PrivateRoutes = () => {
       <Route path="/sheets/:sheetId/expenses" element={<ExpenseSheet />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/sheets/:sheetId/permissions" element={<Permissions />} />
+      <Route path="/update-password" element={<UpdatePasswordPage />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

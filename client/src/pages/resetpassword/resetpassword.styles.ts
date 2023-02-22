@@ -2,18 +2,19 @@ import { makeStyles } from "@mui/styles";
 import { styles } from "constants/styles";
 
 export default makeStyles(() => ({
+  rootContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "cneter",
+    height: "85vh",
+    width: "100%",
+  },
+
   container: {
-    width: "50%",
     display: "flex !important",
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
-    [`@media (max-width: 1100px)`]: {
-      width: "70%",
-    },
-    [`@media (max-width: 700px)`]: {
-      width: "90%",
-    },
   },
 
   avatar: {

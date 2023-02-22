@@ -15,7 +15,7 @@ const updatePassword = asyncHandler(async (req, res, next) => {
 
   if (!(await user.matchPassword(req.body.currentPassword))) {
     return next(
-      new ErrorResponse("Password is incorrect.", httpStatus.UNAUTHORIZED),
+      new ErrorResponse("Old password is incorrect.", httpStatus.BAD_REQUEST),
     );
   }
 
