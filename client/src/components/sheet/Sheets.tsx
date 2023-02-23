@@ -297,21 +297,51 @@ const Sheets = () => {
                             </>
                           )}
                           {sheet.permissionType === "edit" && (
-                            <Button
-                              className={classes.editButton}
-                              variant="outlined"
-                              size="small"
-                              onClick={() =>
-                                showModal({
-                                  idValue: sheet._id,
-                                  titleValue: sheet.title,
-                                  descriptionValue: sheet.description,
-                                  isUpdate: true,
-                                })
-                              }
-                            >
-                              <EditIcon sx={{ width: 20, height: 25 }} />
-                            </Button>
+                            <>
+                              <Button
+                                className={classes.editButton}
+                                variant="outlined"
+                                size="small"
+                                onClick={() =>
+                                  showModal({
+                                    idValue: sheet._id,
+                                    titleValue: sheet.title,
+                                    descriptionValue: sheet.description,
+                                    isUpdate: true,
+                                  })
+                                }
+                              >
+                                <EditIcon sx={{ width: 20, height: 25 }} />
+                              </Button>
+                              <Button
+                                className={classes.disabledButton}
+                                variant="outlined"
+                                size="small"
+                                disabled
+                              >
+                                <DeleteIcon sx={{ width: 20, height: 25 }} />
+                              </Button>
+                            </>
+                          )}
+                          {sheet.permissionType === "view" && (
+                            <>
+                              <Button
+                                className={classes.disabledButton}
+                                variant="outlined"
+                                size="small"
+                                disabled
+                              >
+                                <EditIcon sx={{ width: 20, height: 25 }} />
+                              </Button>
+                              <Button
+                                className={classes.disabledButton}
+                                variant="outlined"
+                                size="small"
+                                disabled
+                              >
+                                <DeleteIcon sx={{ width: 20, height: 25 }} />
+                              </Button>
+                            </>
                           )}
                         </Box>
                       </StyledTableCell>
