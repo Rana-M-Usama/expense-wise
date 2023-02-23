@@ -42,6 +42,11 @@ const UserSchema = new mongoose.Schema(
           "at least one capital letter and a number.",
       ],
     },
+    confirmed: {
+      type: Boolean,
+      default: false,
+    },
+    confirmEmailToken: String,
     resetPasswordToken: String,
     resetPasswordExpire: Date,
   },

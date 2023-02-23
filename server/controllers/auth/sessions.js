@@ -33,6 +33,15 @@ const login = asyncHandler(async (req, res, next) => {
     );
   }
 
+  if (!user.confirmed) {
+    return next(
+      new ErrorResponse(
+        "Please verify your account first.",
+        httpStatus.UNAUTHORIZED,
+      ),
+    );
+  }
+
   sendSessionResponse(user, httpStatus.OK, res, true);
 });
 

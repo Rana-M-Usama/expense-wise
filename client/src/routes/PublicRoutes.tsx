@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import React from "react";
 
+import ConfirmEmailPage from "pages/confirmemail/confirmemail.page";
 import LoginPage from "pages/login/login.page";
 import PageNotFound from "components/PageNotFound";
 import ResetPasswordPage from "pages/resetpassword/resetpassword.page";
@@ -15,6 +16,10 @@ const PublicRoutes = () => {
       <Route
         path="/reset-password/:resetToken"
         element={<ResetPasswordPage />}
+      />
+      <Route
+        path="/confirm-email/:confirmEmailToken"
+        element={<ConfirmEmailPage />}
       />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
