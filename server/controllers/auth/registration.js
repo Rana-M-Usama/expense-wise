@@ -2,6 +2,7 @@ import crypto from "crypto";
 import httpStatus from "http-status";
 
 import asyncHandler from "../../middlewares/async";
+import config from "../../config/config";
 import emailService from "../../utils/sendEmail";
 import ErrorResponse from "../../utils/errorResponse";
 import sendSessionResponse from "../helpers/sendSessionResponse";
@@ -33,26 +34,28 @@ const register = asyncHandler(async (req, res, next) => {
     confirmEmailToken,
   });
 
-  try {
-    const confirmEmailUrl = `${req.get("origin")}/confirm-email/${token}`;
-    const message =
-      `Welcome ${firstName} ${lastName}!. Please confirm your email by`.concat(
-        ` clicking on the given link: \n\n ${confirmEmailUrl}`,
-      );
+  if (config.env === "production") {
+    try {
+      const confirmEmailUrl = `${req.get("origin")}/confirm-email/${token}`;
+      const message =
+        `Welcome ${firstName} ${lastName}!. Please confirm your email `.concat(
+          `by clicking on the given link: \n\n ${confirmEmailUrl}`,
+        );
 
-    await emailService.sendEmail({
-      email: user.email,
-      subject: "Email Confirmation",
-      message,
-    });
-  } catch (err) {
-    await user.remove();
-    return next(
-      new ErrorResponse(
-        "Email could not be sent",
-        httpStatus.INTERNAL_SERVER_ERROR,
-      ),
-    );
+      await emailService.sendEmail({
+        email: user.email,
+        subject: "Email Confirmation",
+        message,
+      });
+    } catch (err) {
+      await user.remove();
+      return next(
+        new ErrorResponse(
+          "Email could not be sent",
+          httpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+    }
   }
 
   sendSessionResponse(user, httpStatus.OK, res, false);

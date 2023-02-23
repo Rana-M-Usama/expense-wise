@@ -2,6 +2,7 @@ import crypto from "crypto";
 import httpStatus from "http-status";
 
 import asyncHandler from "../../middlewares/async";
+import config from "../../config/config";
 import emailService from "../../utils/sendEmail";
 import ErrorResponse from "../../utils/errorResponse";
 import sendSessionResponse from "../helpers/sendSessionResponse";
@@ -48,34 +49,35 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
 
   const resetToken = user.getResetPasswordToken();
   await user.save({ validateBeforeSave: false });
+  if (config.env === "production") {
+    const resetUrl = `${req.get("origin")}/reset-password/${resetToken}`;
 
-  const resetUrl = `${req.get("origin")}/reset-password/${resetToken}`;
+    const message =
+      "You are receiving this email because you has requested the reset".concat(
+        ` of a password. Reset link: \n\n ${resetUrl}`,
+      );
 
-  const message =
-    "You are receiving this email because you has requested the reset".concat(
-      ` of a password. Reset link: \n\n ${resetUrl}`,
-    );
+    try {
+      await emailService.sendEmail({
+        email: user.email,
+        subject: "Password reset token",
+        message,
+      });
 
-  try {
-    await emailService.sendEmail({
-      email: user.email,
-      subject: "Password reset token",
-      message,
-    });
+      res.status(httpStatus.OK).json({ success: true, data: "Email sent" });
+    } catch (err) {
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
 
-    res.status(httpStatus.OK).json({ success: true, data: "Email sent" });
-  } catch (err) {
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpire = undefined;
+      await user.save({ validateBeforeSave: false });
 
-    await user.save({ validateBeforeSave: false });
-
-    return next(
-      new ErrorResponse(
-        "Email could not be sent",
-        httpStatus.INTERNAL_SERVER_ERROR,
-      ),
-    );
+      return next(
+        new ErrorResponse(
+          "Email could not be sent",
+          httpStatus.INTERNAL_SERVER_ERROR,
+        ),
+      );
+    }
   }
 });
 
