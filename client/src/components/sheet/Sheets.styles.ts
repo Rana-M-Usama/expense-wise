@@ -36,6 +36,12 @@ export default makeStyles(() => ({
       marginTop: 5,
     },
   },
+  disabledButton: {
+    marginRight: "10px !important",
+    [`@media (max-width: 666px)`]: {
+      marginTop: 5,
+    },
+  },
   list: {
     borderRadius: 10,
     backgroundColor: styles.list.backgroundColor,
