@@ -89,7 +89,7 @@ const SignupPage = () => {
         password.error
       )
     ) {
-      const response = await request("/auth/register", "POST", {
+      await request("/auth/register", "POST", {
         firstName: signupData.firstName.value,
         lastName: signupData.lastName.value,
         email: signupData.email.value,
@@ -97,7 +97,10 @@ const SignupPage = () => {
       });
 
       if (!error) {
-        Toast("success", "User registered successfully.");
+        Toast(
+          "success",
+          "You're registered! Check your email to activate your account.",
+        );
         setSignupData({
           firstName: { value: "", error: false, errorMessage: "" },
           lastName: { value: "", error: false, errorMessage: "" },

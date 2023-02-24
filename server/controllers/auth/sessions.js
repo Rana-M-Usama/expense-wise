@@ -2,6 +2,7 @@ import axios from "axios";
 import httpStatus from "http-status";
 
 import asyncHandler from "../../middlewares/async";
+import config from "../../config/config";
 import ErrorResponse from "../../utils/errorResponse";
 import sendSessionResponse from "../helpers/sendSessionResponse";
 import User from "../../models/User";
@@ -33,6 +34,7 @@ const googleLogin = asyncHandler(async (req, res, next) => {
           lastName,
           email,
           isGoogleUser: true,
+          confirmed: true,
         });
 
         sendSessionResponse(user, httpStatus.OK, res, true);
@@ -70,6 +72,15 @@ const login = asyncHandler(async (req, res, next) => {
   if (!isMatch) {
     return next(
       new ErrorResponse("Invalid credentials.", httpStatus.UNAUTHORIZED),
+    );
+  }
+
+  if (!user.confirmed && config.env === "production") {
+    return next(
+      new ErrorResponse(
+        "Please verify your account first.",
+        httpStatus.UNAUTHORIZED,
+      ),
     );
   }
 

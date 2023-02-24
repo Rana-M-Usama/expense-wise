@@ -18,7 +18,9 @@ describe("on Sign up Page", () => {
         password,
       );
 
-      cy.contains("User registered successfully.").should("be.visible");
+      cy.contains(
+        "You're registered! Check your email to activate your account.",
+      ).should("be.visible");
     });
   });
 
