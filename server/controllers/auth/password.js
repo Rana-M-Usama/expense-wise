@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import crypto from "crypto";
 import httpStatus from "http-status";
 
@@ -51,11 +52,36 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
   if (config.env === "production") {
     const resetUrl = `${req.get("origin")}/reset-password/${resetToken}`;
-
-    const message =
-      "You are receiving this email because you has requested the reset".concat(
-        ` of a password. Reset link: \n\n ${resetUrl}`,
-      );
+    const message = `
+                    <html>
+                      <head>
+                        <style>
+                          p {
+                            font-size: 16px;
+                            line-height: 1.5;
+                            margin-bottom: 16px;
+                          }
+                          
+                          a {
+                            color: #007bff;
+                            text-decoration: underline;
+                          }
+                          
+                          .signature {
+                            margin-top: 32px;
+                            font-style: italic;
+                          }
+                        </style>
+                      </head>
+                      <body>
+                        <p>Dear ${user.firstName} ${user.lastName},</p>
+                        <p>You are receiving this email because you have requested to reset your password. Please use the link below to reset your password:</p>
+                        <p><a href="${resetUrl}">${resetUrl}</a></p>
+                        <p>If you did not request this password reset, please ignore this message and contact us immediately.</p>
+                        <p class="signature">Best regards,<br>ExpenseWise</p>
+                      </body>
+                    </html>
+                  `;
 
     try {
       await emailService.sendEmail({
