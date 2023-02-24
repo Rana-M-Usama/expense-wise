@@ -55,7 +55,6 @@ const ForgetPasswordPage: FC<Props> = ({ isOpen, onClose }) => {
     setForgotPasswordData({ email });
 
     if (!email.error) {
-      onClose();
       setForgotPasswordData({
         email: { value: "", error: false, errorMessage: "" },
       });
@@ -64,12 +63,10 @@ const ForgetPasswordPage: FC<Props> = ({ isOpen, onClose }) => {
         email: email.value,
       });
 
+      onClose();
+
       if (!error) {
-        Toast(
-          "success",
-          "An email with reset password instructions has been" +
-            " successfully sent to your registered email address.",
-        );
+        Toast("success", "Reset password instructions sent to your email.");
       }
     }
   };
@@ -150,8 +147,13 @@ const ForgetPasswordPage: FC<Props> = ({ isOpen, onClose }) => {
                 {forgotPasswordData.email.errorMessage}
               </div>
             )}
-            <Button fullWidth type="submit" variant="contained">
-              {loading ? <CircularProgress /> : "Send Email"}
+            <Button
+              fullWidth
+              type="submit"
+              disabled={loading}
+              variant="contained"
+            >
+              {loading ? <CircularProgress size={25} /> : "Send Email"}
             </Button>
           </Box>
         </Container>

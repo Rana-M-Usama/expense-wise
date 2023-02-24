@@ -18,6 +18,7 @@ const ConfirmEmailPage = () => {
 
   const confirmEmail = async () => {
     await request(`/auth/confirm-email/${confirmEmailToken}`, "PUT");
+
     if (!error) {
       Toast("success", "User confirmed successfully.");
       navigate("/");

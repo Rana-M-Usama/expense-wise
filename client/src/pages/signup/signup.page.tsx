@@ -92,8 +92,7 @@ const SignupPage = () => {
       if (!error) {
         Toast(
           "success",
-          "Registration successful! We have sent you an email with " +
-            "a confirmation link. Please confirm your account to log in.",
+          "You're registered! Check your email to activate your account.",
         );
         setSignupData({
           firstName: { value: "", error: false, errorMessage: "" },

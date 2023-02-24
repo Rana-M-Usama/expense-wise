@@ -98,7 +98,7 @@ const confirmEmail = asyncHandler(async (req, res, next) => {
   if (!user) {
     return next(
       new ErrorResponse(
-        "The confirm email token is invalid. Please sign up again.",
+        "Invalid confirm email token. Please sign up again.",
         httpStatus.NOT_FOUND,
       ),
     );
