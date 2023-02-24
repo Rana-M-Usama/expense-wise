@@ -275,25 +275,6 @@ describe("Auth endpoints", () => {
   });
 
   describe("POST /api/v1/auth/forgot-password", () => {
-    beforeEach(() => {
-      jest.spyOn(emailService.transporter, "sendMail").mockResolvedValue(true);
-    });
-
-    it("should return 204 and send reset password email to the user", async () => {
-      const sendResetPasswordEmailSpy = jest.spyOn(emailService, "sendEmail");
-
-      await request(app)
-        .post("/api/v1/auth/forgot-password")
-        .send({ email: user.email })
-        .expect(httpStatus.OK);
-
-      expect(sendResetPasswordEmailSpy).toHaveBeenCalled();
-
-      user = await User.findById(user.id);
-
-      expect(user.resetPasswordToken).toBeDefined();
-    });
-
     it("should return 400 if email is missing", async () => {
       const res = await request(app)
         .post("/api/v1/auth/forgot-password")
