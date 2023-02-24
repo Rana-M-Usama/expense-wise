@@ -3,13 +3,17 @@ import {
   Button,
   Container,
   CssBaseline,
+  Divider,
   Grid,
   Link,
   TextField,
+  Typography,
 } from "@mui/material";
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useDispatch } from "react-redux";
+import { useGoogleLogin } from "@react-oauth/google";
 
 import {
   validateConfirmPassword,
@@ -21,11 +25,14 @@ import {
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
 
+import googleIcon from "assets/Google.svg";
 import logo from "assets/logo.png";
+import { setCurrentUser } from "slices/userSlice";
 import useStyles from "pages/signup/signup.styles";
 
 const SignupPage = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, request, error, clearError } = useHttp();
 
@@ -82,7 +89,7 @@ const SignupPage = () => {
         password.error
       )
     ) {
-      await request("/auth/register", "POST", {
+      const response = await request("/auth/register", "POST", {
         firstName: signupData.firstName.value,
         lastName: signupData.lastName.value,
         email: signupData.email.value,
@@ -109,6 +116,25 @@ const SignupPage = () => {
       clearError();
     }
   }, [error]);
+
+  const handleGoogleLoginSuccess = async (res: any) => {
+    const accessToken = res.access_token;
+
+    if (accessToken) {
+      const response = await request("/auth/google-register", "POST", {
+        googleAccessToken: accessToken,
+      });
+
+      if (!error) {
+        dispatch(setCurrentUser(response.data.user));
+        Toast("success", "Logged in successfully.");
+        localStorage.setItem("token", response.data.token);
+        navigate("/");
+      }
+    }
+  };
+
+  const login = useGoogleLogin({ onSuccess: handleGoogleLoginSuccess });
 
   return (
     <Container component="main" className={classes.container}>
@@ -238,13 +264,32 @@ const SignupPage = () => {
             </Grid>
           </Grid>
           <Button
+            className={classes.button}
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
-            sx={{ mt: 3, height: "50px" }}
           >
             {loading ? <CircularProgress sx={{ color: "white" }} /> : "Sign Up"}
+          </Button>
+          <Divider sx={{ mt: 1 }}>
+            <Typography>or</Typography>
+          </Divider>
+          <Button
+            className={classes.button}
+            fullWidth
+            variant="outlined"
+            onClick={() => login()}
+            startIcon={
+              <Box
+                sx={{ height: "30px" }}
+                component="img"
+                src={googleIcon}
+                alt="googeIcon"
+              />
+            }
+          >
+            Sign up with Google
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>

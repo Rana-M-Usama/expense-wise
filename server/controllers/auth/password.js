@@ -49,7 +49,7 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
   const resetToken = user.getResetPasswordToken();
   await user.save({ validateBeforeSave: false });
 
-  const resetUrl = `${req.get("origin")}/reset-password/${resetToken}`;
+  const resetUrl = `${req.get("origin")}/${req.body.url}/${resetToken}`;
 
   const message =
     "You are receiving this email because you has requested the reset".concat(
@@ -92,6 +92,10 @@ const resetPassword = asyncHandler(async (req, res, next) => {
     resetPasswordToken,
     resetPasswordExpire: { $gt: Date.now() },
   });
+
+  if (user.isGoogleUser) {
+    user.isGoogleUser = false;
+  }
 
   if (!user) {
     if (user?.resetPasswordExpire < Date.now()) {

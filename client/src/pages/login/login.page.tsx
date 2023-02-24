@@ -4,6 +4,7 @@ import {
   CircularProgress,
   Container,
   CssBaseline,
+  Divider,
   FormControl,
   Grid,
   IconButton,
@@ -12,11 +13,13 @@ import {
   Link,
   OutlinedInput,
   TextField,
+  Typography,
 } from "@mui/material";
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
+import { useGoogleLogin } from "@react-oauth/google";
 
 import { validateEmail, validateLoginPassword } from "validators/auth";
 import ForgotPasswordPage from "pages/forgotpassword/forgotpassword.page";
@@ -24,6 +27,7 @@ import { setCurrentUser } from "slices/userSlice";
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
 
+import googleIcon from "assets/Google.svg";
 import logo from "assets/logo.png";
 import useStyles from "pages/login/login.styles";
 
@@ -87,6 +91,25 @@ const LoginPage = () => {
       }
     }
   };
+
+  const handleGoogleLoginSuccess = async (tokenResponse: any) => {
+    const accessToken = tokenResponse.access_token;
+
+    if (accessToken) {
+      const response = await request("/auth/google-login", "POST", {
+        googleAccessToken: accessToken,
+      });
+
+      if (!error) {
+        dispatch(setCurrentUser(response.data.user));
+        Toast("success", "Logged in successfully.");
+        localStorage.setItem("token", response.data.token);
+        navigate("/");
+      }
+    }
+  };
+
+  const login = useGoogleLogin({ onSuccess: handleGoogleLoginSuccess });
 
   useEffect(() => {
     if (error) {
@@ -173,9 +196,28 @@ const LoginPage = () => {
             type="submit"
             variant="contained"
             disabled={loading}
-            sx={{ mt: 3, height: "50px" }}
+            className={classes.button}
           >
             {loading ? <CircularProgress /> : "Sign in"}
+          </Button>
+          <Divider sx={{ mt: 1 }}>
+            <Typography>or</Typography>
+          </Divider>
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={() => login()}
+            className={classes.button}
+            startIcon={
+              <Box
+                sx={{ height: "30px" }}
+                component="img"
+                src={googleIcon}
+                alt="googeIcon"
+              />
+            }
+          >
+            Sign in with Google
           </Button>
         </Box>
         <Grid container>

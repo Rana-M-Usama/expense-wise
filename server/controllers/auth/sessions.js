@@ -1,9 +1,49 @@
+import axios from "axios";
 import httpStatus from "http-status";
 
 import asyncHandler from "../../middlewares/async";
 import ErrorResponse from "../../utils/errorResponse";
 import sendSessionResponse from "../helpers/sendSessionResponse";
 import User from "../../models/User";
+
+// @desc      Login user with google account
+// @route     POST /api/v1/auth/google-login
+// @access    Public
+const googleLogin = asyncHandler(async (req, res, next) => {
+  const { googleAccessToken } = req.body;
+  if (!googleAccessToken) {
+    return next(new ErrorResponse("Invalid access token.", 400));
+  }
+  axios
+    .get("https://www.googleapis.com/oauth2/v3/userinfo", {
+      headers: {
+        Authorization: `Bearer ${googleAccessToken}`,
+      },
+    })
+    .then(async (response) => {
+      const firstName = response.data.given_name;
+      const lastName = response.data.family_name;
+      const { email } = response.data;
+
+      const userExist = await User.findOne({ email });
+
+      if (!userExist) {
+        const user = await User.create({
+          firstName,
+          lastName,
+          email,
+          isGoogleUser: true,
+        });
+
+        sendSessionResponse(user, httpStatus.OK, res, true);
+      }
+
+      sendSessionResponse(userExist, httpStatus.OK, res, true);
+    })
+    .catch((err) => {
+      res.status(400).json({ err });
+    });
+});
 
 // @desc      Login user
 // @route     POST /api/v1/auth/login
@@ -63,4 +103,4 @@ const getMe = asyncHandler(async (req, res) => {
   });
 });
 
-export { login, logout, getMe };
+export { login, logout, getMe, googleLogin };

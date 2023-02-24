@@ -30,6 +30,7 @@ const useFetchUser = () => {
           lastName: data.lastName,
           email: data.email,
           imageUrl: data.imageUrl,
+          isGoogleUser: data.isGoogleUser,
         };
         dispatch(setCurrentUser(currentUser));
       } catch (error: any) {
