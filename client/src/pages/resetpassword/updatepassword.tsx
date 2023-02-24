@@ -238,8 +238,9 @@ const UpdatePasswordPage = () => {
             onClick={accountHandler}
             variant="contained"
             startIcon={<GoogleIcon />}
+            disabled={loading}
           >
-            Add password
+            {loading ? <CircularProgress size={25} /> : "Add Password"}
           </Button>
         </Container>
       )}
