@@ -144,9 +144,9 @@ const UpdatePasswordPage = () => {
                 error={newPasswordData.oldPassword.error}
               />
               {newPasswordData.oldPassword.error && (
-                <div className={classes.errorMessage}>
+                <Box className={classes.errorMessage}>
                   {newPasswordData.oldPassword.errorMessage}
-                </div>
+                </Box>
               )}
               <TextField
                 color="primary"
@@ -164,9 +164,9 @@ const UpdatePasswordPage = () => {
                 error={newPasswordData.newPassword.error}
               />
               {newPasswordData.newPassword.error && (
-                <div className={classes.errorMessage}>
+                <Box className={classes.errorMessage}>
                   {newPasswordData.newPassword.errorMessage}
-                </div>
+                </Box>
               )}
               <TextField
                 color="primary"
@@ -184,9 +184,9 @@ const UpdatePasswordPage = () => {
                 error={newPasswordData.confirmPassword.error}
               />
               {newPasswordData.confirmPassword.error && (
-                <div className={classes.errorMessage}>
+                <Box className={classes.errorMessage}>
                   {newPasswordData.confirmPassword.errorMessage}
-                </div>
+                </Box>
               )}
               <Button
                 type="submit"
@@ -202,6 +202,8 @@ const UpdatePasswordPage = () => {
         </Container>
       ) : (
         <Container
+          component="main"
+          maxWidth="sm"
           sx={{
             boxShadow: 2,
             p: 5,
@@ -209,36 +211,28 @@ const UpdatePasswordPage = () => {
             justifyContent: "center",
             flexDirection: "column",
           }}
-          maxWidth="sm"
         >
-          <Typography variant="subtitle1" sx={{ mb: 2 }}>
-            <b>Email Address</b>
-          </Typography>
+          <Typography>Email Address</Typography>
           <TextField
             disabled
-            sx={{
-              backgroundColor: styles.list.backgroundColor,
-              borderRadius: 7,
-              mb: 2,
-            }}
             variant="outlined"
             inputProps={{ style: { padding: 7 } }}
             type="email"
             placeholder="Email"
             name="email"
             value={currentUser.email}
-            onChange={changeHandlerData}
+            sx={{ backgroundColor: styles.list.backgroundColor, mb: 2 }}
           />
           <Button
+            onClick={accountHandler}
+            variant="contained"
+            startIcon={<GoogleIcon />}
+            disabled={loading}
             sx={{
               maxWidth: "255px",
               display: "flex",
               justifyContent: "flex-start",
             }}
-            onClick={accountHandler}
-            variant="contained"
-            startIcon={<GoogleIcon />}
-            disabled={loading}
           >
             {loading ? <CircularProgress size={25} /> : "Add Password"}
           </Button>

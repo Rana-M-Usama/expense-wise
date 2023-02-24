@@ -14,36 +14,33 @@ import User from "../../models/User";
 // @access    Public
 const googleRegister = asyncHandler(async (req, res) => {
   const { googleAccessToken } = req.body;
-
-  axios
-    .get("https://www.googleapis.com/oauth2/v3/userinfo", {
+  const { data } = await axios.get(
+    "https://www.googleapis.com/oauth2/v3/userinfo",
+    {
       headers: {
         Authorization: `Bearer ${googleAccessToken}`,
       },
-    })
-    .then(async (response) => {
-      const firstName = response.data.given_name;
-      const lastName = response.data.family_name;
-      const { email } = response.data;
+    },
+  );
+  const { given_name: firstName, family_name: lastName, email } = data;
+  const user = await User.findOne({ email });
 
-      let user = await User.findOne({ email });
-      if (user) {
-        return sendSessionResponse(user, httpStatus.OK, res, true);
-      }
+  if (user) {
+    return res.status(httpStatus.OK).json({ user });
+  }
 
-      user = await User.create({
-        firstName,
-        lastName,
-        email,
-        isGoogleUser: true,
-        confirmed: true,
-      });
+  const newUser = await User.create({
+    firstName,
+    lastName,
+    email,
+    isGoogleUser: true,
+    confirmed: true,
+  });
 
-      sendSessionResponse(user, httpStatus.OK, res, true);
-    })
-    .catch((err) => {
-      res.status(400).json({ err });
-    });
+  return res.status(httpStatus.OK).json({
+    success: true,
+    data: newUser,
+  });
 });
 
 // @desc      Register user

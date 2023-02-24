@@ -12,39 +12,38 @@ import User from "../../models/User";
 // @access    Public
 const googleLogin = asyncHandler(async (req, res, next) => {
   const { googleAccessToken } = req.body;
+
   if (!googleAccessToken) {
     return next(new ErrorResponse("Invalid access token.", 400));
   }
-  axios
-    .get("https://www.googleapis.com/oauth2/v3/userinfo", {
+
+  const response = await axios.get(
+    "https://www.googleapis.com/oauth2/v3/userinfo",
+    {
       headers: {
         Authorization: `Bearer ${googleAccessToken}`,
       },
-    })
-    .then(async (response) => {
-      const firstName = response.data.given_name;
-      const lastName = response.data.family_name;
-      const { email } = response.data;
+    },
+  );
+  const { given_name: firstName, family_name: lastName, email } = response.data;
+  let userExist = await User.findOne({ email });
 
-      const userExist = await User.findOne({ email });
-
-      if (!userExist) {
-        const user = await User.create({
-          firstName,
-          lastName,
-          email,
-          isGoogleUser: true,
-          confirmed: true,
-        });
-
-        sendSessionResponse(user, httpStatus.OK, res, true);
-      }
-
-      sendSessionResponse(userExist, httpStatus.OK, res, true);
-    })
-    .catch((err) => {
-      res.status(400).json({ err });
+  if (!userExist) {
+    userExist = await User.create({
+      firstName,
+      lastName,
+      email,
+      isGoogleUser: true,
+      confirmed: true,
     });
+  }
+
+  if (userExist && !userExist.confirmed) {
+    userExist.confirmed = true;
+    await userExist.save();
+  }
+
+  sendSessionResponse(userExist, httpStatus.OK, res, true);
 });
 
 // @desc      Login user
