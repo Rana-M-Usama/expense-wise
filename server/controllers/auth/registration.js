@@ -37,10 +37,44 @@ const register = asyncHandler(async (req, res, next) => {
   if (config.env === "production") {
     try {
       const confirmEmailUrl = `${req.get("origin")}/confirm-email/${token}`;
-      const message =
-        `Welcome ${firstName} ${lastName}!. Please confirm your email `.concat(
-          `by clicking on the given link: \n\n ${confirmEmailUrl}`,
-        );
+      const message = `
+                      <html>
+                        <head>
+                          <style>
+                            p {
+                              font-size: 16px;
+                              line-height: 1.5;
+                              margin-bottom: 16px;
+                            }
+                            
+                            a {
+                              color: #007bff;
+                              text-decoration: underline;
+                            }
+                            
+                            .signature {
+                              margin-top: 32px;
+                              font-style: italic;
+                            }
+                          </style>
+                        </head>
+                        <body>
+                          <p>Dear ${firstName} ${lastName},</p>
+                          <p>
+                            Thank you for creating an account with ExpenseWise. 
+                            To activate your account, 
+                            please click on the following link:
+                          </p>
+                          <p>
+                            <a href="${confirmEmailUrl}">${confirmEmailUrl}</a>
+                          </p>
+                          <p>If you did not create an account with ExpenseWise,
+                           please ignore this email.
+                           </p>
+                          <p class="signature">Best regards,<br>ExpenseWise</p>
+                        </body>
+                      </html>
+                    `;
 
       await emailService.sendEmail({
         email: user.email,

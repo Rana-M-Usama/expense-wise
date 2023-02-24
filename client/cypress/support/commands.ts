@@ -8,8 +8,8 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-import { faker } from "@faker-js/faker";
 import axios from "axios";
+import { faker } from "@faker-js/faker";
 
 Cypress.Commands.add("clearDB", async () => {
   const url = Cypress.env("serverUrl") + Cypress.env("clearTestDbEndpoint");
