@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import crypto from "crypto";
 import httpStatus from "http-status";
 
@@ -61,9 +60,17 @@ const register = asyncHandler(async (req, res, next) => {
                         </head>
                         <body>
                           <p>Dear ${firstName} ${lastName},</p>
-                          <p>Thank you for creating an account with ExpenseWise. To activate your account, please click on the following link or copy and paste it into your browser:</p>
-                          <p><a href="${confirmEmailUrl}">${confirmEmailUrl}</a></p>
-                          <p>If you did not create an account with ExpenseWise, please ignore this email.</p>
+                          <p>
+                            Thank you for creating an account with ExpenseWise. 
+                            To activate your account, 
+                            please click on the following link:
+                          </p>
+                          <p>
+                            <a href="${confirmEmailUrl}">${confirmEmailUrl}</a>
+                          </p>
+                          <p>If you did not create an account with ExpenseWise,
+                           please ignore this email.
+                           </p>
                           <p class="signature">Best regards,<br>ExpenseWise</p>
                         </body>
                       </html>

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import crypto from "crypto";
 import httpStatus from "http-status";
 
@@ -75,9 +74,18 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
                       </head>
                       <body>
                         <p>Dear ${user.firstName} ${user.lastName},</p>
-                        <p>You are receiving this email because you have requested to reset your password. Please use the link below to reset your password:</p>
-                        <p><a href="${resetUrl}">${resetUrl}</a></p>
-                        <p>If you did not request this password reset, please ignore this message and contact us immediately.</p>
+                        <p>
+                          You are receiving this email because you have 
+                          requested to reset your password. 
+                          Please use the link below to reset your password:
+                        </p>
+                        <p>
+                          <a href="${resetUrl}">${resetUrl}</a>
+                        </p>
+                        <p>
+                          If you did not request this password reset, 
+                          please ignore this message and contact us immediately.
+                        </p>
                         <p class="signature">Best regards,<br>ExpenseWise</p>
                       </body>
                     </html>
