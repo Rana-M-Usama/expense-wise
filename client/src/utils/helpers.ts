@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { setCurrentUser, setCurrentUserEmpty } from "slices/userSlice";
+import AxiosInstance from "./axios";
 import type { RootState } from "app/store";
 import Toast from "components/tostify/Toast";
 import useHttp from "./useHttp";
@@ -52,4 +53,15 @@ const titleize = (str: string) => {
     .join(" ");
 };
 
-export { useFetchUser, titleize };
+const pingServer = async () => {
+  try {
+    await AxiosInstance.get("/ping");
+    return null; // no error occurred
+  } catch (error: any) {
+    if (error.message.includes("Network Error")) {
+      return "The server is not available at the moment.";
+    }
+  }
+};
+
+export { useFetchUser, titleize, pingServer };

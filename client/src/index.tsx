@@ -18,13 +18,13 @@ const google_id: string = process.env.REACT_APP_GOOGLE_CLIENT_ID!;
 
 root.render(
   <GoogleOAuthProvider clientId={google_id}>
-    <React.StrictMode>
-      <Provider store={store}>
-        <Router>
-          <App />
-        </Router>
-      </Provider>
-    </React.StrictMode>
+    {/* <React.StrictMode> */}
+    <Provider store={store}>
+      <Router>
+        <App />
+      </Router>
+    </Provider>
+    {/* </React.StrictMode> */}
   </GoogleOAuthProvider>,
 );
 

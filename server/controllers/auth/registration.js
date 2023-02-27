@@ -26,7 +26,7 @@ const googleRegister = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user) {
-    return res.status(httpStatus.OK).json({ user });
+    sendSessionResponse(user, httpStatus.OK, res, true);
   }
 
   const newUser = await User.create({
@@ -37,10 +37,7 @@ const googleRegister = asyncHandler(async (req, res) => {
     confirmed: true,
   });
 
-  return res.status(httpStatus.OK).json({
-    success: true,
-    data: newUser,
-  });
+  sendSessionResponse(newUser, httpStatus.OK, res, true);
 });
 
 // @desc      Register user

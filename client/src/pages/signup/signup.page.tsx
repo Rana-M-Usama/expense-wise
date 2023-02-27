@@ -292,7 +292,7 @@ const SignupPage = () => {
               />
             }
           >
-            Sign up with Google
+            Sign in with Google
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
