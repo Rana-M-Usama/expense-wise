@@ -130,20 +130,25 @@ const resetPassword = asyncHandler(async (req, res, next) => {
   });
 
   if (!user) {
-    if (user?.resetPasswordExpire < Date.now()) {
-      return next(
-        new ErrorResponse(
-          "Expired password reset token, please generate a new one.",
-          httpStatus.NOT_FOUND,
-        ),
-      );
-    }
     return next(
       new ErrorResponse(
         "Invalid password reset token, please generate a new one.",
         httpStatus.NOT_FOUND,
       ),
     );
+  }
+
+  if (user.resetPasswordExpire < Date.now()) {
+    return next(
+      new ErrorResponse(
+        "Expired password reset token, please generate a new one.",
+        httpStatus.NOT_FOUND,
+      ),
+    );
+  }
+
+  if (user.isGoogleUser) {
+    user.isGoogleUser = false;
   }
 
   user.password = req.body.password;
