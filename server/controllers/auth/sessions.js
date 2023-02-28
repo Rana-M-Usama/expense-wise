@@ -1,9 +1,9 @@
-import axios from "axios";
 import httpStatus from "http-status";
 
 import asyncHandler from "../../middlewares/async";
 import config from "../../config/config";
 import ErrorResponse from "../../utils/errorResponse";
+import { getGoogleUserData } from "../../utils/helpers";
 import sendSessionResponse from "../helpers/sendSessionResponse";
 import User from "../../models/User";
 
@@ -17,15 +17,11 @@ const googleLogin = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("Invalid access token.", 400));
   }
 
-  const response = await axios.get(
-    "https://www.googleapis.com/oauth2/v3/userinfo",
-    {
-      headers: {
-        Authorization: `Bearer ${googleAccessToken}`,
-      },
-    },
-  );
-  const { given_name: firstName, family_name: lastName, email } = response.data;
+  const {
+    given_name: firstName,
+    family_name: lastName,
+    email,
+  } = await getGoogleUserData(googleAccessToken);
   let userExist = await User.findOne({ email });
 
   if (!userExist) {

@@ -1,4 +1,3 @@
-import axios from "axios";
 import crypto from "crypto";
 import httpStatus from "http-status";
 
@@ -6,23 +5,25 @@ import asyncHandler from "../../middlewares/async";
 import config from "../../config/config";
 import emailService from "../../utils/sendEmail";
 import ErrorResponse from "../../utils/errorResponse";
+import { getGoogleUserData } from "../../utils/helpers";
 import sendSessionResponse from "../helpers/sendSessionResponse";
 import User from "../../models/User";
 
 // @desc      Register user with google account
 // @route     POST /api/v1/auth/google-register
 // @access    Public
-const googleRegister = asyncHandler(async (req, res) => {
+const googleRegister = asyncHandler(async (req, res, next) => {
   const { googleAccessToken } = req.body;
-  const { data } = await axios.get(
-    "https://www.googleapis.com/oauth2/v3/userinfo",
-    {
-      headers: {
-        Authorization: `Bearer ${googleAccessToken}`,
-      },
-    },
-  );
-  const { given_name: firstName, family_name: lastName, email } = data;
+
+  if (!googleAccessToken) {
+    return next(new ErrorResponse("Invalid access token.", 400));
+  }
+
+  const {
+    given_name: firstName,
+    family_name: lastName,
+    email,
+  } = await getGoogleUserData(googleAccessToken);
   const user = await User.findOne({ email });
 
   if (user) {
