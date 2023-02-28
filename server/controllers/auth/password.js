@@ -129,10 +129,6 @@ const resetPassword = asyncHandler(async (req, res, next) => {
     resetPasswordExpire: { $gt: Date.now() },
   });
 
-  if (user.isGoogleUser) {
-    user.isGoogleUser = false;
-  }
-
   if (!user) {
     return next(
       new ErrorResponse(
