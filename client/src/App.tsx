@@ -2,7 +2,7 @@ import { CircularProgress, ThemeProvider } from "@mui/material";
 import React, { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 
-import { pingServer, useFetchUser } from "utils/helpers";
+import { useFetchUser, useServer } from "utils/helpers";
 import Navbar from "components/common/layouts/navbar/Navbar";
 import PrivateRoutes from "routes/PrivateRoutes";
 import PublicRoutes from "routes/PublicRoutes";
@@ -13,16 +13,13 @@ import { theme } from "theme";
 
 const App = () => {
   const [loading, isLogin, fetchUserData] = useFetchUser();
+  const { error } = useServer();
 
   useEffect(() => {
-    const serverAvailability = async () => {
-      const error = await pingServer();
-      if (error) {
-        Toast("danger", error);
-      }
-    };
-    serverAvailability();
-  }, []);
+    if (error) {
+      Toast("danger", "Server is not responding at the moment");
+    }
+  }, [error]);
 
   useEffect(() => {
     if (typeof fetchUserData === "function") {

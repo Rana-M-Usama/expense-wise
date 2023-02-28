@@ -36,6 +36,11 @@ const useHttp = () => {
         setLoading(false);
         return response.data;
       } catch (error: any) {
+        if (error.message === "Network Error") {
+          setLoading(false);
+          setError("Server is not responding at the moment");
+          throw error;
+        }
         if (error.response.status === 401) {
           dispatch(setCurrentUserEmpty());
           navigate("/");
