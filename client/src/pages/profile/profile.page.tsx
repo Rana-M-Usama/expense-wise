@@ -188,7 +188,6 @@ const ProfilePage = () => {
                   placeholder="Email"
                   name="email"
                   value={profileData.email}
-                  onChange={changeHandlerData}
                 />
               </Box>
             </Grid>

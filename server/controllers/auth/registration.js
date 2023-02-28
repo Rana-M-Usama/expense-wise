@@ -5,19 +5,52 @@ import asyncHandler from "../../middlewares/async";
 import config from "../../config/config";
 import emailService from "../../utils/sendEmail";
 import ErrorResponse from "../../utils/errorResponse";
+import { getGoogleUserData } from "../../utils/helpers";
 import sendSessionResponse from "../helpers/sendSessionResponse";
 import User from "../../models/User";
+
+// @desc      Register user with google account
+// @route     POST /api/v1/auth/google-register
+// @access    Public
+const googleRegister = asyncHandler(async (req, res, next) => {
+  const { googleAccessToken } = req.body;
+
+  if (!googleAccessToken) {
+    return next(new ErrorResponse("Invalid access token.", 400));
+  }
+
+  const {
+    given_name: firstName,
+    family_name: lastName,
+    email,
+  } = await getGoogleUserData(googleAccessToken);
+  const user = await User.findOne({ email });
+
+  if (user) {
+    sendSessionResponse(user, httpStatus.OK, res, true);
+  }
+
+  const newUser = await User.create({
+    firstName,
+    lastName,
+    email,
+    isGoogleUser: true,
+    confirmed: true,
+  });
+
+  sendSessionResponse(newUser, httpStatus.OK, res, true);
+});
 
 // @desc      Register user
 // @route     POST /api/v1/auth/register
 // @access    Public
 const register = asyncHandler(async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
-
   if (email && (await User.findOne({ email }))) {
-    return res
-      .status(httpStatus.CONFLICT)
-      .json({ success: false, errors: ["Email already in use."] });
+    return res.status(httpStatus.CONFLICT).json({
+      success: false,
+      errors: ["An account with that email address already exists"],
+    });
   }
 
   const token = crypto.randomBytes(20).toString("hex");
@@ -145,4 +178,4 @@ const confirmEmail = asyncHandler(async (req, res, next) => {
   sendSessionResponse(user, httpStatus.OK, res, false);
 });
 
-export { confirmEmail, register, updateDetails };
+export { confirmEmail, googleRegister, register, updateDetails };

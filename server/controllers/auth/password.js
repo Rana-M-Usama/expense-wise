@@ -50,7 +50,7 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
   const resetToken = user.getResetPasswordToken();
   await user.save({ validateBeforeSave: false });
   if (config.env === "production") {
-    const resetUrl = `${req.get("origin")}/reset-password/${resetToken}`;
+    const resetUrl = `${req.get("origin")}/${req.body.url}/${resetToken}`;
     const message = `
                     <html>
                       <head>
@@ -128,6 +128,10 @@ const resetPassword = asyncHandler(async (req, res, next) => {
     resetPasswordToken,
     resetPasswordExpire: { $gt: Date.now() },
   });
+
+  if (user.isGoogleUser) {
+    user.isGoogleUser = false;
+  }
 
   if (!user) {
     if (user?.resetPasswordExpire < Date.now()) {

@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import Expense from "../models/Expense";
 
 const calculateAmount = (data, status, amountType) =>
@@ -23,4 +25,16 @@ const isMongoId = (id) => {
   return checkForHexRegExp.test(id);
 };
 
-export { isMongoId, getAmountStats };
+const getGoogleUserData = async (googleAccessToken) => {
+  const response = await axios.get(
+    "https://www.googleapis.com/oauth2/v3/userinfo",
+    {
+      headers: {
+        Authorization: `Bearer ${googleAccessToken}`,
+      },
+    },
+  );
+  return response.data;
+};
+
+export { isMongoId, getAmountStats, getGoogleUserData };

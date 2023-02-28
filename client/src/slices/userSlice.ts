@@ -7,6 +7,7 @@ type currentUser = {
   lastName: string;
   email: string;
   imageUrl: string;
+  isGoogleUser: boolean;
 };
 
 type UserState = {
@@ -20,6 +21,7 @@ const initialState: UserState = {
     lastName: "",
     email: "",
     imageUrl: "",
+    isGoogleUser: false,
   },
 };
 

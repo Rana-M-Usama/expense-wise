@@ -61,6 +61,7 @@ const ForgetPasswordPage: FC<Props> = ({ isOpen, onClose }) => {
 
       await request("/auth/forgot-password", "POST", {
         email: email.value,
+        url: "forget-password",
       });
 
       onClose();

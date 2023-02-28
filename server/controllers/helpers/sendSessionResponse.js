@@ -6,6 +6,7 @@ const sendSessionResponse = (user, statusCode, res, isToken) => {
     lastName: user.lastName,
     email: user.email,
     imageUrl: user.imageUrl,
+    isGoogleUser: user.isGoogleUser,
   };
 
   const options = {

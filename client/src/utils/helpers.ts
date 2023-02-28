@@ -30,6 +30,7 @@ const useFetchUser = () => {
           lastName: data.lastName,
           email: data.email,
           imageUrl: data.imageUrl,
+          isGoogleUser: data.isGoogleUser,
         };
         dispatch(setCurrentUser(currentUser));
       } catch (error: any) {
@@ -51,4 +52,26 @@ const titleize = (str: string) => {
     .join(" ");
 };
 
-export { useFetchUser, titleize };
+const useServer = () => {
+  const { request } = useHttp();
+  const [error, setError] = useState("");
+
+  const pingServer = async () => {
+    await request("/ping");
+  };
+
+  useEffect(() => {
+    const serverAvailability = async () => {
+      try {
+        await pingServer();
+      } catch (error: any) {
+        setError(error.message);
+      }
+    };
+    serverAvailability();
+  }, []);
+
+  return { error };
+};
+
+export { useFetchUser, titleize, useServer };

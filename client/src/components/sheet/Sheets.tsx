@@ -30,6 +30,7 @@ import {
   setSheets,
 } from "slices/sheetSlice";
 import {
+  StyledLinkTableRow,
   StyledTableCell,
   StyledTableRow,
 } from "components/sheet/ExpenseSheet.styles";
@@ -232,7 +233,10 @@ const Sheets = () => {
                   </StyledTableRow>
                 ) : sheets.length > 0 ? (
                   paginatedSheets.currentData().map((sheet: any) => (
-                    <StyledTableRow key={sheet._id}>
+                    <StyledLinkTableRow
+                      to={`/sheets/${sheet._id}/expenses`}
+                      key={sheet._id}
+                    >
                       <StyledTableCell
                         sx={{
                           maxWidth: "150px",
@@ -271,19 +275,21 @@ const Sheets = () => {
                                 className={classes.editButton}
                                 variant="outlined"
                                 size="small"
-                                onClick={() =>
+                                onClick={e => {
+                                  e.preventDefault();
                                   showModal({
                                     idValue: sheet._id,
                                     titleValue: sheet.title,
                                     descriptionValue: sheet.description,
                                     isUpdate: true,
-                                  })
-                                }
+                                  });
+                                }}
                               >
                                 <EditIcon sx={{ width: 20, height: 25 }} />
                               </Button>
                               <Button
-                                onClick={() => {
+                                onClick={e => {
+                                  e.preventDefault();
                                   showConfirmationModal({
                                     sheetId: sheet._id,
                                   });
@@ -345,7 +351,7 @@ const Sheets = () => {
                           )}
                         </Box>
                       </StyledTableCell>
-                    </StyledTableRow>
+                    </StyledLinkTableRow>
                   ))
                 ) : (
                   <StyledTableRow className={classes.list}>

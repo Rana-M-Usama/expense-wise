@@ -1,4 +1,5 @@
 import { Paper, TableCell, tableCellClasses, TableRow } from "@mui/material";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { styled } from "@mui/material/styles";
 
@@ -21,7 +22,29 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:last-child td, &:last-child th": {
     border: 0,
   },
+  "&:hover": {
+    cursor: "pointer",
+    textDecoration: "none",
+  },
 }));
+
+const StyledLinkTableRow = styled(Link)`
+  display: table-row;
+  text-decoration: none;
+
+  &:nth-of-type(odd) {
+    background-color: ${({ theme }) => theme.palette.action.hover};
+  }
+
+  &:last-child td,
+  &:last-child th {
+    border: 0;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
 
 const AmountBox = styled(Paper)(({ theme }) => ({
   backgroundColor: styles.amountBox.backgroundColor,
@@ -53,4 +76,10 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export { useStyles, StyledTableCell, StyledTableRow, AmountBox };
+export {
+  useStyles,
+  StyledTableCell,
+  StyledTableRow,
+  StyledLinkTableRow,
+  AmountBox,
+};

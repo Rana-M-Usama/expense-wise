@@ -3,8 +3,44 @@ import httpStatus from "http-status";
 import asyncHandler from "../../middlewares/async";
 import config from "../../config/config";
 import ErrorResponse from "../../utils/errorResponse";
+import { getGoogleUserData } from "../../utils/helpers";
 import sendSessionResponse from "../helpers/sendSessionResponse";
 import User from "../../models/User";
+
+// @desc      Login user with google account
+// @route     POST /api/v1/auth/google-login
+// @access    Public
+const googleLogin = asyncHandler(async (req, res, next) => {
+  const { googleAccessToken } = req.body;
+
+  if (!googleAccessToken) {
+    return next(new ErrorResponse("Invalid access token.", 400));
+  }
+
+  const {
+    given_name: firstName,
+    family_name: lastName,
+    email,
+  } = await getGoogleUserData(googleAccessToken);
+  let userExist = await User.findOne({ email });
+
+  if (!userExist) {
+    userExist = await User.create({
+      firstName,
+      lastName,
+      email,
+      isGoogleUser: true,
+      confirmed: true,
+    });
+  }
+
+  if (userExist && !userExist.confirmed) {
+    userExist.confirmed = true;
+    await userExist.save();
+  }
+
+  sendSessionResponse(userExist, httpStatus.OK, res, true);
+});
 
 // @desc      Login user
 // @route     POST /api/v1/auth/login
@@ -73,4 +109,4 @@ const getMe = asyncHandler(async (req, res) => {
   });
 });
 
-export { login, logout, getMe };
+export { login, logout, getMe, googleLogin };

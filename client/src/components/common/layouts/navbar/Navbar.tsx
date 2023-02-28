@@ -12,6 +12,7 @@ import React, { MouseEvent, useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import DrawerMenu from "components/common/layouts/drawer/DrawerMenu";
+import { googleLogout } from "@react-oauth/google";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { Stack } from "@mui/system";
 
@@ -46,6 +47,7 @@ const Navbar = () => {
   const logout = async (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
     await request("/auth/logout", "GET");
+    googleLogout();
 
     if (!error) {
       dispatch(setCurrentUserEmpty());

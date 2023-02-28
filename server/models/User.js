@@ -32,16 +32,31 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "avatar.png",
     },
+    isGoogleUser: {
+      type: Boolean,
+      default: false,
+    },
     password: {
       type: String,
-      required: [true, "Password is required."],
       select: false,
+      required: [
+        function () {
+          return !this.isGoogleUser;
+        },
+        "Password is required.",
+      ],
+      default() {
+        if (this.isGoogleUser) {
+          return "";
+        }
+      },
       match: [
         /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z\d@$!%*#?&-]{6,}$/,
         "Please provide a valid password, minimum six characters, " +
           "at least one capital letter and a number.",
       ],
     },
+
     confirmed: {
       type: Boolean,
       default: false,

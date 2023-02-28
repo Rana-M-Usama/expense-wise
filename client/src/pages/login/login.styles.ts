@@ -22,6 +22,11 @@ export default makeStyles(() => ({
     height: "70px !important",
   },
 
+  button: {
+    marginTop: "10px !important",
+    height: "50px",
+  },
+
   icon: {
     width: "50% !important",
     height: "50% !important",
