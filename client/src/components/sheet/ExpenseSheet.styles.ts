@@ -49,7 +49,7 @@ const StyledLinkTableRow = styled(Link)`
 const AmountBox = styled(Paper)(({ theme }) => ({
   backgroundColor: styles.amountBox.backgroundColor,
   ...theme.typography.body2,
-  padding: theme.spacing(2),
+  padding: theme.spacing(1),
   textAlign: "center",
   color: "white",
 }));

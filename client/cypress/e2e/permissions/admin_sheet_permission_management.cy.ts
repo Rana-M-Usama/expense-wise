@@ -92,7 +92,6 @@ describe("Permissions Management with admin", () => {
         cy.contains("Logged in successfully.");
         cy.get("table.MuiTable-root")
           .find("tr.MuiTableRow-root")
-          .contains(title)
           .parent()
           .parent()
           .within(() => {

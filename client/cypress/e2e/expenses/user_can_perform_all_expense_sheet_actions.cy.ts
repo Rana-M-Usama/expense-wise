@@ -42,6 +42,8 @@ describe("Expense Page", () => {
         cy.contains("Remaining: 0").should("be.visible");
         cy.contains("Spent: 0").should("be.visible");
         cy.contains("Total: 0").should("be.visible");
+        cy.contains("Debt: 0").should("be.visible");
+        cy.contains("Current: 0").should("be.visible");
 
         // Check expenses count
         cy.get("table.MuiTable-root")
@@ -63,8 +65,9 @@ describe("Expense Page", () => {
         cy.get("table.MuiTable-root")
           .find("tr.MuiTableRow-root")
           .should("have.length", 2);
-        cy.contains(`Total: ${amount}`).should("be.visible");
+        cy.contains(`Current: ${amount}`).should("be.visible");
         cy.contains(`Recieved: ${amount}`).should("be.visible");
+        cy.contains(`Total: ${amount}`).should("be.visible");
 
         //edit first expense
         cy.editExpense(
@@ -93,6 +96,7 @@ describe("Expense Page", () => {
           .contains("10")
           .should("be.visible");
         cy.contains("Total: 10").should("be.visible");
+        cy.contains("Current: 10").should("be.visible");
         cy.contains("Remaining: 10").should("be.visible");
 
         //delete first expense
@@ -109,6 +113,7 @@ describe("Expense Page", () => {
         cy.createExpenseList(4, "120", "unpaid", "incoming");
         cy.createExpenseList(4, "150", "paid", "incoming");
         cy.createExpenseList(4, "110", "paid", "outgoing");
+        cy.createExpenseList(4, "10", "unpaid", "outgoing");
 
         // Assert that 11 expenses are displayed on the first page
         cy.get("table.MuiTable-root")
@@ -117,7 +122,9 @@ describe("Expense Page", () => {
         cy.contains("Recieved: 600").should("be.visible");
         cy.contains("Remaining: 480").should("be.visible");
         cy.contains("Spent: 440").should("be.visible");
-        cy.contains("Total: 1080").should("be.visible");
+        cy.contains("Debt: 40").should("be.visible");
+        cy.contains("Current: 1080").should("be.visible");
+        cy.contains("Total: 1120").should("be.visible");
 
         // Navigate to the second page
         cy.get('[data-testid="NavigateNextIcon"]').click();
@@ -127,7 +134,9 @@ describe("Expense Page", () => {
         cy.contains("Recieved: 600").should("be.visible");
         cy.contains("Remaining: 480").should("be.visible");
         cy.contains("Spent: 440").should("be.visible");
-        cy.contains("Total: 1080").should("be.visible");
+        cy.contains("Debt: 40").should("be.visible");
+        cy.contains("Current: 1080").should("be.visible");
+        cy.contains("Total: 1120").should("be.visible");
 
         // Navigate to the first page
         cy.get('[data-testid="NavigateBeforeIcon"]').click();

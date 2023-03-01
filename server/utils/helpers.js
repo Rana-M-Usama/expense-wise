@@ -12,11 +12,16 @@ const getAmountStats = async (sheetId) => {
   const receivedAmount = calculateAmount(expenses, "paid", "incoming");
   const pendingAmount = calculateAmount(expenses, "unpaid", "incoming");
   const spentAmount = calculateAmount(expenses, "paid", "outgoing");
+  const debtAmount = calculateAmount(expenses, "unpaid", "outgoing");
+  const currentAmount = receivedAmount + pendingAmount;
+
   return {
     receivedAmount,
     pendingAmount,
     spentAmount,
-    totalAmount: receivedAmount + pendingAmount,
+    debtAmount,
+    currentAmount,
+    totalAmount: currentAmount + spentAmount,
   };
 };
 

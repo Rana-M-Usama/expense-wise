@@ -23,6 +23,12 @@ export default makeStyles(() => ({
       marginTop: 5,
     },
   },
+  addSheet: {
+    "&:hover": {
+      color: "white",
+      background: `${styles.theme.primaryColor} !important`,
+    },
+  },
   deleteButton: {
     marginRight: "10px !important",
     color: `${styles.deleteButton.color} !important`,

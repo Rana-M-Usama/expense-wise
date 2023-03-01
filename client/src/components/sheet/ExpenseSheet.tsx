@@ -101,6 +101,8 @@ const ExpenseSheet = () => {
     pendingAmount: null,
     receivedAmount: null,
     spentAmount: null,
+    currentAmount: null,
+    debtAmount: null,
     totalAmount: null,
   });
   let [page, setPage] = useState(1);
@@ -453,7 +455,7 @@ const ExpenseSheet = () => {
               )}
             </Box>
           </Box>
-          <Grid container spacing={2} sx={{ mt: 3, mb: 2 }}>
+          <Grid container spacing={2} sx={{ mt: 2, mb: 2 }}>
             <Grid item xs={12} sm={6} md={3}>
               <AmountBox>Recieved: {sheetBalance.receivedAmount}</AmountBox>
             </Grid>
@@ -461,10 +463,18 @@ const ExpenseSheet = () => {
               <AmountBox>Remaining: {sheetBalance.pendingAmount}</AmountBox>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <AmountBox>Total: {sheetBalance.totalAmount}</AmountBox>
+              <AmountBox>Spent: {sheetBalance.spentAmount}</AmountBox>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <AmountBox>Spent: {sheetBalance.spentAmount}</AmountBox>
+              <AmountBox>Debt: {sheetBalance.debtAmount}</AmountBox>
+            </Grid>
+          </Grid>
+          <Grid container spacing={2} sx={{ mb: 3 }}>
+            <Grid item xs={12} sm={6} md={6}>
+              <AmountBox>Current: {sheetBalance.currentAmount}</AmountBox>
+            </Grid>
+            <Grid item xs={12} sm={6} md={6}>
+              <AmountBox>Total: {sheetBalance.totalAmount}</AmountBox>
             </Grid>
           </Grid>
         </Container>
