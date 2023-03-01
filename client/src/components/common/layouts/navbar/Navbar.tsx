@@ -107,6 +107,7 @@ const Navbar = () => {
             >
               <Avatar
                 alt="Remy Sharp"
+                src={currentUser.imageUrl}
                 sx={{
                   fontSize: 35,
                   cursor: "pointer",

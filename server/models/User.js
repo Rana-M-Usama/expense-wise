@@ -30,7 +30,7 @@ const UserSchema = new mongoose.Schema(
     },
     imageUrl: {
       type: String,
-      default: "avatar.png",
+      default: "",
     },
     isGoogleUser: {
       type: Boolean,

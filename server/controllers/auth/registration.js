@@ -10,6 +10,7 @@ import { getGoogleUserData } from "../../utils/helpers";
 import sendSessionResponse from "../helpers/sendSessionResponse";
 import upload from "../helpers/uploader";
 import User from "../../models/User";
+import { v4 } from "uuid";
 
 // @desc      Register user with google account
 // @route     POST /api/v1/auth/google-register
@@ -136,10 +137,13 @@ const register = asyncHandler(async (req, res, next) => {
 const updateDetails = asyncHandler(async (req, res) => {
   const { firstName, lastName } = req.body;
   let imageUrl;
+  const record = await User.findById(req.user.id);
+  const name = record.imageUrl.split("/").pop();
 
   if (req.files[0]) {
     const data = fs.readFileSync(req.files[0].path);
-    imageUrl = await upload(process.env.BUCKET_NAME, "test.png", data).Location;
+    const resonse = await upload(process.env.BUCKET_NAME, name || v4(), data);
+    imageUrl = resonse.Location;
   }
 
   const user = await User.findByIdAndUpdate(
