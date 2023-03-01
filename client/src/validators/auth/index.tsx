@@ -89,6 +89,29 @@ const validateLastName = (lastName: string) => {
   }
 };
 
+const validateImageFile = (file: File | undefined) => {
+  if (
+    file &&
+    !(
+      file.type === "image/png" ||
+      file.type === "image/jpeg" ||
+      file.type === "image/jpg"
+    )
+  ) {
+    return {
+      error: true,
+      errorMessage: "Image formate should be png/jpeg/jpg.",
+    };
+  } else if (file && file?.size / 1048576 > 1) {
+    return {
+      error: true,
+      errorMessage: "Image size should be less than 1 MB.",
+    };
+  } else {
+    return { error: false, errorMessage: "" };
+  }
+};
+
 export {
   validateEmail,
   validatePassword,
@@ -96,4 +119,5 @@ export {
   validateFirstName,
   validateLastName,
   validateConfirmPassword,
+  validateImageFile,
 };

@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import fs from "fs";
 import httpStatus from "http-status";
 
 import asyncHandler from "../../middlewares/async";
@@ -7,6 +8,7 @@ import emailService from "../../utils/sendEmail";
 import ErrorResponse from "../../utils/errorResponse";
 import { getGoogleUserData } from "../../utils/helpers";
 import sendSessionResponse from "../helpers/sendSessionResponse";
+import upload from "../helpers/uploader";
 import User from "../../models/User";
 
 // @desc      Register user with google account
@@ -132,7 +134,13 @@ const register = asyncHandler(async (req, res, next) => {
 // @route     PUT /api/v1/auth/me
 // @access    Private
 const updateDetails = asyncHandler(async (req, res) => {
-  const { firstName, lastName, imageUrl } = req.body;
+  const { firstName, lastName } = req.body;
+  let imageUrl;
+
+  if (req.files[0]) {
+    const data = fs.readFileSync(req.files[0].path);
+    imageUrl = await upload(process.env.BUCKET_NAME, "test.png", data).Location;
+  }
 
   const user = await User.findByIdAndUpdate(
     req.user.id,

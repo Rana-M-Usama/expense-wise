@@ -14,21 +14,27 @@ const useHttp = () => {
   const [error, setError] = useState<string | null>(null);
 
   const request = useCallback(
-    async (url: string, method = "GET", body: any = null) => {
+    async (
+      url: string,
+      method = "GET",
+      body: any = null,
+      contentType = "application/json",
+    ) => {
       setLoading(true);
       try {
         const requestConfig: AxiosRequestConfig = {
           url: baseURL + url,
           method,
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": contentType,
             Accept: "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           } as unknown as AxiosRequestHeaders,
         };
 
         if (body) {
-          requestConfig.data = JSON.stringify(body);
+          requestConfig.data =
+            contentType === "application/json" ? JSON.stringify(body) : body;
         }
 
         const response = await axios(requestConfig);
