@@ -7,10 +7,18 @@ import {
   Container,
   Grid,
   IconButton,
+  Menu,
+  MenuItem,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+  useEffect,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Stack } from "@mui/system";
 
@@ -33,6 +41,7 @@ const ProfilePage = () => {
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const [inputImageFile, setInputImageFile] = useState<File>();
   const { loading, request, error, clearError } = useHttp();
+  const [menuOpen, setMenuOpen] = useState<null | HTMLElement>(null);
 
   const [profileData, setProfileData] = useState({
     firstName: { value: currentUser.firstName, error: false, errorMessage: "" },
@@ -41,18 +50,13 @@ const ProfilePage = () => {
     imageUrl: { value: currentUser.imageUrl, error: false, errorMessage: "" },
   });
 
-  useEffect(() => {
-    setProfileData({
-      firstName: {
-        value: currentUser.firstName,
-        error: false,
-        errorMessage: "",
-      },
-      lastName: { value: currentUser.lastName, error: false, errorMessage: "" },
-      email: currentUser.email,
-      imageUrl: { value: currentUser.imageUrl, error: false, errorMessage: "" },
-    });
-  }, [currentUser]);
+  const handleMenu = (event: MouseEvent<HTMLElement>) => {
+    setMenuOpen(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setMenuOpen(null);
+  };
 
   const changeHandlerData = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -79,6 +83,7 @@ const ProfilePage = () => {
           errorMessage: "",
         },
       });
+      handleClose();
     }
   };
 
@@ -138,6 +143,19 @@ const ProfilePage = () => {
   };
 
   useEffect(() => {
+    setProfileData({
+      firstName: {
+        value: currentUser.firstName,
+        error: false,
+        errorMessage: "",
+      },
+      lastName: { value: currentUser.lastName, error: false, errorMessage: "" },
+      email: currentUser.email,
+      imageUrl: { value: currentUser.imageUrl, error: false, errorMessage: "" },
+    });
+  }, [currentUser]);
+
+  useEffect(() => {
     if (error) {
       Toast("danger", error);
       clearError();
@@ -154,20 +172,12 @@ const ProfilePage = () => {
       >
         <Stack sx={{ alignItems: "center", p: 2 }}>
           <Badge
+            onClick={handleMenu}
             overlap="circular"
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             badgeContent={
               <IconButton sx={{ p: 0 }}>
-                <label htmlFor="photo-upload">
-                  <SmallAvatar />
-                  <input
-                    type="file"
-                    id="photo-upload"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={changeImageHandler}
-                  />
-                </label>
+                <SmallAvatar />
               </IconButton>
             }
           >
@@ -185,6 +195,36 @@ const ProfilePage = () => {
               {currentUser.firstName.substring(0, 1).toUpperCase()}
             </Avatar>
           </Badge>
+          <Menu
+            id="menu-appbar"
+            className={classes.menuItem}
+            anchorEl={menuOpen}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={Boolean(menuOpen)}
+            onClose={handleClose}
+          >
+            <MenuItem>
+              <label className={classes.menuItem} htmlFor="photo-upload">
+                Upload Photo
+                <input
+                  type="file"
+                  id="photo-upload"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={changeImageHandler}
+                />
+              </label>
+            </MenuItem>
+            <MenuItem>Delete Photo</MenuItem>
+          </Menu>
           {profileData.imageUrl.error && (
             <div className={classes.errorMessage}>
               {profileData.imageUrl.errorMessage}

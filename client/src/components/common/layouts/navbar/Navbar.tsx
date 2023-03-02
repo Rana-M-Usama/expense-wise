@@ -120,7 +120,7 @@ const Navbar = () => {
               </Avatar>
             </Stack>
             <Menu
-              sx={{ mt: 5 }}
+              sx={{ mt: 6 }}
               id="menu-appbar"
               anchorEl={menuOpen}
               anchorOrigin={{

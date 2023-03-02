@@ -31,6 +31,10 @@ export default makeStyles(() => ({
     fontSize: "0.8rem",
     marginTop: "8px",
   },
+
+  menuItem: {
+    cursor: "pointer",
+  },
 }));
 
 const SmallAvatar = styled(CameraAltIcon)(({ theme }) => ({
