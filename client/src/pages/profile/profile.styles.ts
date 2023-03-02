@@ -1,4 +1,7 @@
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { makeStyles } from "@mui/styles";
+import { styled } from "@mui/material/styles";
+import { styles } from "constants/styles";
 
 export default makeStyles(() => ({
   rootContainer: {
@@ -29,3 +32,16 @@ export default makeStyles(() => ({
     marginTop: "8px",
   },
 }));
+
+const SmallAvatar = styled(CameraAltIcon)(({ theme }) => ({
+  width: 35,
+  height: 35,
+  padding: 5,
+  borderRadius: 50,
+  cursor: "pointer",
+  color: styles.theme.primaryColor,
+  border: `2px solid ${theme.palette.background.paper}`,
+  backgroundColor: styles.list.backgroundColor,
+}));
+
+export { SmallAvatar };

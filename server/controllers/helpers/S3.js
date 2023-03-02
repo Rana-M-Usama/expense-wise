@@ -5,7 +5,7 @@ const s3 = new AWS.S3({
   secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
 });
 
-const upload = async (bucket, key, body) =>
+const uploadImage = async (bucket, key, body) =>
   s3
     .upload({
       Bucket: bucket,
@@ -14,4 +14,12 @@ const upload = async (bucket, key, body) =>
     })
     .promise();
 
-export default upload;
+const deleteImage = async (bucket, key) =>
+  s3
+    .deleteObject({
+      Bucket: bucket,
+      Key: key,
+    })
+    .promise();
+
+export { deleteImage, uploadImage };

@@ -12,9 +12,7 @@ import {
 } from "@mui/material";
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { Stack } from "@mui/system";
-import { styled } from "@mui/material/styles";
 
 import {
   validateFirstName,
@@ -26,18 +24,8 @@ import type { RootState } from "app/store";
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
 
+import useStyles, { SmallAvatar } from "pages//profile/profile.styles";
 import { styles } from "constants/styles";
-import useStyles from "pages//profile/profile.styles";
-
-const SmallAvatar = styled(CameraAltIcon)(({ theme }) => ({
-  width: 35,
-  height: 35,
-  border: `2px solid ${theme.palette.background.paper}`,
-  borderRadius: 50,
-  backgroundColor: styles.list.backgroundColor,
-  color: styles.theme.primaryColor,
-  padding: 5,
-}));
 
 const ProfilePage = () => {
   const classes = useStyles();
@@ -79,14 +67,18 @@ const ProfilePage = () => {
   };
 
   const changeImageHandler = async (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
+    const file = event.target.files && event.target.files[0];
 
-    if (files && files.length > 0) {
-      setInputImageFile(files[0]);
-    }
-    const formData = new FormData();
-    if (files && files.length > 0) {
-      formData.append("files", files[0]);
+    if (file) {
+      setInputImageFile(file);
+      setProfileData({
+        ...profileData,
+        imageUrl: {
+          value: URL.createObjectURL(file),
+          error: false,
+          errorMessage: "",
+        },
+      });
     }
   };
 
@@ -180,7 +172,7 @@ const ProfilePage = () => {
             }
           >
             <Avatar
-              alt="Remy Sharp"
+              alt="Profile Image"
               src={profileData.imageUrl.value}
               sx={{
                 width: 150,
