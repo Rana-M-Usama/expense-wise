@@ -95,6 +95,19 @@ const ProfilePage = () => {
     }
   };
 
+  const cancelImage = async () => {
+    setInputImageFile(undefined);
+    setProfileData({
+      ...profileData,
+      imageUrl: {
+        value: "",
+        error: false,
+        errorMessage: "",
+      },
+    });
+    handleClose();
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let { firstName, lastName, imageUrl, email } = profileData;
@@ -235,6 +248,9 @@ const ProfilePage = () => {
             </MenuItem>
             {currentUser.imageUrl && (
               <MenuItem onClick={() => deleteImage()}>Delete Photo</MenuItem>
+            )}
+            {inputImageFile && (
+              <MenuItem onClick={() => cancelImage()}>Cancel</MenuItem>
             )}
           </Menu>
           {profileData.imageUrl.error && (
