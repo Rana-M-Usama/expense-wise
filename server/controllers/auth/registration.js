@@ -137,14 +137,19 @@ const register = asyncHandler(async (req, res, next) => {
 const updateDetails = asyncHandler(async (req, res) => {
   const { firstName, lastName } = req.body;
   let imageUrl;
+  let key;
   const record = await User.findById(req.user.id);
-  const key = record.imageUrl.split("/").pop();
+  if (record?.imageUrl) {
+    key = record.imageUrl.split("/").pop();
+  }
 
-  if (req.files[0]) {
-    await deleteImage(process.env.BUCKET_NAME, key);
+  if (req.files?.[0]?.path) {
+    if (key) {
+      await deleteImage(process.env.BUCKET_NAME, key);
+    }
     const data = fs.readFileSync(req.files[0].path);
-    const resonse = await uploadImage(process.env.BUCKET_NAME, v4(), data);
-    imageUrl = resonse.Location;
+    const { Location } = await uploadImage(process.env.BUCKET_NAME, v4(), data);
+    imageUrl = Location;
   }
 
   const user = await User.findByIdAndUpdate(
@@ -160,6 +165,27 @@ const updateDetails = asyncHandler(async (req, res) => {
     success: true,
     data: user,
   });
+});
+
+// @desc      Delete Profile Picture
+// @route     Delete /api/v1/auth/delete-picture
+// @access    Private
+const deletePicture = asyncHandler(async (req, res, next) => {
+  const record = await User.findById(req.user.id);
+
+  const key = record.imageUrl.split("/").pop();
+
+  try {
+    await deleteImage(process.env.BUCKET_NAME, key);
+    record.imageUrl = undefined;
+    await record.save();
+  } catch (error) {
+    return next(
+      new ErrorResponse("Failed to delete the image", httpStatus.BAD_REQUEST),
+    );
+  }
+
+  sendSessionResponse(record, httpStatus.OK, res, false);
 });
 
 // @desc      Confirm Email
@@ -191,4 +217,4 @@ const confirmEmail = asyncHandler(async (req, res, next) => {
   sendSessionResponse(user, httpStatus.OK, res, false);
 });
 
-export { confirmEmail, googleRegister, register, updateDetails };
+export { confirmEmail, googleRegister, register, updateDetails, deletePicture };

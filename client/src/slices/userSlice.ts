@@ -6,7 +6,7 @@ type currentUser = {
   firstName: string;
   lastName: string;
   email: string;
-  imageUrl: string;
+  imageUrl: string | undefined;
   isGoogleUser: boolean;
 };
 

@@ -87,6 +87,14 @@ const ProfilePage = () => {
     }
   };
 
+  const deleteImage = async () => {
+    await request("/auth/delete-picture", "DELETE");
+    if (!error) {
+      dispatch(modifyCurrentUser({ imageUrl: undefined }));
+      Toast("danger", "Profile deleted successfully");
+    }
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let { firstName, lastName, imageUrl, email } = profileData;
@@ -192,7 +200,9 @@ const ProfilePage = () => {
                 fontSize: 150,
               }}
             >
-              {currentUser.firstName.substring(0, 1).toUpperCase()}
+              <Typography sx={{ fontSize: 100 }}>
+                {currentUser.firstName.substring(0, 1).toUpperCase()}
+              </Typography>
             </Avatar>
           </Badge>
           <Menu
@@ -223,7 +233,9 @@ const ProfilePage = () => {
                 />
               </label>
             </MenuItem>
-            <MenuItem>Delete Photo</MenuItem>
+            {currentUser.imageUrl && (
+              <MenuItem onClick={() => deleteImage()}>Delete Photo</MenuItem>
+            )}
           </Menu>
           {profileData.imageUrl.error && (
             <div className={classes.errorMessage}>

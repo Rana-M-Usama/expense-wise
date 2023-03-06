@@ -116,7 +116,9 @@ const Navbar = () => {
                   border: `2px solid ${styles.userAvatar.border}`,
                 }}
               >
-                {currentUser.firstName.substring(0, 1).toUpperCase()}
+                <Typography sx={{ fontSize: 25 }}>
+                  {currentUser.firstName.substring(0, 1).toUpperCase()}
+                </Typography>
               </Avatar>
             </Stack>
             <Menu

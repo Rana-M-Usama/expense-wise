@@ -5,7 +5,8 @@ import multipleFileUpload from "../../middlewares/multiFileUploader";
 import protect from "../../middlewares/auth";
 
 const { forgotPassword, resetPassword, updatePassword } = password;
-const { confirmEmail, googleRegister, register, updateDetails } = registration;
+const { confirmEmail, googleRegister, register, updateDetails, deletePicture } =
+  registration;
 const { getMe, googleLogin, login, logout } = sessions;
 
 const router = express.Router();
@@ -13,6 +14,7 @@ const router = express.Router();
 router.post("/google-register", googleRegister);
 router.post("/register", register);
 router.post("/login", login);
+router.delete("/delete-picture", protect, deletePicture);
 router.post("/google-login", googleLogin);
 router.get("/logout", logout);
 router.get("/me", protect, getMe);
