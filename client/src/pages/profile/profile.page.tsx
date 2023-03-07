@@ -90,7 +90,16 @@ const ProfilePage = () => {
 
   const deleteImage = async () => {
     setDeletePhoto(true);
-    cancelImage();
+    setInputImageFile(undefined);
+    setProfileData({
+      ...profileData,
+      imageUrl: {
+        value: "",
+        error: false,
+        errorMessage: "",
+      },
+    });
+    handleClose();
   };
 
   const cancelImage = async () => {
@@ -98,7 +107,7 @@ const ProfilePage = () => {
     setProfileData({
       ...profileData,
       imageUrl: {
-        value: "",
+        value: currentUser.imageUrl,
         error: false,
         errorMessage: "",
       },
@@ -159,6 +168,7 @@ const ProfilePage = () => {
       );
 
       if (!error) {
+        setDeletePhoto(false);
         setInputImageFile(undefined);
         dispatch(modifyCurrentUser(response.data));
         Toast("success", "Profile updated successfully.");
