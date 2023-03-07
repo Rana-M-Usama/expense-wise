@@ -208,4 +208,4 @@ const confirmEmail = asyncHandler(async (req, res, next) => {
   sendSessionResponse(user, httpStatus.OK, res, false);
 });
 
-export { confirmEmail, googleRegister, register, updateDetails, deletePicture };
+export { confirmEmail, googleRegister, register, updateDetails };
