@@ -23,6 +23,11 @@ export default makeStyles(() => ({
   },
 
   textfield: {
+    "& .MuiOutlinedInput-root:hover": {
+      "& > fieldset": {
+        borderColor: styles.textField.hoverBorderColor,
+      },
+    },
     borderRadius: 7,
   },
 

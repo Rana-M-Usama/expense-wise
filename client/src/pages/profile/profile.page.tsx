@@ -312,7 +312,10 @@ const ProfilePage = () => {
                 <TextField
                   disabled
                   className={classes.textfield}
-                  sx={{ backgroundColor: styles.list.backgroundColor }}
+                  sx={{
+                    backgroundColor: styles.list.backgroundColor,
+                    pointerEvents: "none",
+                  }}
                   variant="outlined"
                   inputProps={{ style: { padding: 7 } }}
                   type="email"
