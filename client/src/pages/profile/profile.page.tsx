@@ -40,6 +40,7 @@ const ProfilePage = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const [inputImageFile, setInputImageFile] = useState<File>();
+  const [deletePhoto, setDeletePhoto] = useState(false);
   const { loading, request, error, clearError } = useHttp();
   const [menuOpen, setMenuOpen] = useState<null | HTMLElement>(null);
 
@@ -88,11 +89,8 @@ const ProfilePage = () => {
   };
 
   const deleteImage = async () => {
-    await request("/auth/delete-picture", "DELETE");
-    if (!error) {
-      dispatch(modifyCurrentUser({ imageUrl: undefined }));
-      Toast("danger", "Profile deleted successfully");
-    }
+    setDeletePhoto(true);
+    cancelImage();
   };
 
   const cancelImage = async () => {
@@ -131,7 +129,8 @@ const ProfilePage = () => {
     if (
       currentUser.firstName === firstName.value &&
       currentUser.lastName === lastName.value &&
-      inputImageFile === undefined
+      inputImageFile === undefined &&
+      !deletePhoto
     ) {
       firstName.error = true;
       firstName.errorMessage = "Please update first name.";
@@ -139,10 +138,14 @@ const ProfilePage = () => {
       lastName.errorMessage = "Please update last name.";
     }
 
-    if (!(firstName.error || lastName.error || imageUrl.error)) {
+    if (!(firstName.error || lastName.error || imageUrl.error) || deletePhoto) {
       const formData = new FormData();
       if (inputImageFile) {
         formData.append("files", inputImageFile);
+      }
+
+      if (deletePhoto) {
+        formData.append("deletePhoto", "true");
       }
 
       formData.append("firstName", firstName.value);
