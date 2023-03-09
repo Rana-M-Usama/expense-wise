@@ -464,7 +464,7 @@ const ExpenseSheet = () => {
                   Received: {sheetBalance.receivedAmount}
                 </Box>
                 <Box className={classes.totalBox}>
-                  Remaning: {sheetBalance.remainingAmount}
+                  Remaining: {sheetBalance.remainingAmount}
                 </Box>
               </Box>
             </Box>

@@ -159,12 +159,13 @@ describe("Sheet endpoints", () => {
         title: sheet.title,
         owner: sheet.owner._id,
         amounts: {
-          pendingAmount: 2000,
+          remainingAmount: 2000,
           receivedAmount: 1200,
           spentAmount: 800,
-          currentAmount: 3200,
           debtAmount: 200,
-          totalAmount: 4000,
+          totalIncomingAmount: 3200,
+          totalOutgoingAmount: 1000,
+          currentSheetBalance: 400,
         },
       });
     });

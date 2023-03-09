@@ -51,7 +51,7 @@ describe("Sheet Page", () => {
         // Assert that two sheets were created
         cy.visit("/");
         cy.get("table.MuiTable-root")
-          .find("tr.MuiTableRow-root")
+          .find("a.css-q7usj2")
           .should("have.length", 2);
 
         // Edit first sheet
@@ -63,27 +63,27 @@ describe("Sheet Page", () => {
         cy.contains("Yes").click();
         cy.contains("Sheet deleted successfully.").should("be.visible");
         cy.get("table.MuiTable-root")
-          .find("tr.MuiTableRow-root")
-          .should("have.length", 2);
+          .find("a.css-q7usj2")
+          .should("have.length", 1);
 
         // Add 12 more sheets
         cy.createSheetList(12);
         // Assert that 10 sheets are displayed on the first page
         cy.get("table.MuiTable-root")
-          .find("tr.MuiTableRow-root")
-          .should("have.length", 11);
+          .find("a.css-q7usj2")
+          .should("have.length", 10);
 
         // Navigate to the second page
         cy.get('[data-testid="NavigateNextIcon"]').click();
         cy.get("table.MuiTable-root")
-          .find("tr.MuiTableRow-root")
-          .should("have.length", 4);
+          .find("a.css-q7usj2")
+          .should("have.length", 3);
 
         // Navigate to the first page
         cy.get('[data-testid="NavigateBeforeIcon"]').click();
         cy.get("table.MuiTable-root")
-          .find("tr.MuiTableRow-root")
-          .should("have.length", 11);
+          .find("a.css-q7usj2")
+          .should("have.length", 10);
       });
     },
   );

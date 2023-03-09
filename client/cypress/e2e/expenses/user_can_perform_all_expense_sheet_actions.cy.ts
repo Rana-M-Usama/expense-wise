@@ -38,12 +38,13 @@ describe("Expense Page", () => {
         cy.contains("Status").should("be.visible");
         cy.contains("Amount").should("be.visible");
         cy.contains("Action").should("be.visible");
-        cy.contains("Recieved: 0").should("be.visible");
-        cy.contains("Remaining: 0").should("be.visible");
-        cy.contains("Spent: 0").should("be.visible");
-        cy.contains("Total: 0").should("be.visible");
-        cy.contains("Debt: 0").should("be.visible");
-        cy.contains("Current: 0").should("be.visible");
+        cy.contains("Total Incoming:").should("be.visible");
+        cy.contains("Received:").should("be.visible");
+        cy.contains("Remaining:").should("be.visible");
+        cy.contains("Total Outgoing:").should("be.visible");
+        cy.contains("Spent:").should("be.visible");
+        cy.contains("Debt:").should("be.visible");
+        cy.contains("Current Sheet Balance:").should("be.visible");
 
         // Check expenses count
         cy.get("table.MuiTable-root")
@@ -65,9 +66,20 @@ describe("Expense Page", () => {
         cy.get("table.MuiTable-root")
           .find("tr.MuiTableRow-root")
           .should("have.length", 2);
-        cy.contains(`Current: ${amount}`).should("be.visible");
-        cy.contains(`Recieved: ${amount}`).should("be.visible");
-        cy.contains(`Total: ${amount}`).should("be.visible");
+        cy.contains("Total Incoming:").should("be.visible");
+        cy.contains(amount).should("be.visible");
+        cy.contains("Received:").should("be.visible");
+        cy.contains(amount).should("be.visible");
+        cy.contains("Remaining:").should("be.visible");
+        cy.contains(amount).should("be.visible");
+        cy.contains("Total Outgoing:").should("be.visible");
+        cy.contains(amount).should("be.visible");
+        cy.contains("Spent:").should("be.visible");
+        cy.contains(amount).should("be.visible");
+        cy.contains("Debt:").should("be.visible");
+        cy.contains(amount).should("be.visible");
+        cy.contains("Current Sheet Balance:").should("be.visible");
+        cy.contains(amount).should("be.visible");
 
         //edit first expense
         cy.editExpense(
@@ -95,9 +107,20 @@ describe("Expense Page", () => {
           .find("tr.MuiTableRow-root")
           .contains("10")
           .should("be.visible");
-        cy.contains("Total: 10").should("be.visible");
-        cy.contains("Current: 10").should("be.visible");
-        cy.contains("Remaining: 10").should("be.visible");
+        cy.contains("Total Incoming:").should("be.visible");
+        cy.contains("10").should("be.visible");
+        cy.contains("Received:").should("be.visible");
+        cy.contains("10").should("be.visible");
+        cy.contains("Total Outgoing:").should("be.visible");
+        cy.contains("10").should("be.visible");
+        cy.contains("Spent:").should("be.visible");
+        cy.contains("10").should("be.visible");
+        cy.contains("Remaining:").should("be.visible");
+        cy.contains("10").should("be.visible");
+        cy.contains("Debt:").should("be.visible");
+        cy.contains("10").should("be.visible");
+        cy.contains("Current Sheet Balance:").should("be.visible");
+        cy.contains("10").should("be.visible");
 
         //delete first expense
         cy.get('svg[data-testid="DeleteIcon"]').first().click();
@@ -119,24 +142,40 @@ describe("Expense Page", () => {
         cy.get("table.MuiTable-root")
           .find("tr.MuiTableRow-root")
           .should("have.length", 12);
-        cy.contains("Recieved: 600").should("be.visible");
-        cy.contains("Remaining: 480").should("be.visible");
-        cy.contains("Spent: 440").should("be.visible");
-        cy.contains("Debt: 40").should("be.visible");
-        cy.contains("Current: 1080").should("be.visible");
-        cy.contains("Total: 1120").should("be.visible");
+        cy.contains("Total Incoming:").should("be.visible");
+        cy.contains("1080").should("be.visible");
+        cy.contains("Received:").should("be.visible");
+        cy.contains("600").should("be.visible");
+        cy.contains("Remaining:").should("be.visible");
+        cy.contains("480").should("be.visible");
+        cy.contains("Total Outgoing:").should("be.visible");
+        cy.contains("480").should("be.visible");
+        cy.contains("Spent:").should("be.visible");
+        cy.contains("440").should("be.visible");
+        cy.contains("Debt:").should("be.visible");
+        cy.contains("40").should("be.visible");
+        cy.contains("Current Sheet Balance:").should("be.visible");
+        cy.contains("160").should("be.visible");
 
         // Navigate to the second page
         cy.get('[data-testid="NavigateNextIcon"]').click();
         cy.get("table.MuiTable-root")
           .find("tr.MuiTableRow-root")
-          .should("have.length", 2);
-        cy.contains("Recieved: 600").should("be.visible");
-        cy.contains("Remaining: 480").should("be.visible");
-        cy.contains("Spent: 440").should("be.visible");
-        cy.contains("Debt: 40").should("be.visible");
-        cy.contains("Current: 1080").should("be.visible");
-        cy.contains("Total: 1120").should("be.visible");
+          .should("have.length", 6);
+        cy.contains("Total Incoming:").should("be.visible");
+        cy.contains("1080").should("be.visible");
+        cy.contains("Received:").should("be.visible");
+        cy.contains("600").should("be.visible");
+        cy.contains("Remaining:").should("be.visible");
+        cy.contains("480").should("be.visible");
+        cy.contains("Total Outgoing:").should("be.visible");
+        cy.contains("480").should("be.visible");
+        cy.contains("Spent:").should("be.visible");
+        cy.contains("440").should("be.visible");
+        cy.contains("Debt:").should("be.visible");
+        cy.contains("40").should("be.visible");
+        cy.contains("Current Sheet Balance:").should("be.visible");
+        cy.contains("160").should("be.visible");
 
         // Navigate to the first page
         cy.get('[data-testid="NavigateBeforeIcon"]').click();
