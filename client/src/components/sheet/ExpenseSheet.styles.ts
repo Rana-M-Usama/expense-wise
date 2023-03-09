@@ -74,6 +74,18 @@ const useStyles = makeStyles(() => ({
     minHeight: "444px",
     backgroundColor: styles.list.backgroundColor,
   },
+
+  totalOutterBox: {
+    padding: 6,
+    color: "white",
+    background: styles.amountBox.backgroundColor,
+  },
+
+  totalBox: {
+    flex: 1,
+    padding: 6,
+    border: "1px solid",
+  },
 }));
 
 export {
