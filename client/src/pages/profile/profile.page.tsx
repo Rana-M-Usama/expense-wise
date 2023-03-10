@@ -40,7 +40,7 @@ const ProfilePage = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const [inputImageFile, setInputImageFile] = useState<File>();
-  const [deletePhoto, setDeletePhoto] = useState(false);
+  const [isDeletePhoto, setIsDeletePhoto] = useState(false);
   const { loading, request, error, clearError } = useHttp();
   const [menuOpen, setMenuOpen] = useState<null | HTMLElement>(null);
 
@@ -89,7 +89,7 @@ const ProfilePage = () => {
   };
 
   const deleteImage = async () => {
-    setDeletePhoto(true);
+    setIsDeletePhoto(true);
     setInputImageFile(undefined);
     setProfileData({
       ...profileData,
@@ -139,7 +139,7 @@ const ProfilePage = () => {
       currentUser.firstName === firstName.value &&
       currentUser.lastName === lastName.value &&
       inputImageFile === undefined &&
-      !deletePhoto
+      !isDeletePhoto
     ) {
       firstName.error = true;
       firstName.errorMessage = "Please update first name.";
@@ -147,14 +147,14 @@ const ProfilePage = () => {
       lastName.errorMessage = "Please update last name.";
     }
 
-    if (!(firstName.error || lastName.error || imageUrl.error) || deletePhoto) {
+    if (!(firstName.error || lastName.error || imageUrl.error)) {
       const formData = new FormData();
       if (inputImageFile) {
         formData.append("files", inputImageFile);
       }
 
-      if (deletePhoto) {
-        formData.append("deletePhoto", "true");
+      if (isDeletePhoto) {
+        formData.append("isDeletePhoto", "true");
       }
 
       formData.append("firstName", firstName.value);
@@ -168,7 +168,7 @@ const ProfilePage = () => {
       );
 
       if (!error) {
-        setDeletePhoto(false);
+        setIsDeletePhoto(false);
         setInputImageFile(undefined);
         dispatch(modifyCurrentUser(response.data));
         Toast("success", "Profile updated successfully.");

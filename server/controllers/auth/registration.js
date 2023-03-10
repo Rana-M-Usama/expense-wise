@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import fs from "fs";
 import httpStatus from "http-status";
+import { v4 } from "uuid";
 
 import { deleteImage, uploadImage } from "../helpers/S3";
 import asyncHandler from "../../middlewares/async";
@@ -10,7 +11,6 @@ import ErrorResponse from "../../utils/errorResponse";
 import { getGoogleUserData } from "../../utils/helpers";
 import sendSessionResponse from "../helpers/sendSessionResponse";
 import User from "../../models/User";
-import { v4 } from "uuid";
 
 // @desc      Register user with google account
 // @route     POST /api/v1/auth/google-register
@@ -135,7 +135,7 @@ const register = asyncHandler(async (req, res, next) => {
 // @route     PUT /api/v1/auth/me
 // @access    Private
 const updateDetails = asyncHandler(async (req, res, next) => {
-  const { firstName, lastName, deletePhoto } = req.body;
+  const { firstName, lastName, isDeletePhoto } = req.body;
   let imageUrl;
   let key;
   const record = await User.findById(req.user.id);
@@ -143,7 +143,7 @@ const updateDetails = asyncHandler(async (req, res, next) => {
     key = record.imageUrl.split("/").pop();
   }
 
-  if (deletePhoto) {
+  if (isDeletePhoto) {
     try {
       await deleteImage(process.env.BUCKET_NAME, key);
       record.imageUrl = undefined;
