@@ -67,7 +67,7 @@ describe("Auth endpoints", () => {
         .expect(httpStatus.CONFLICT);
 
       expect(res.body.errors).toEqual([
-        "An account with that email address already exists",
+        "An account with that email address already exists.",
       ]);
     });
 
@@ -237,7 +237,7 @@ describe("Auth endpoints", () => {
         .send({
           firstName: "Updated firstName",
           lastName: "Updated lastName",
-          imageUrl: "newAvatar.jpg",
+          imageUrl: "",
         })
         .expect(httpStatus.OK);
 
@@ -246,7 +246,7 @@ describe("Auth endpoints", () => {
         _id: expect.anything(),
         email: user.email,
         firstName: "Updated firstName",
-        imageUrl: "newAvatar.jpg",
+        imageUrl: "",
         lastName: "Updated lastName",
       });
     });

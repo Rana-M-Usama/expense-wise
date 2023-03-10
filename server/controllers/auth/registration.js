@@ -52,7 +52,7 @@ const register = asyncHandler(async (req, res, next) => {
   if (email && (await User.findOne({ email }))) {
     return res.status(httpStatus.CONFLICT).json({
       success: false,
-      errors: ["An account with that email address already exists"],
+      errors: ["An account with that email address already exists."],
     });
   }
 
