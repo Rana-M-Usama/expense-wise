@@ -92,13 +92,16 @@ describe("Permissions Management with viewer", () => {
         cy.contains("Logged in successfully.");
         cy.get("table.MuiTable-root")
           .find("tr.MuiTableRow-root")
-          .contains(title)
           .parent()
           .parent()
           .within(() => {
             cy.get('svg[data-testid="VisibilityIcon"]').should("be.visible");
-            cy.get('svg[data-testid="EditIcon"]').should("not.exist");
-            cy.get('svg[data-testid="DeleteIcon"]').should("not.exist");
+            cy.get('svg[data-testid="EditIcon"]')
+              .parent()
+              .should("have.attr", "disabled");
+            cy.get('svg[data-testid="DeleteIcon"]')
+              .parent()
+              .should("have.attr", "disabled");
             cy.get('svg[data-testid="VisibilityIcon"]').click();
           });
         cy.url().should("include", "/sheets");

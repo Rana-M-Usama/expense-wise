@@ -49,7 +49,7 @@ const StyledLinkTableRow = styled(Link)`
 const AmountBox = styled(Paper)(({ theme }) => ({
   backgroundColor: styles.amountBox.backgroundColor,
   ...theme.typography.body2,
-  padding: theme.spacing(2),
+  padding: theme.spacing(1),
   textAlign: "center",
   color: "white",
 }));
@@ -73,6 +73,18 @@ const useStyles = makeStyles(() => ({
   tableContainer: {
     minHeight: "444px",
     backgroundColor: styles.list.backgroundColor,
+  },
+
+  totalOutterBox: {
+    padding: 6,
+    color: "white",
+    background: styles.amountBox.backgroundColor,
+  },
+
+  totalBox: {
+    flex: 1,
+    padding: 6,
+    border: "1px solid",
   },
 }));
 

@@ -30,6 +30,7 @@ Cypress.Commands.add("clearDB", async () => {
 
 Cypress.Commands.add("login", (email: string, password: string) => {
   cy.visit("/");
+  cy.contains("Sign in with Google").should("be.visible");
   cy.get("input[name='email']").type(email);
   cy.get("input[name='password']").type(password);
   cy.contains("Sign in").click();
@@ -51,6 +52,7 @@ Cypress.Commands.add(
     confirmPassword: string,
   ) => {
     cy.visit("/signup");
+    cy.contains("Sign in with Google").should("be.visible");
     cy.get("input[name='firstName']").type(firstName);
     cy.get("input[name='lastName']").type(lastName);
     cy.get("input[name='email']").type(email);
@@ -61,7 +63,7 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("createSheet", (title: string, description: string) => {
-  cy.get('svg[data-testid="AddCircleRoundedIcon"]').click();
+  cy.contains("Add new Sheet").click();
   cy.get("input[name='title']").type(title);
   cy.get("input[name='description']").type(description);
   cy.contains("Add Sheet").click();
