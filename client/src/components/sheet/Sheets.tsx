@@ -1,11 +1,4 @@
 import {
-  AddCircleRounded as AddCircleRoundedIcon,
-  Delete as DeleteIcon,
-  Edit as EditIcon,
-  MoodBad as NoExpensesFoundIcon,
-  Visibility as VisibilityIcon,
-} from "@mui/icons-material";
-import {
   Button,
   Container,
   Pagination,
@@ -18,6 +11,12 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import {
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+  MoodBad as NoExpensesFoundIcon,
+  Visibility as VisibilityIcon,
+} from "@mui/icons-material";
 import React, { ChangeEvent, Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Box } from "@mui/system";
@@ -196,8 +195,13 @@ const Sheets = () => {
           justifyContent="space-between"
           style={{ marginBottom: 15 }}
         >
-          <Button onClick={() => showModal({ ...initialProps })}>
-            <AddCircleRoundedIcon sx={{ width: 40, height: 45 }} />
+          <Button
+            className={classes.addSheet}
+            variant="outlined"
+            size="small"
+            onClick={() => showModal({ ...initialProps })}
+          >
+            Add new Sheet
           </Button>
         </Stack>
         <Box className={classes.tableContainer}>

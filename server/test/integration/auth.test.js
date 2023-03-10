@@ -41,6 +41,7 @@ describe("Auth endpoints", () => {
         firstName: userParams.firstName,
         lastName: userParams.lastName,
         email: userParams.email,
+        isGoogleUser: false,
         imageUrl: expect.anything(),
       });
     });
@@ -65,7 +66,9 @@ describe("Auth endpoints", () => {
         .send(userParams)
         .expect(httpStatus.CONFLICT);
 
-      expect(res.body.errors).toEqual(["Email already in use."]);
+      expect(res.body.errors).toEqual([
+        "An account with that email address already exists",
+      ]);
     });
 
     it("should return 400 error if password length is less than 6 characters", async () => {
@@ -142,6 +145,7 @@ describe("Auth endpoints", () => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
+        isGoogleUser: false,
         imageUrl: expect.anything(),
       });
     });

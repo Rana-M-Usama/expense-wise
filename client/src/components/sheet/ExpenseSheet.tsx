@@ -8,7 +8,6 @@ import {
   Button,
   CircularProgress,
   Container,
-  Grid,
   IconButton,
   Link,
   Menu,
@@ -44,7 +43,6 @@ import useHttp from "utils/useHttp";
 import usePagination from "components/common/pagination/Pagination";
 
 import {
-  AmountBox,
   StyledTableCell,
   StyledTableRow,
   useStyles,
@@ -98,10 +96,13 @@ const ExpenseSheet = () => {
   const [sheetPermissionType, setSheetPermissionType] = useState("");
   const [sheetOption, setSheetOption] = useState<null | Element>(null);
   const [sheetBalance, setSheetBalance] = useState({
-    pendingAmount: null,
     receivedAmount: null,
+    remainingAmount: null,
     spentAmount: null,
-    totalAmount: null,
+    debtAmount: null,
+    totalIncomingAmount: null,
+    totalOutgoingAmount: null,
+    currentSheetBalance: null,
   });
   let [page, setPage] = useState(1);
   const [paginate] = useState(11);
@@ -437,10 +438,10 @@ const ExpenseSheet = () => {
                 </Table>
               </TableContainer>
             </Box>
-            <Box
-              sx={{ display: "flex", justifyContent: "center", mt: 5, mb: 2 }}
-            >
-              {count > 1 && (
+            {count > 1 && (
+              <Box
+                sx={{ display: "flex", justifyContent: "center", mt: 5, mb: 2 }}
+              >
                 <Pagination
                   count={count}
                   size="large"
@@ -450,23 +451,42 @@ const ExpenseSheet = () => {
                   onChange={handleChange}
                   color="primary"
                 />
-              )}
+              </Box>
+            )}
+          </Box>
+          <Box sx={{ textAlign: "center", fontSize: "1rem", my: 3 }}>
+            <Box>
+              <Box className={classes.totalOutterBox}>
+                Total Incoming: {sheetBalance.totalIncomingAmount}
+              </Box>
+              <Box sx={{ display: "flex" }}>
+                <Box className={classes.totalBox}>
+                  Received: {sheetBalance.receivedAmount}
+                </Box>
+                <Box className={classes.totalBox}>
+                  Remaining: {sheetBalance.remainingAmount}
+                </Box>
+              </Box>
+            </Box>
+            <Box sx={{ my: 2 }}>
+              <Box className={classes.totalOutterBox}>
+                Total Outgoing: {sheetBalance.totalOutgoingAmount}
+              </Box>
+              <Box sx={{ display: "flex" }}>
+                <Box className={classes.totalBox}>
+                  Spent: {sheetBalance.spentAmount}
+                </Box>
+                <Box className={classes.totalBox}>
+                  Debt: {sheetBalance.debtAmount}
+                </Box>
+              </Box>
+            </Box>
+            <Box>
+              <Box className={classes.totalOutterBox}>
+                Current Sheet Balance: {sheetBalance.currentSheetBalance}
+              </Box>
             </Box>
           </Box>
-          <Grid container spacing={2} sx={{ mt: 3, mb: 2 }}>
-            <Grid item xs={12} sm={6} md={3}>
-              <AmountBox>Recieved: {sheetBalance.receivedAmount}</AmountBox>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <AmountBox>Remaining: {sheetBalance.pendingAmount}</AmountBox>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <AmountBox>Total: {sheetBalance.totalAmount}</AmountBox>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <AmountBox>Spent: {sheetBalance.spentAmount}</AmountBox>
-            </Grid>
-          </Grid>
         </Container>
       )}
     </>

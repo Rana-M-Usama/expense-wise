@@ -10,13 +10,21 @@ const calculateAmount = (data, status, amountType) =>
 const getAmountStats = async (sheetId) => {
   const expenses = await Expense.find({ sheet: sheetId });
   const receivedAmount = calculateAmount(expenses, "paid", "incoming");
-  const pendingAmount = calculateAmount(expenses, "unpaid", "incoming");
+  const remainingAmount = calculateAmount(expenses, "unpaid", "incoming");
   const spentAmount = calculateAmount(expenses, "paid", "outgoing");
+  const debtAmount = calculateAmount(expenses, "unpaid", "outgoing");
+  const totalIncomingAmount = receivedAmount + remainingAmount;
+  const totalOutgoingAmount = spentAmount + debtAmount;
+  const currentSheetBalance = receivedAmount - spentAmount;
+
   return {
     receivedAmount,
-    pendingAmount,
+    remainingAmount,
     spentAmount,
-    totalAmount: receivedAmount + pendingAmount,
+    debtAmount,
+    totalIncomingAmount,
+    totalOutgoingAmount,
+    currentSheetBalance,
   };
 };
 

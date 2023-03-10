@@ -139,6 +139,13 @@ describe("Sheet endpoints", () => {
         owner: user,
         sheet,
       }).save();
+      await ExpenseFactory({
+        status: "unpaid",
+        amount: 200,
+        amountType: "outgoing",
+        owner: user,
+        sheet,
+      }).save();
 
       const res = await request(app)
         .get(`/api/v1/sheets/${sheet._id}`)
@@ -152,10 +159,13 @@ describe("Sheet endpoints", () => {
         title: sheet.title,
         owner: sheet.owner._id,
         amounts: {
-          pendingAmount: 2000,
+          remainingAmount: 2000,
           receivedAmount: 1200,
           spentAmount: 800,
-          totalAmount: 3200,
+          debtAmount: 200,
+          totalIncomingAmount: 3200,
+          totalOutgoingAmount: 1000,
+          currentSheetBalance: 400,
         },
       });
     });

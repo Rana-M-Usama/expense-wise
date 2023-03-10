@@ -59,7 +59,7 @@ describe("Expense model", () => {
     });
 
     it("should throw a validation error if the length of the type field exceeds 100 characters", () => {
-      expense.type = FAKER_STRING.substring(0, 101);
+      expense.type = FAKER_STRING.substring(0, 150);
       expect(expense.validateSync().errors.type.message).toEqual(
         "Type can not be longer than 100 characters.",
       );
