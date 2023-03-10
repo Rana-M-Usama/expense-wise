@@ -1,6 +1,9 @@
 import crypto from "crypto";
+import fs from "fs";
 import httpStatus from "http-status";
+import { v4 } from "uuid";
 
+import { deleteImage, uploadImage } from "../helpers/S3";
 import asyncHandler from "../../middlewares/async";
 import config from "../../config/config";
 import emailService from "../../utils/sendEmail";
@@ -49,7 +52,7 @@ const register = asyncHandler(async (req, res, next) => {
   if (email && (await User.findOne({ email }))) {
     return res.status(httpStatus.CONFLICT).json({
       success: false,
-      errors: ["An account with that email address already exists"],
+      errors: ["An account with that email address already exists."],
     });
   }
 
@@ -131,8 +134,35 @@ const register = asyncHandler(async (req, res, next) => {
 // @desc      Update user details
 // @route     PUT /api/v1/auth/me
 // @access    Private
-const updateDetails = asyncHandler(async (req, res) => {
-  const { firstName, lastName, imageUrl } = req.body;
+const updateDetails = asyncHandler(async (req, res, next) => {
+  const { firstName, lastName, isDeletePhoto } = req.body;
+  let imageUrl;
+  let key;
+  const record = await User.findById(req.user.id);
+  if (record?.imageUrl) {
+    key = record.imageUrl.split("/").pop();
+  }
+
+  if (isDeletePhoto) {
+    try {
+      await deleteImage(process.env.BUCKET_NAME, key);
+      record.imageUrl = undefined;
+      await record.save();
+    } catch (error) {
+      return next(
+        new ErrorResponse("Failed to delete the image", httpStatus.BAD_REQUEST),
+      );
+    }
+  }
+
+  if (req.files?.[0]?.path) {
+    if (key) {
+      await deleteImage(process.env.BUCKET_NAME, key);
+    }
+    const data = fs.readFileSync(req.files[0].path);
+    const { Location } = await uploadImage(process.env.BUCKET_NAME, v4(), data);
+    imageUrl = Location;
+  }
 
   const user = await User.findByIdAndUpdate(
     req.user.id,

@@ -1,6 +1,7 @@
 import express from "express";
 
 import { password, registration, sessions } from "../../controllers/auth";
+import multipleFileUpload from "../../middlewares/multiFileUploader";
 import protect from "../../middlewares/auth";
 
 const { forgotPassword, resetPassword, updatePassword } = password;
@@ -15,7 +16,7 @@ router.post("/login", login);
 router.post("/google-login", googleLogin);
 router.get("/logout", logout);
 router.get("/me", protect, getMe);
-router.put("/me", protect, updateDetails);
+router.put("/me", [protect, multipleFileUpload("files")], updateDetails);
 router.put("/me/password", protect, updatePassword);
 router.post("/forgot-password", forgotPassword);
 router.put("/reset-password/:resetToken", resetPassword);

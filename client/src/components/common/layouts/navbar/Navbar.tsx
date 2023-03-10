@@ -107,6 +107,7 @@ const Navbar = () => {
             >
               <Avatar
                 alt="Remy Sharp"
+                src={currentUser.imageUrl}
                 sx={{
                   fontSize: 35,
                   cursor: "pointer",
@@ -115,11 +116,13 @@ const Navbar = () => {
                   border: `2px solid ${styles.userAvatar.border}`,
                 }}
               >
-                {currentUser.firstName.substring(0, 1).toUpperCase()}
+                <Typography sx={{ fontSize: 25 }}>
+                  {currentUser.firstName.substring(0, 1).toUpperCase()}
+                </Typography>
               </Avatar>
             </Stack>
             <Menu
-              sx={{ mt: 5 }}
+              sx={{ mt: 6 }}
               id="menu-appbar"
               anchorEl={menuOpen}
               anchorOrigin={{

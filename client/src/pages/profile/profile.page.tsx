@@ -1,51 +1,63 @@
 import {
   Avatar,
+  Badge,
   Box,
   Button,
+  CircularProgress,
   Container,
   Grid,
+  IconButton,
+  Menu,
+  MenuItem,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+  useEffect,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CircularProgress from "@mui/material/CircularProgress";
 import { Stack } from "@mui/system";
 
-import { validateFirstName, validateLastName } from "validators/auth";
+import {
+  validateFirstName,
+  validateImageFile,
+  validateLastName,
+} from "validators/auth";
 import { modifyCurrentUser } from "slices/userSlice";
 import type { RootState } from "app/store";
 import Toast from "components/tostify/Toast";
 import useHttp from "utils/useHttp";
 
+import useStyles, { SmallAvatar } from "pages//profile/profile.styles";
 import { styles } from "constants/styles";
-import useStyles from "pages//profile/profile.styles";
 
 const ProfilePage = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
+  const [inputImageFile, setInputImageFile] = useState<File>();
+  const [isDeletePhoto, setIsDeletePhoto] = useState(false);
   const { loading, request, error, clearError } = useHttp();
+  const [menuOpen, setMenuOpen] = useState<null | HTMLElement>(null);
 
   const [profileData, setProfileData] = useState({
     firstName: { value: currentUser.firstName, error: false, errorMessage: "" },
     lastName: { value: currentUser.lastName, error: false, errorMessage: "" },
     email: currentUser.email,
-    imageUrl: currentUser.imageUrl,
+    imageUrl: { value: currentUser.imageUrl, error: false, errorMessage: "" },
   });
 
-  useEffect(() => {
-    setProfileData({
-      firstName: {
-        value: currentUser.firstName,
-        error: false,
-        errorMessage: "",
-      },
-      lastName: { value: currentUser.lastName, error: false, errorMessage: "" },
-      email: currentUser.email,
-      imageUrl: currentUser.imageUrl,
-    });
-  }, [currentUser]);
+  const handleMenu = (event: MouseEvent<HTMLElement>) => {
+    setMenuOpen(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setMenuOpen(null);
+  };
 
   const changeHandlerData = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -57,6 +69,50 @@ const ProfilePage = () => {
         errorMessage: "",
       },
     });
+  };
+
+  const changeImageHandler = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files && event.target.files[0];
+
+    if (file) {
+      setInputImageFile(file);
+      setProfileData({
+        ...profileData,
+        imageUrl: {
+          value: URL.createObjectURL(file),
+          error: false,
+          errorMessage: "",
+        },
+      });
+      handleClose();
+    }
+  };
+
+  const deleteImage = async () => {
+    setIsDeletePhoto(true);
+    setInputImageFile(undefined);
+    setProfileData({
+      ...profileData,
+      imageUrl: {
+        value: "",
+        error: false,
+        errorMessage: "",
+      },
+    });
+    handleClose();
+  };
+
+  const cancelImage = async () => {
+    setInputImageFile(undefined);
+    setProfileData({
+      ...profileData,
+      imageUrl: {
+        value: currentUser.imageUrl,
+        error: false,
+        errorMessage: "",
+      },
+    });
+    handleClose();
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -72,16 +128,18 @@ const ProfilePage = () => {
       ...validateLastName(profileData.lastName.value),
     };
 
-    setProfileData({
-      firstName,
-      lastName,
-      imageUrl: imageUrl,
-      email: email,
-    });
+    imageUrl = {
+      ...imageUrl,
+      ...validateImageFile(inputImageFile),
+    };
+
+    setProfileData({ firstName, lastName, imageUrl, email });
 
     if (
       currentUser.firstName === firstName.value &&
-      currentUser.lastName === lastName.value
+      currentUser.lastName === lastName.value &&
+      inputImageFile === undefined &&
+      !isDeletePhoto
     ) {
       firstName.error = true;
       firstName.errorMessage = "Please update first name.";
@@ -89,18 +147,47 @@ const ProfilePage = () => {
       lastName.errorMessage = "Please update last name.";
     }
 
-    if (!(firstName.error || lastName.error)) {
-      const response = await request("/auth/me", "PUT", {
-        firstName: firstName.value,
-        lastName: lastName.value,
-      });
+    if (!(firstName.error || lastName.error || imageUrl.error)) {
+      const formData = new FormData();
+      if (inputImageFile) {
+        formData.append("files", inputImageFile);
+      }
+
+      if (isDeletePhoto) {
+        formData.append("isDeletePhoto", "true");
+      }
+
+      formData.append("firstName", firstName.value);
+      formData.append("lastName", lastName.value);
+
+      const response = await request(
+        "/auth/me",
+        "PUT",
+        formData,
+        "multipart/form-data",
+      );
 
       if (!error) {
+        setIsDeletePhoto(false);
+        setInputImageFile(undefined);
         dispatch(modifyCurrentUser(response.data));
         Toast("success", "Profile updated successfully.");
       }
     }
   };
+
+  useEffect(() => {
+    setProfileData({
+      firstName: {
+        value: currentUser.firstName,
+        error: false,
+        errorMessage: "",
+      },
+      lastName: { value: currentUser.lastName, error: false, errorMessage: "" },
+      email: currentUser.email,
+      imageUrl: { value: currentUser.imageUrl, error: false, errorMessage: "" },
+    });
+  }, [currentUser]);
 
   useEffect(() => {
     if (error) {
@@ -118,18 +205,72 @@ const ProfilePage = () => {
         sx={{ boxShadow: 5, mt: 5 }}
       >
         <Stack sx={{ alignItems: "center", p: 2 }}>
-          <Avatar
-            alt="Remy Sharp"
-            sx={{
-              width: 150,
-              height: 150,
-              bgcolor: `${styles.theme.primaryColor}`,
-              border: `5px solid ${styles.userAvatar.border}`,
-              fontSize: 150,
-            }}
+          <Badge
+            onClick={handleMenu}
+            overlap="circular"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            badgeContent={
+              <IconButton sx={{ p: 0 }}>
+                <SmallAvatar />
+              </IconButton>
+            }
           >
-            {currentUser.firstName.substring(0, 1).toUpperCase()}
-          </Avatar>
+            <Avatar
+              alt="Profile Image"
+              src={profileData.imageUrl.value}
+              sx={{
+                width: 150,
+                height: 150,
+                bgcolor: `${styles.theme.primaryColor}`,
+                border: `5px solid ${styles.userAvatar.border}`,
+                fontSize: 150,
+              }}
+            >
+              <Typography sx={{ fontSize: 100 }}>
+                {currentUser.firstName.substring(0, 1).toUpperCase()}
+              </Typography>
+            </Avatar>
+          </Badge>
+          <Menu
+            id="menu-appbar"
+            className={classes.menuItem}
+            anchorEl={menuOpen}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={Boolean(menuOpen)}
+            onClose={handleClose}
+          >
+            <MenuItem>
+              <label className={classes.menuItem} htmlFor="photo-upload">
+                Upload Photo
+                <input
+                  type="file"
+                  id="photo-upload"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={changeImageHandler}
+                />
+              </label>
+            </MenuItem>
+            {currentUser.imageUrl && (
+              <MenuItem onClick={() => deleteImage()}>Delete Photo</MenuItem>
+            )}
+            {inputImageFile && (
+              <MenuItem onClick={() => cancelImage()}>Cancel</MenuItem>
+            )}
+          </Menu>
+          {profileData.imageUrl.error && (
+            <div className={classes.errorMessage}>
+              {profileData.imageUrl.errorMessage}
+            </div>
+          )}
         </Stack>
         <Box component="form" noValidate onSubmit={handleSubmit}>
           <Grid container spacing={3}>
@@ -181,7 +322,10 @@ const ProfilePage = () => {
                 <TextField
                   disabled
                   className={classes.textfield}
-                  sx={{ backgroundColor: styles.list.backgroundColor }}
+                  sx={{
+                    backgroundColor: styles.list.backgroundColor,
+                    pointerEvents: "none",
+                  }}
                   variant="outlined"
                   inputProps={{ style: { padding: 7 } }}
                   type="email"
